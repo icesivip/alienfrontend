@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import DashboardLayout from './../pages/Starter/SampleLayout.vue';
-import Starter from './../pages/Starter/SamplePage.vue';
+import Beginner from './../pages/Starter/Beginner.vue';
+import SimplexMethod from './../pages/Starter/SimplexMethod.vue';
+import Table from './../pages/Tables/Table.vue';
 
 Vue.use(Router);
 
@@ -16,7 +18,12 @@ export default new Router({
         {
           path: 'dashboard',
           name: 'dashboard',
-          components: { default: Starter }
+          components: { default: DashboardLayout}
+
+        },{
+          path: 'simplex',
+          name: 'simplex',
+          components: { default: SimplexMethod}
         }
       ]
     }
