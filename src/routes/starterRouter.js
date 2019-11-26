@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import DashboardLayout from './../pages/Starter/SampleLayout.vue';
 import Starter from './../pages/Starter/SamplePage.vue';
-
+import CraftLayout from 'src/components/AlienComponents/CRAFT/CraftLayout'
 Vue.use(Router);
 
 export default new Router({
@@ -17,6 +17,11 @@ export default new Router({
           path: 'dashboard',
           name: 'dashboard',
           components: { default: Starter }
+        },
+        {
+          path: 'craft',
+          name: 'craft',
+          components: { default: CraftLayout }
         }
       ]
     }
