@@ -4,6 +4,7 @@
       <h1>Simplex Method</h1>
     </div>
     <!-- Small charts -->
+    <div class="row">
     <div class="col-lg-4">
       <card>
         <template slot="header">
@@ -11,19 +12,19 @@
             <i class="tim-icons icon-book-bookmark text-primary"></i> What is it?
           </h3>
         </template>
-        <div>
+        <div style = "height: 80px">
           <h5 align='justify'>It is an analytic method for solving problems of linear programming using algebraic operations. This method provides a strategy for evaluating the feasible results finding the optimal value of the objective function.</h5>
         </div>
       </card>
     </div>
     <div class="col-lg-4">
-      <card>
+      <card >
         <template slot="header">
           <h3 class="card-title">
             <i class="tim-icons icon-notes text-info"></i> When to use it?
           </h3>
         </template>
-        <div>
+        <div style = "height: 80px">
           <h5 align="justify">This method can be applied for problems of linear programming that use two or more variables.</h5>
         </div>
       </card>
@@ -35,15 +36,13 @@
             <i class="tim-icons icon-paper text-success"></i> Instructions
           </h3>
         </template>
-        <div>
+        <div style = "height: 80px">
           <h5
             align="justify"
           >For using the program you will need an objective function and the respective constraints. As a result, the program is going to show the type and value of the optimal solution (if there is one) and the values of the basic and non basic variables.</h5>
         </div>
       </card>
     </div>
-    <div class="col-12" align="center">
-      <h2>Solver</h2>
     </div>
     <br />
     <br />
