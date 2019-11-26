@@ -20,6 +20,7 @@
     "chart.js": "^2.7.1",
     "d3": "^5.7.0",
     "datamaps": "^0.5.9",
+    "easypz": "^1.1.7",
     "element-ui": "^2.11.1",
     "es6-promise": "^4.1.1",
     "fuse.js": "^3.2.0",
