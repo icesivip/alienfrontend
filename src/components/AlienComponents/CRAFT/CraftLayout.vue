@@ -5,22 +5,24 @@
       <form>
         <div class="form-row">
           <div class="col text-center">
-            <table class="text-center">
-              <tr v-for="(row, i) in userDistribution" :key="i">
-                <td v-for="(data, j) in userDistribution[i]" :key="j">
-                  <base-input
-                    v-validate="modelValidations.userInput"
-                    type="number"
-                    min="0"
-                    step="1"
-                    v-model="userDistribution[i][j]"
-                    :error="getError('input-' + i + '-' + j)"
-                    :name="'input-' + i + '-' + j"
-                    class="user-input"
-                  ></base-input>
-                </td>
-              </tr>
-            </table>
+            <div class="table-responsive">
+              <table class="text-center table">
+                <tr v-for="(row, i) in userDistribution" :key="i">
+                  <td v-for="(data, j) in userDistribution[i]" :key="j">
+                    <base-input
+                      v-validate="modelValidations.userInput"
+                      type="number"
+                      min="0"
+                      step="1"
+                      v-model="userDistribution[i][j]"
+                      :error="getError('input-' + i + '-' + j)"
+                      :name="'input-' + i + '-' + j"
+                      class="user-input"
+                    ></base-input>
+                  </td>
+                </tr>
+              </table>
+            </div>
           </div>
 
           <!--           <div class="col text-center">
@@ -288,12 +290,12 @@ import EasyPZ from "easypz";
 import { Slider } from "src/components";
 import axios from "axios";
 import { Select, Option } from "element-ui";
+import swal from "sweetalert2";
 export default {
   data() {
     return {
       colorMap: {},
-      distributions: [
-      ],
+      distributions: [],
       selectedDistribution: 0,
       userDistribution: [
         [0, 0, 0, 0, 0],
@@ -320,12 +322,26 @@ export default {
     [Option.name]: Option
   },
   methods: {
+    succesMessage() {
+      swal({
+        type: "success",
+        title: "Success!",
+        text: "The algorithm has finished!"
+      });
+    },
+    errorMessage(message) {
+      swal({
+        type: "error",
+        title: "An error ocurred!",
+        text: message
+      });
+    },
     log() {
       axios
         .post("http://proyectovip.icesi.edu.co/craft", this.requestBody)
         .then(response => {
-          console.log(response);
-
+          // console.log(response);
+          this.succesMessage();
           response.data.distributions.sort(function(a, b) {
             if (a.cost > b.cost) {
               return 1;
@@ -339,7 +355,8 @@ export default {
           /*           this.$refs.slider.noUiSlider.updateOptions(this.sliderOptions); */
         })
         .catch(e => {
-          console.log(e);
+          this.errorMessage(e.response.data.message);
+          // console.log(e.response);
         });
 
       /*       axios
@@ -465,28 +482,19 @@ export default {
   height: 250px !important;
 }
 
-td {
-  min-width: 100px;
-}
-
-tr {
-  width: 100%;
-}
-
 .expand {
   width: 100%;
 }
 
-table {
-  width: 100%;
-  display: block;
-  overflow: auto;
+td {
+  padding: 5px;
 }
 
 .user-input {
-  padding: 5px;
-
+  padding: 1px;
+  vertical-align: center;
   min-width: 100px;
+  margin: 0;
 }
 
 .view-table {
