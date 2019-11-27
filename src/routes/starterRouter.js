@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import DashboardLayout from './../pages/Starter/SampleLayout.vue';
-import Beginner from './../pages/Starter/Beginner.vue';
+
 import SimplexMethod from './../pages/Starter/SimplexMethod.vue';
-import Table from './../pages/Tables/Table.vue';
+
+import Starter from './../pages/Starter/SamplePage.vue';
+import CraftLayout from 'src/components/AlienComponents/CRAFT/CraftLayout'
 
 Vue.use(Router);
 
@@ -18,22 +20,29 @@ export default new Router({
         {
           path: 'dashboard',
           name: 'dashboard',
-          components: { default: DashboardLayout}
 
-        },{
+
+          components: { default: Starter }
+        },
+        {
+          path: 'craft',
+          name: 'craft',
+          components: { default: CraftLayout }
+
+        }, {
           path: 'simplex',
           name: 'simplex',
-          components: { default: SimplexMethod}
+          components: { default: SimplexMethod }
+
+
         }
-      ]
-    }
-  ],
-  linkActiveClass: 'active',
-  scrollBehavior (to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { x: 0, y: 0 }
-    }
-  }
-});
+      ],
+      linkActiveClass: 'active',
+      scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+          return savedPosition
+        } else {
+          return { x: 0, y: 0 }
+        }
+      }
+    });
