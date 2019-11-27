@@ -293,26 +293,6 @@ export default {
     return {
       colorMap: {},
       distributions: [
-        {
-          cost: 0,
-          distribution: [
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0]
-          ]
-        },
-        {
-          cost: 0,
-          distribution: [
-            [1, 0, 0, 0, 0],
-            [1, 0, 0, 0, 0],
-            [1, 0, 0, 0, 0],
-            [1, 0, 0, 0, 0],
-            [1, 1, 1, 0, 0]
-          ]
-        }
       ],
       selectedDistribution: 0,
       userDistribution: [
