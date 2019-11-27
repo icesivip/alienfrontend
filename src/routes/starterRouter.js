@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import DashboardLayout from './../pages/Starter/SampleLayout.vue';
 
-import SimplexMethod from './../pages/Starter/SimplexMethod.vue';
+import SimplexMethod from 'src/components/AlienComponents/SIMPLEX/SimplexMethod.vue';
 
 import Starter from './../pages/Starter/SamplePage.vue';
 import CraftLayout from 'src/components/AlienComponents/CRAFT/CraftLayout'
@@ -33,8 +33,8 @@ export default new Router({
           path: 'simplex',
           name: 'simplex',
           components: { default: SimplexMethod }
-
-
+        }
+        ]
         }
       ],
       linkActiveClass: 'active',

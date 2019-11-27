@@ -68,32 +68,11 @@
             </div>
 
             <div class="row">
-              <label class="col-sm-2 col-form-label" style="font-size: 1.00rem">Number of Variables</label>
-              <div class="col-sm-3">
-                <base-input
-                  name="number"
-                  v-validate="modelValidations.number"
-                  v-model="model.number"
-                  :error="getError('number')"
-                ></base-input>
-              </div>
-              <label
-                class="col-sm-2 col-form-label"
-                style="font-size: 1.00rem"
-              >Number of Constraints</label>
-              <div class="col-sm-3">
-                <base-input
-                  name="number2"
-                  v-validate="modelValidations.number"
-                  v-model="model.number2"
-                  :error="getError('number2')"
-                ></base-input>
-              </div>
+            
+             
             </div>
           </div>
-          <div class="text-center">
-            <base-button native-type="submit" @click.native.prevent="validate" type="info" style='width: 20%'>Go!</base-button>
-          </div>
+         
         </card>
       </form>
     </div>
@@ -115,7 +94,7 @@
   </div>
 </template>
 <script>
-import Table from "src/pages/Tables/Table.vue";
+import Table from "src/Table.vue";
 export default {
   name: "starter-page",
   data() {
