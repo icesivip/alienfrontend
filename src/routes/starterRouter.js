@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import DashboardLayout from './../pages/Starter/SampleLayout.vue';
 
 import SimplexMethod from 'src/components/AlienComponents/SIMPLEX/SimplexMethod.vue';
-
+import BranchAndBound from 'src/components/AlienComponents/B&B/BranchAndBound.vue';
 import Starter from './../pages/Starter/SamplePage.vue';
 import CraftLayout from 'src/components/AlienComponents/CRAFT/CraftLayout'
 
@@ -21,7 +21,6 @@ export default new Router({
           path: 'dashboard',
           name: 'dashboard',
 
-
           components: { default: Starter }
         },
         {
@@ -33,7 +32,11 @@ export default new Router({
           path: 'simplex',
           name: 'simplex',
           components: { default: SimplexMethod }
-        }
+        }, {
+          path: 'branch',
+          name: 'branch',
+          components: { default: BranchAndBound }
+        },
         ]
         }
       ],
