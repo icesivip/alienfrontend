@@ -77,7 +77,7 @@
       </form>
     </div>
     <div class="col-lg-12">
-      <Table></Table>
+      <Table @getSolution="solveSolution"></Table>
     </div>
     
       <div class="row" style='width: 100%' align='center'>
@@ -95,6 +95,7 @@
 </template>
 <script>
 import Table from "src/Table.vue";
+import axios from "axios";
 export default {
   name: "starter-page",
   data() {
@@ -128,7 +129,44 @@ export default {
       this.$validator.validateAll().then(isValid => {
         this.$emit("on-submit", this.registerForm, isValid);
       });
-    }
+    },
+    solveSolution(qwery) {
+          var nuevoqwery = "";
+          var div = qwery.split("vars");
+          nuevoqwery += div[0] + "equations=";
+          div = div[1];
+          div = div.split("objectiveFunction=");
+          div = div[1];
+          div = div.split("&constraints=");
+
+          nuevoqwery += "1 Z "
+          var div1 = div[0].split(",");
+          for (let i = 0; i < div1.length; i++) {
+            nuevoqwery += div1[i] + " X"+ (i+1) + " ";
+          }
+          nuevoqwery += "= 0n"
+          div = div[1].split(";");
+          for (let i = 0; i < div.length -1; i++) {
+            var div2 = div[i].split(",");
+            nuevoqwery += "0 Z "
+            for (let j = 0; j < div2.length-2; j++) {
+            nuevoqwery += div2[j] + " X"+ (j+1) + " ";
+          }
+          nuevoqwery += div2[div2.length-2] + " " + div2[div2.length-1];
+          if(i < div.length-1)
+          nuevoqwery += "n";
+          }
+      axios
+        .get(
+          "https://icesiviptest.herokuapp.com/simplexMethod/"+nuevoqwery
+        )
+        .then(response => {
+          
+          console.log(nuevoqwery);
+
+        });
+      return null;
+    },
   }
 };
 </script>
