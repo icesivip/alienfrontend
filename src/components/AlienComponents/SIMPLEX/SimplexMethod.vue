@@ -81,13 +81,11 @@
     </div>
     
       <div class="row" style='width: 100%' align='center'>
-        <div class="col">
-         <base-button native-type="submit" type="info" style='width: 90%'>Final Solution</base-button>
-        </div>
+      
 
         <div class="col">
           
-          <base-button native-type="submit" type="info" style='width: 90%'>Step by Step</base-button>
+          <base-button native-type="submit" type="primary" style='width: 20%'>Step by Step</base-button>
         </div>
      
     </div>
