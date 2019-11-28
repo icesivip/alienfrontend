@@ -5,14 +5,60 @@
     <side-bar
       :background-color="sidebarBackground"
       short-title="CT"
-      title="Creative Tim"
+      title="VIP - Alien"
     >
       <template slot-scope="props" slot="links">
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: $t('sidebar.dashboard'),
             icon: 'tim-icons icon-chart-pie-36',
             path: '/dashboard'
+          }"
+        > 
+        </sidebar-item> -->
+        <sidebar-item
+          :link="{
+            name: $t('Simplex Method'),
+            icon: 'tim-icons icon-molecule-40',
+            path: '/simplex'
+          }"
+        >
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('BranchAndBound'),
+            icon: 'tim-icons icon-book-bookmark',
+            path: '/branch'
+          }"
+        >
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Craft Layout'),
+            icon: 'tim-icons icon-palette',
+            path: '/craft'
+          }"
+        >
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('simplex'),
+            icon: 'tim-icons icon-single-copy-04',
+            path: '/simplex'
+          }">
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('craft'),
+            icon: 'tim-icons icon-components',
+            path: '/craft'
+          }"
+        ></sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('branch'),
+            icon: 'tim-icons icon-vector',
+            path: '/branch'
           }"
         >
         </sidebar-item>
