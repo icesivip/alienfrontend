@@ -1,6 +1,7 @@
 <template>
   <div>
-     <button @click="solveSolution">holiwis</button>
+
+    <app-table @getSolution="solveSolution"></app-table>
      <div v-show="mostrar">
     <h1 class="text-center">Optimal Solution</h1>
     <card>
@@ -34,12 +35,15 @@
 </template>
 
 <script>
+import Table from "../../../../src/Table.vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 
 export default {
   name: "branch",
-  components: {},
+  components: {
+    "app-table": Table
+  },
   data: function() {
     return {
       valuesSolution: [30, 2],
@@ -51,12 +55,13 @@ export default {
   },
 
   methods: {
-    solveSolution: function(event) {
+    solveSolution(qwery) {
       axios
         .get(
-          "https://icesiviptest.herokuapp.com/branchAndBound/?type=MAXIMIZE&vars=X1:C,X2:C,X3:C,X4:C,X5:C&objectiveFunction=8,4,1,2,5&constraints=9,8,5,8,2,<=,19;1,2,3,8,5,<=,90;"
+          "https://icesiviptest.herokuapp.com/branchAndBound/"+qwery
         )
         .then(response => {
+          console.log(response)
           this.valuesSolution = response.data.optimalSolution.variables;
           this.cantVars = 0;
           for (var key in response.data.optimalSolution.variables) {
