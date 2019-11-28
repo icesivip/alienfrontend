@@ -39,7 +39,7 @@
   </div>
 </template>
 <script>
-import Table from "../src/Table.vue";
+import Table from "../../../../src/Table.vue";
 import axios from "axios";
 import Chart from "chart.js";
 import zoom from "chartjs-plugin-zoom";

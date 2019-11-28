@@ -1,30 +1,18 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <h3>Starter page</h3>
-    </div>
-    <div class="d-flex justify-content-center">
-      <app-table></app-table>
-    </div>
+  <div class="row"><h3>Starter page</h3>
+  <bb></bb>
   </div>
 </template>
 <script>
-import graphical from '../../graphicalMethod.vue'
+import branch from '../../components/AlienComponents/B&B/BranchAndBound.vue'
 export default {
   name: 'starter-page',
-  
   data() {
-    return {
-      
-    };
+    return {};
   },
-  components: {
-      'app-table' : graphical
-  },
-  methods: {
-
+  components:{
+      'bb' : branch
   }
 };
-
 </script>
 <style></style>
