@@ -61,9 +61,9 @@ export default {
           "https://icesiviptest.herokuapp.com/branchAndBound/"+qwery
         )
         .then(response => {
-          console.log(response)
+          if(response.data.optimalSolution!= null){
           this.valuesSolution = response.data.optimalSolution.variables;
-          this.cantVars = 0;
+            this.cantVars = 0;
           for (var key in response.data.optimalSolution.variables) {
             this.cantVars++;
           }
@@ -71,6 +71,8 @@ export default {
           console.log(response.data.solutionTree.text.desc.split("\n").length);
           this.textoSolTC = response.data.solutionTree.text;
           this.mostrar = true;
+          }
+          else alert("No solution");
         });
       return null;
     },
