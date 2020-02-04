@@ -77,27 +77,62 @@
       </form>
     </div>
     <div class="col-lg-12">
-      <Table @getSolution="solveSolution"></Table>
-    </div>
-    
-      <div class="row" style='width: 100%' align='center'>
       
+      <Tablex @getSolution="solveSolution"></Tablex>
+    </div>
+ <h3 class="text-center" v-if="iteration >= 0">Solution Data Table</h3>
+  <hr>
+ <h4 v-if="iteration == 0">Slack variables created</h4>
+ <h4 v-if="iteration > 0">Iteration: {{iteration}}, {{operationsDone}}</h4>
+
+<table class="table">
+        <thead>
+          <tr>
+            <th
+              class="text-center"
+              v-for="item in variables"
+              v-bind:key="item"
+            >{{item}}</th>
+            <th class="text-center" v-if="iteration>=0">
+              RHS
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+    <tr v-for="(m,j) in tablaResultados" v-bind:key="j">
+      <td v-for="(n, i) in m" :key="i" class="text-center">{{n}}
+      </td>
+          </tr>
+          </tbody>
+      </table>
 
         <div class="col">
           
-          <base-button native-type="submit" type="primary" style='width: 20%'>Step by Step</base-button>
+          <base-button native-type="submit" v-on:click="stepByStep(-1)" v-if="iteration >= 0" type="primary" style='width: 20%'>Last Iteration</base-button>
+          <base-button native-type="submit" v-on:click="finalSol()" v-if="iteration >= 0" type="primary" style='width: 20%'>Final Solution</base-button>
+          <base-button native-type="submit" v-on:click="stepByStep(1)" v-if="iteration >= 0" type="primary" style='width: 20%'>Next Iteration</base-button>
+          
         </div>
-     
-    </div>
+     <h4>{{messageSol}}</h4>
   </div>
 </template>
 <script>
-import Table from "src/Table.vue";
+import Tablex from "src/Table.vue";
 import axios from "axios";
 export default {
   name: "starter-page",
   data() {
     return {
+      variables: [],
+      tablaResultados: [],
+      reducedCosts: [],
+      intervalsDFO: [],
+      intervalsDConstraints: [],
+      rhs: [],
+      messageSol: null,
+      nuevoqwery: "",
+      iteration: -1,
+      operationsDone: "",
       model: {
         required: "",
         number: ""
@@ -114,7 +149,7 @@ export default {
     };
   },
   components: {
-    Table: Table
+    Tablex: Tablex
   },
   methods: {
     nextPage() {
@@ -154,16 +189,38 @@ export default {
           if(i < div.length-1)
           nuevoqwery += "n";
           }
+          this.nuevoqwery = nuevoqwery;
+      this.stepByStep(1);
+      return null;
+    },
+    stepByStep(val){
+    var next = this.nuevoqwery;
+    if(val == 1 && this.messageSol == null)
+     this.iteration++;
+    else if(val == -1 && this.iteration > 0)
+      this.iteration--;
+    next = next.replace("?","?iteration="+this.iteration+"&");
+    console.log(this.iteration);
+    this.callServer(next);
+    },
+    finalSol(){
+      this.iteration = this.callServer(this.nuevoqwery);
+    },
+    callServer(route){
+      var it ="";
       axios
         .get(
-          "https://icesiviptest.herokuapp.com/simplexMethod/"+nuevoqwery
+          "https://icesiviptest.herokuapp.com/simplexMethod/"+route
         )
         .then(response => {
-          
-          console.log(nuevoqwery);
-
+          this.messageSol = response.data.messageSol;
+          this.tablaResultados = response.data.actualMatrix;
+          this.variables = response.data.everyVariableName;
+          this.rhs = response.data.rhsinitialM;
+          this.operationsDone = response.data.operationsDone;
+          it = response.data.iterationID;
         });
-      return null;
+        return it;
     },
   }
 };

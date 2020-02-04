@@ -8,38 +8,7 @@
       title="VIP - Alien"
     >
       <template slot-scope="props" slot="links">
-        <!-- <sidebar-item
-          :link="{
-            name: $t('sidebar.dashboard'),
-            icon: 'tim-icons icon-chart-pie-36',
-            path: '/dashboard'
-          }"
-        > 
-        </sidebar-item> -->
-        <sidebar-item
-          :link="{
-            name: $t('Simplex Method'),
-            icon: 'tim-icons icon-molecule-40',
-            path: '/simplex'
-          }"
-        >
-        </sidebar-item>
-        <sidebar-item
-          :link="{
-            name: $t('BranchAndBound'),
-            icon: 'tim-icons icon-book-bookmark',
-            path: '/branch'
-          }"
-        >
-        </sidebar-item>
-        <sidebar-item
-          :link="{
-            name: $t('Craft Layout'),
-            icon: 'tim-icons icon-palette',
-            path: '/craft'
-          }"
-        >
-        </sidebar-item>
+       
         <sidebar-item
           :link="{
             name: $t('simplex'),
