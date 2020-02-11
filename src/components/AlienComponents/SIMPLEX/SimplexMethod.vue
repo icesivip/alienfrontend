@@ -111,8 +111,10 @@
       <td class="text-center" v-else>{{varsBase[j-1]}}</td>
       <td v-for="(n, i) in m" :key="i" class="text-center">{{n}}
       </td>
-      <td class="text-center" v-if="j>=1 && theta!= null"> {{theta[j-1]}}
+      <td class="text-center" v-if="j>=1 && theta != null && theta[j-1]<999999999999"> {{theta[j-1]}}
       </td>
+        <td class="text-center" v-else-if="j>=1 && theta != null">&#8734;
+        </td>
           </tr>
           </tbody>
       </table>
