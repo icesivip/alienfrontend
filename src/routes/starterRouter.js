@@ -6,6 +6,8 @@ import SimplexMethod from 'src/components/AlienComponents/SIMPLEX/SimplexMethod.
 import BranchAndBound from 'src/components/AlienComponents/B&B/BranchAndBound.vue';
 import Starter from './../pages/Starter/SamplePage.vue';
 import CraftLayout from 'src/components/AlienComponents/CRAFT/CraftLayout'
+import graphicalMethod from 'src/components/AlienComponents/GM/graphicalMethod'
+import LPTable from 'src/components/AlienComponents/Auxiliary/LPTable.vue'
 
 Vue.use(Router);
 
@@ -36,6 +38,16 @@ export default new Router({
           path: 'branch',
           name: 'branch',
           components: { default: BranchAndBound }
+        },
+        {
+          path: 'graphical',
+          name: 'graphical',
+          components: { default: graphicalMethod }
+        },
+        {
+          path: 'test',
+          name: 'test',
+          components: { default: LPTable}
         },
         ]
         }

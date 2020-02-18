@@ -14,7 +14,7 @@
             icon: 'tim-icons icon-chart-pie-36',
             path: '/dashboard'
           }"
-        > 
+        >
         </sidebar-item> -->
         <sidebar-item
           :link="{
@@ -34,7 +34,7 @@
         </sidebar-item>
         <sidebar-item
           :link="{
-            name: $t('Craft Layout'),
+            name: $t('Craft Algorithm'),
             icon: 'tim-icons icon-palette',
             path: '/craft'
           }"
@@ -49,9 +49,9 @@
         </sidebar-item>
         <sidebar-item
           :link="{
-            name: $t('craft'),
-            icon: 'tim-icons icon-components',
-            path: '/craft'
+            name: $t('graphical'),
+            icon: 'tim-icons icon-chart-bar-32',
+            path: '/graphical'
           }"
         ></sidebar-item>
         <sidebar-item
