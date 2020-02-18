@@ -42,26 +42,12 @@
         </sidebar-item>
         <sidebar-item
           :link="{
-            name: $t('simplex'),
-            icon: 'tim-icons icon-single-copy-04',
-            path: '/simplex'
-          }">
-        </sidebar-item>
-        <sidebar-item
-          :link="{
             name: $t('graphical'),
             icon: 'tim-icons icon-chart-bar-32',
             path: '/graphical'
           }"
         ></sidebar-item>
-        <sidebar-item
-          :link="{
-            name: $t('branch'),
-            icon: 'tim-icons icon-vector',
-            path: '/branch'
-          }"
-        >
-        </sidebar-item>
+
       </template>
     </side-bar>
     <div class="main-panel" :data="sidebarBackground">
