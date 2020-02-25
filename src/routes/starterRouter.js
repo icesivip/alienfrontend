@@ -8,6 +8,7 @@ import Starter from './../pages/Starter/SamplePage.vue';
 import CraftLayout from 'src/components/AlienComponents/CRAFT/CraftLayout'
 import graphicalMethod from 'src/components/AlienComponents/GM/graphicalMethod'
 import LPTable from 'src/components/AlienComponents/Auxiliary/LPTable.vue'
+import testEmit from 'src/components/AlienComponents/Test/testEmit.vue'
 
 Vue.use(Router);
 
@@ -48,6 +49,11 @@ export default new Router({
           path: 'test',
           name: 'test',
           components: { default: LPTable}
+        },
+        {
+          path: 'testTable',
+          name: 'testTable',
+          components: { default: testEmit}
         },
         ]
         }

@@ -34,6 +34,7 @@
                   <el-select
                     placeholder="Function Type"
                     v-model="model.variables[i]"
+                    @change="emitModel"
                   >
                     <el-option
                       v-for="(option, i) in variableTypes"
@@ -99,6 +100,7 @@
                 <el-select
                   placeholder="Function Type"
                   v-model="model.objectiveFunction.type"
+                  @change="emitModel"
                 >
                   <el-option
                     class="select-success"
@@ -126,6 +128,7 @@
                   v-model="model.objectiveFunction.coefficients[i]"
                   :name="'input-' + i"
                   class="user-input"
+                  @change="emitModel"
                 ></base-input>
               </td>
             </tr>
@@ -165,6 +168,7 @@
                   v-model="model.constraints[i].coefficients[j]"
                   :name="'Constraint_' + i + '_' + j"
                   class="user-input"
+                  @change="emitModel"
                 ></base-input>
               </td>
 
@@ -172,6 +176,7 @@
                 <el-select
                   placeholder="Type"
                   v-model="model.constraints[i].type"
+                  @change="emitModel"
                 >
                   <el-option class="select" value="<=" label="<=" key="<=">
                   </el-option>
@@ -189,6 +194,7 @@
                   v-model="model.constraints[i].limit"
                   :name="'Constraint_limit_' + i"
                   class="user-input"
+                  @change="emitModel"
                 ></base-input>
               </td>
             </tr>
@@ -219,29 +225,38 @@ import swal from "sweetalert2";
 export default {
   data() {
     return {
-      model: {
-        objectiveFunction: { coefficients: [1, 1], type: "Maximize" },
-        constraints: [{ coefficients: [1, 1], type: "<=", limit: 10 }],
-        variables: ["Continuous", "Continuous"]
-      },
+      model: Object,
       modelType: "Mixed",
       minVars: 2,
       maxVars: Infinity
     };
   },
+  created:function(){
+    this.model={
+        objectiveFunction: { coefficients: [1, 1], type: "Maximize" },
+        constraints: [{ coefficients: [1, 1], type: "<=", limit: 10 }],
+        variables: ["Continuous", "Continuous"]
+      }
+      this.emitModel()
+  },
 
   components: {},
   methods: {
+    emitModel(){
+      this.$emit("input", this.model);
+    },
     addVariable() {
       if (this.model.variables.length < this.maxVars) {
         this.model.objectiveFunction.coefficients.push(1);
         this.model.constraints.forEach(element => element.coefficients.push(1));
         this.model.variables.push("Continuous");
+        this.emitModel()
       } else {
         swal({
           type: "error",
           title: "Error",
-          text: "Maximum number of variables for this solver exceeded.Can't add."
+          text:
+            "Maximum number of variables for this solver exceeded.Can't add."
         });
       }
     },
@@ -250,16 +265,19 @@ export default {
         this.model.objectiveFunction.coefficients.pop();
         this.model.constraints.forEach(element => element.coefficients.pop());
         this.model.variables.pop();
+        this.emitModel()
       } else {
         swal({
           type: "error",
           title: "Error",
-          text: "Minimum number of variables for this solver reached. Can't delete."
+          text:
+            "Minimum number of variables for this solver reached. Can't delete."
         });
       }
     },
     removeConstraint() {
       this.model.constraints.pop();
+      this.emitModel()
     },
     addConstraint() {
       this.model.constraints.push({
@@ -267,6 +285,7 @@ export default {
         type: "<=",
         limit: 10
       });
+      this.emitModel()
     }
   },
   computed: {
