@@ -1,41 +1,43 @@
 <template>
-  <div class="container">
-    <div class="d-flex justify-content-center">
+  <div>
+    <div>
       <h2 class="text-center">Graphical Method Solver</h2>
     </div>
-    
-
-    <app-table @getSolution="solveSolution"></app-table>
+    <LPTable v-model="lpModel" maximumVars="2"> </LPTable>
+    <base-button type="primary" block @click="solveSolution">
+      Solve
+    </base-button>
 
     <h2 class="text-center">Solution Space Chart</h2>
     <canvas id="chart-area" width="400" :height="height"></canvas>
-    
 
     <h2 class="text-center">Basic Feasible Solution</h2>
     <table class="table">
-        <thead>
-          <tr>
-            <th
-              class="text-center"
-              v-for="item in headSolution"
-              v-bind:key="item.title"
-            >{{item.title}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="n in elements" :key="n">
-            <td class="text-center"> 
-              {{solutionsX[n]}}
-            </td >
-            <td class="text-center">
-              {{solutionsY[n]}}
-            </td>
-            <td class="text-center">
-              {{solutionsZ[n]}}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <thead>
+        <tr>
+          <th
+            class="text-center"
+            v-for="item in headSolution"
+            v-bind:key="item.title"
+          >
+            {{ item.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="n in elements" :key="n">
+          <td class="text-center">
+            {{ solutionsX[n] }}
+          </td>
+          <td class="text-center">
+            {{ solutionsY[n] }}
+          </td>
+          <td class="text-center">
+            {{ solutionsZ[n] }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 <script>
@@ -43,24 +45,71 @@ import Table from "../../../../src/Table.vue";
 import axios from "axios";
 import Chart from "chart.js";
 import zoom from "chartjs-plugin-zoom";
+import LPTable from "../Auxiliary/LPTable.vue";
 export default {
   data() {
     return {
       myChart: null,
-      headSolution:[],
-      solutionsX:[],
-      solutionsY:[],
-      solutionsZ:[],
-      elements:0,
+      lpModel: {},
+      headSolution: [],
+      solutionsX: [],
+      solutionsY: [],
+      solutionsZ: [],
+      elements: 0,
       height: "device-height"
     };
   },
   components: {
-    "app-table": Table
+    "app-table": Table,
+    LPTable
   },
   mounted() {},
   methods: {
-    solveSolution(qwery) {
+    buildQuery() {
+      //?type=MAXIMIZE&vars=X1:I,X2:B&objectiveFunction=1,6&constraints=1,6,<=,67;1,1,<=,5;
+
+      var query = "?type=";
+      query += this.lpModel.objectiveFunction.type.toUpperCase() + "&vars=";
+      for (var i = 0; i < this.lpModel.variables.length; i++) {
+        if (this.lpModel.variables[i] == "Continuous") {
+          query += "X" + (i + 1) + ":C";
+        } else if (this.lpModel.variables[i] == "Binary") {
+          query += "X" + (i + 1) + ":B";
+        } else {
+          query += "X" + (i + 1) + ":I";
+        }
+
+        if (i != this.lpModel.variables.length - 1) {
+          query += ",";
+        }
+      }
+      query += "&objectiveFunction=";
+      for (
+        var i = 0;
+        i < this.lpModel.objectiveFunction.coefficients.length;
+        i++
+      ) {
+        query += this.lpModel.objectiveFunction.coefficients[i];
+        if (i != this.lpModel.objectiveFunction.coefficients.length - 1) {
+          query += ",";
+        }
+      }
+      query += "&constraints=";
+      for (var i = 0; i < this.lpModel.constraints.length; i++) {
+        for (
+          var j = 0;
+          j < this.lpModel.constraints[i].coefficients.length;
+          j++
+        ) {
+          query += this.lpModel.constraints[i].coefficients[j] + ",";
+        }
+        query += this.lpModel.constraints[i].type + ",";
+        query += this.lpModel.constraints[i].limit + ";";
+      }
+      return query
+    },
+    solveSolution() {
+      var qwery = this.buildQuery();
       axios
         .get("https://viptest1.herokuapp.com/graphicalMethod/" + qwery)
         .then(response => {
@@ -94,19 +143,19 @@ export default {
           this.headSolution.push({ title: "X1" });
           this.headSolution.push({ title: "X2" });
           this.headSolution.push({ title: "Z" });
-          var contador=0;
-          this.solutionsY=[];
-          this.solutionsZ=[];
-          this.solutionsX=[];
+          var contador = 0;
+          this.solutionsY = [];
+          this.solutionsZ = [];
+          this.solutionsX = [];
           solList.forEach(element => {
             solX.push(element.variables.X1);
             this.solutionsX.push(element.variables.X1);
             solY.push(element.variables.X2);
             this.solutionsY.push(element.variables.X2);
-            this.solutionsZ.push(element.z)
+            this.solutionsZ.push(element.z);
             contador++;
           });
-          this.elements= contador;
+          this.elements = contador;
           var minX;
           var maxX;
           minX = Math.min.apply(Math, solX);
@@ -396,5 +445,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

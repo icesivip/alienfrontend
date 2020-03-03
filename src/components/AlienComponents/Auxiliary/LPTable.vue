@@ -223,12 +223,13 @@ import axios from "axios";
 import { Select, Option } from "element-ui";
 import swal from "sweetalert2";
 export default {
+  props:['maximumVars','problemType'],
   data() {
     return {
       model: Object,
-      modelType: "Mixed",
+      modelType: this.problemType || "Mixed",
       minVars: 2,
-      maxVars: Infinity
+      maxVars: this.maximumVars || Infinity
     };
   },
   created:function(){
@@ -246,6 +247,7 @@ export default {
       this.$emit("input", this.model);
     },
     addVariable() {
+      console.log(this.maxVars)
       if (this.model.variables.length < this.maxVars) {
         this.model.objectiveFunction.coefficients.push(1);
         this.model.constraints.forEach(element => element.coefficients.push(1));
