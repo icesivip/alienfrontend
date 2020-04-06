@@ -78,7 +78,10 @@
     </div>
     <div class="col-lg-12">
       
-      <Tablex @getSolution="solveSolution"></Tablex>
+      <LPTable v-model="lpModel" problemType="Continuous"> </LPTable>
+    <base-button type="primary" block @click="solveSolution">
+      Start solving
+    </base-button>
     </div>
     <div v-if="iteration >= 0">
  <h3 class="text-center">Solution Data Table</h3>
@@ -271,10 +274,12 @@
 <script>
 import Tablex from "src/Table.vue";
 import axios from "axios";
+import LPTable from "../Auxiliary/LPTable.vue";
 export default {
   name: "starter-page",
   data() {
     return {
+      lpModel: {},
       variableNames: [],
       tablaResultados: [],
       intervalsDFO: null,
@@ -282,7 +287,7 @@ export default {
       intervalsDConstraints: null,
       rhsinitialM: [],
       messageSol: null,
-      nuevoqwery: "",
+      query: "",
       iteration: -1,
       operationsDone: "",
       equationsFO: null,
@@ -310,7 +315,7 @@ export default {
     };
   },
   components: {
-    Tablex: Tablex
+    LPTable
   },
   methods: {
     nextPage() {
@@ -324,39 +329,36 @@ export default {
         this.$emit("on-submit", this.registerForm, isValid);
       });
     },
-    solveSolution(qwery) {
-          var nuevoqwery = "";
-          var div = qwery.split("vars");
-          nuevoqwery += div[0] + "equations=";
-          div = div[1];
-          div = div.split("objectiveFunction=");
-          div = div[1];
-          div = div.split("&constraints=");
-
-          nuevoqwery += "1 Z "
-          var div1 = div[0].split(",");
-          for (let i = 0; i < div1.length; i++) {
-            nuevoqwery += div1[i] + " X"+ (i+1) + " ";
-          }
-          nuevoqwery += "= 0n"
-          div = div[1].split(";");
-          for (let i = 0; i < div.length -1; i++) {
-            var div2 = div[i].split(",");
-            nuevoqwery += "0 Z "
-            for (let j = 0; j < div2.length-2; j++) {
-            nuevoqwery += div2[j] + " X"+ (j+1) + " ";
-          }
-          nuevoqwery += div2[div2.length-2] + " " + div2[div2.length-1];
-          if(i < div.length-1)
-          nuevoqwery += "n";
-          }
-          this.nuevoqwery = nuevoqwery;
-          this.iteration = -1;
+    buildQuery() {
+      //?type=MAXIMIZE&equations=1 Z -3 X1 -2 X2 -5 X3 = 0n0 Z 1 X1 2 X2 1 X3 <= 430n0 Z 3 X1 0 X2 2 X3 <= 460n0 Z 1 X1 4 X2 0 X3 <= 420
+      this.query = "?type=";
+      this.query += this.lpModel.objectiveFunction.type.toUpperCase() + "&equations=";
+      this.query += "1 Z ";
+      for (var i = 0; i < this.lpModel.objectiveFunction.coefficients.length; i++) {
+        this.query += -this.lpModel.objectiveFunction.coefficients[i] + " X"+(i+1) + " ";
+      }
+      this.query += "= 0n";
+      for (var i = 0; i < this.lpModel.constraints.length; i++) {
+        this.query += "0 Z ";
+        for (
+          var j = 0;
+          j < this.lpModel.constraints[i].coefficients.length;
+          j++
+        ) {
+          this.query += this.lpModel.constraints[i].coefficients[j] + " X"+(j+1) + " ";
+        }
+        this.query += this.lpModel.constraints[i].type + " ";
+        this.query += this.lpModel.constraints[i].limit + "n";
+      }
+    },
+    solveSolution() {
+      this.buildQuery();
+      this.iteration = -1;
       this.stepByStep(1);
       return null;
     },
     stepByStep(val){
-    var next = this.nuevoqwery;
+    var next = this.query;
     if(val == 1 && (this.messageSol == null || this.iteration == -1))
      this.iteration++;
     else if(val == -1 && this.iteration > 0)
@@ -365,7 +367,7 @@ export default {
     this.callServer(next, false);
     },
     finalSol(){
-      this.callServer(this.nuevoqwery, true);
+      this.callServer(this.query, true);
     },
     callServer(route, isFinal){
       axios
