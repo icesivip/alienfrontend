@@ -48,22 +48,22 @@ export default new Router({
         {
           path: 'test',
           name: 'test',
-          components: { default: LPTable}
+          components: { default: LPTable }
         },
         {
           path: 'testTable',
           name: 'testTable',
-          components: { default: testEmit}
+          components: { default: testEmit }
         },
-        ]
-        }
-      ],
-      linkActiveClass: 'active',
-      scrollBehavior(to, from, savedPosition) {
-        if (savedPosition) {
-          return savedPosition
-        } else {
-          return { x: 0, y: 0 }
-        }
-      }
-    });
+      ]
+    }
+  ],
+  linkActiveClass: 'active',
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
+});
