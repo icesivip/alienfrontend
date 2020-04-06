@@ -41,11 +41,11 @@
   </div>
 </template>
 <script>
-import Table from "../../../../src/Table.vue";
+import Table from "./../../../components/Modules/Table";
 import axios from "axios";
 import Chart from "chart.js";
 import zoom from "chartjs-plugin-zoom";
-import LPTable from "../Auxiliary/LPTable.vue";
+import LPTable from "./../../../components/Modules/LinearProgramming/LPTable";
 export default {
   data() {
     return {
