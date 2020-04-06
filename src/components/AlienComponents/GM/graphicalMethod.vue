@@ -3,13 +3,16 @@
     <div>
       <h2 class="text-center">Graphical Method Solver</h2>
     </div>
-    <LPTable v-model="lpModel" maximumVars="2"> </LPTable>
+    <LPTable v-model="lpModel" maximumVars="2" problemType="Continuous"> </LPTable>
     <base-button type="primary" block @click="solveSolution">
       Solve
     </base-button>
 
     <h2 class="text-center">Solution Space Chart</h2>
-    <canvas id="chart-area" width="400" :height="height"></canvas>
+   <line-chart style="height: 25%"
+              :chart-data="myChart.data" v-if="myChart"
+              :extra-options="myChart.options">
+  </line-chart>
 
     <h2 class="text-center">Basic Feasible Solution</h2>
     <table class="table">
@@ -46,6 +49,9 @@ import axios from "axios";
 import Chart from "chart.js";
 import zoom from "chartjs-plugin-zoom";
 import LPTable from "../Auxiliary/LPTable.vue";
+import LineChart from 'src/components/Charts/LineChart'
+import BarChart from 'src/components/Charts/BarChart'
+import PieChart from 'src/components/Charts/PieChart'
 export default {
   data() {
     return {
@@ -61,7 +67,10 @@ export default {
   },
   components: {
     "app-table": Table,
-    LPTable
+    LPTable,
+    LineChart,
+    BarChart,
+    PieChart
   },
   mounted() {},
   methods: {
@@ -117,6 +126,16 @@ export default {
           var constraints = response.data.constraints;
           var optimal = response.data.optimalSolution;
           var solList = response.data.solutionList;
+          for(var i=0;i<solList.length;i++){
+            for(var j=i+1;j<solList.length;j++){
+              if(solList[i].z==solList[j].z && solList[i].variables.X1==solList[j].variables.X1 && solList[i].variables.X2==solList[j].variables.X2){
+                solList.splice(j,1)
+                j--;
+                break;
+              }
+            }
+          }
+          console.log(solList)
           var solX = [];
           var solY = [];
           constraints.forEach(element => {
@@ -140,6 +159,7 @@ export default {
               solY.push(cy);
             }
           });
+          this.headSolution = [];
           this.headSolution.push({ title: "X1" });
           this.headSolution.push({ title: "X2" });
           this.headSolution.push({ title: "Z" });
@@ -192,7 +212,6 @@ export default {
           if (minY == 0 && maxY == 0) {
             maxY = 1;
           }
-          console.log(minX, maxX, minY, maxY);
           var constCount;
           constCount = constraints.length;
           var dataframe;
@@ -322,9 +341,7 @@ export default {
             });
             count++;
           });
-          const ctx = document.getElementById("chart-area");
-
-          this.myChart = new Chart(ctx, {
+          this.myChart ={
             //type: 'scatter',
             type: "line",
             data: {
@@ -372,6 +389,7 @@ export default {
                 ]
               },
               responsive: true,
+              maintainAspectRatio: false,
               plugins: {
                 zoom: {
                   // Container for pan options
@@ -434,7 +452,7 @@ export default {
                 }
               }
             }
-          });
+          }
         });
       return null;
     }
