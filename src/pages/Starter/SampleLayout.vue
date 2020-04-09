@@ -21,7 +21,7 @@
         ></sidebar-item>
         <sidebar-item
           :link="{
-            name: $t('BranchAndBound'),
+            name: $t('Branch And Bound'),
             icon: 'tim-icons icon-book-bookmark',
             path: '/branch'
           }"
@@ -35,9 +35,23 @@
         ></sidebar-item>
         <sidebar-item
           :link="{
-            name: $t('graphical'),
+            name: $t('Graphical Method'),
             icon: 'tim-icons icon-chart-bar-32',
             path: '/graphical'
+          }"
+        ></sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Master Production Schedule'),
+            icon: 'tim-icons icon-components',
+            path: '/master-production-schedule'
+          }"
+        ></sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Material Requirements Planning'),
+            icon: 'tim-icons icon-calendar-60',
+            path: '/material-requirements-planning'
           }"
         ></sidebar-item>
       </template>

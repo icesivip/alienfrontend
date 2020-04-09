@@ -5,11 +5,14 @@ import Starter from './../pages/Starter/SamplePage';
 
 import SimplexMethod from 'src/views/Modules/LinearProgramming/SimplexMethod';
 import BranchAndBound from 'src/views/Modules/LinearProgramming/BranchAndBound';
-import CraftMethod from 'src/views/Modules/LinearProgramming/CraftMethod'
-import GraphicalMethod from 'src/views/Modules/LinearProgramming/GraphicalMethod'
+import CraftMethod from 'src/views/Modules/LinearProgramming/CraftMethod';
+import GraphicalMethod from 'src/views/Modules/LinearProgramming/GraphicalMethod';
 
-import LPTable from 'src/components/Modules/LinearProgramming/LPTable'
-import TestEmit from 'src/views/Modules/LinearProgramming/Test/testEmit'
+import MPS from 'src/views/Modules/MasterPlanSchedule/MPS';
+import MRP from 'src/views/Modules/MasterPlanSchedule/MRP';
+
+import LPTable from 'src/components/Modules/LinearProgramming/LPTable';
+import TestEmit from 'src/views/Modules/LinearProgramming/Test/testEmit';
 
 Vue.use(Router);
 
@@ -32,11 +35,13 @@ export default new Router({
           name: 'craft',
           components: { default: CraftMethod }
 
-        }, {
+        },
+        {
           path: 'simplex',
           name: 'simplex',
           components: { default: SimplexMethod }
-        }, {
+        },
+        {
           path: 'branch',
           name: 'branch',
           components: { default: BranchAndBound }
@@ -45,6 +50,16 @@ export default new Router({
           path: 'graphical',
           name: 'graphical',
           components: { default: GraphicalMethod }
+        },
+        {
+          path: 'master-production-schedule',
+          name: 'mps',
+          components: { default: MPS }
+        },
+        {
+          path: 'material-requirements-planning',
+          name: 'mrp',
+          components: { default: MRP }
         },
         {
           path: 'test',
