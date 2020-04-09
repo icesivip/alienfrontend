@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import Table from "../../../../src/Table.vue";
+import Table from "./../../../components/Modules/Table";
 import axios from "axios";
 import VueAxios from "vue-axios";
 
