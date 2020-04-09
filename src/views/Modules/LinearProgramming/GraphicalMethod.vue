@@ -44,14 +44,16 @@
   </div>
 </template>
 <script>
-import Table from "../../../../src/Table.vue";
+import Table from "./../../../components/Modules/Table";
 import axios from "axios";
 import Chart from "chart.js";
 import zoom from "chartjs-plugin-zoom";
-import LPTable from "../Auxiliary/LPTable.vue";
+import LPTable from "./../../../components/Modules/LinearProgramming/LPTable";
+
 import LineChart from 'src/components/Charts/LineChart'
 import BarChart from 'src/components/Charts/BarChart'
 import PieChart from 'src/components/Charts/PieChart'
+
 export default {
   data() {
     return {

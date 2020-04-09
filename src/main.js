@@ -19,6 +19,8 @@ import RouterPrefetch from 'vue-router-prefetch'
 import DashboardPlugin from './plugins/dashboard-plugin';
 import App from './App.vue';
 
+import store from './store';
+
 // router setup
 import router from './routes/starterRouter';
 import i18n from './i18n';
@@ -33,5 +35,6 @@ new Vue({
   el: '#app',
   render: h => h(App),
   router,
+  store,
   i18n
 });
