@@ -8,8 +8,9 @@
 </template>
 
 <script>
-import LPTable from "../Auxiliary/LPTable.vue";
-import CraftLayout from "../CRAFT/CraftLayout";
+import LPTable from "../../../../components/Modules/LinearProgramming/LPTable";
+import CraftLayout from "../CraftMethod";
+
 export default {
   data(){
     return{

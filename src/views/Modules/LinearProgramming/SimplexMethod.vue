@@ -269,7 +269,7 @@
 
 </template>
 <script>
-import Tablex from "src/Table.vue";
+import Tablex from "./../../../components/Modules/Table";
 import axios from "axios";
 export default {
   name: "starter-page",

@@ -2,11 +2,7 @@
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
     <notifications></notifications>
     <sidebar-fixed-toggle-button />
-    <side-bar
-      :background-color="sidebarBackground"
-      short-title="CT"
-      title="VIP - Alien"
-    >
+    <side-bar :background-color="sidebarBackground" short-title="CT" title="VIP - Alien">
       <template slot-scope="props" slot="links">
         <!-- <sidebar-item
           :link="{
@@ -15,7 +11,7 @@
             path: '/dashboard'
           }"
         >
-        </sidebar-item> -->
+        </sidebar-item>-->
         <sidebar-item
           :link="{
             name: $t('Linear Programming'),
@@ -58,16 +54,32 @@
           >
           </sidebar-item>
         </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Master Plan Schedule'),
+            icon: 'tim-icons icon-calendar-60'
+          }"
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Master Production Schedule'),
+              path: '/master-production-schedule'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Material Requirements Planning'),
+              path: '/material-requirements-planning'
+            }"
+          ></sidebar-item>
+        </sidebar-item>
       </template>
     </side-bar>
     <div class="main-panel" :data="sidebarBackground">
       <dashboard-navbar></dashboard-navbar>
       <router-view name="header"></router-view>
 
-      <div
-        :class="{ content: !$route.meta.hideContent }"
-        @click="toggleSidebar"
-      >
+      <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar">
         <zoom-center-transition :duration="200" mode="out-in">
           <!-- your content here -->
           <router-view></router-view>

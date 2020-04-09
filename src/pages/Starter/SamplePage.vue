@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import branch from '../../components/AlienComponents/B&B/BranchAndBound.vue'
+import branch from '../../views/Modules/LinearProgramming/BranchAndBound'
 export default {
   name: 'starter-page',
   data() {
