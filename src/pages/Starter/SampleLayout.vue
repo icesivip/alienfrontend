@@ -14,46 +14,65 @@
         </sidebar-item>-->
         <sidebar-item
           :link="{
-            name: $t('Simplex Method'),
-            icon: 'tim-icons icon-molecule-40',
-            path: '/simplex'
+            name: $t('Linear Programming'),
+            icon: 'tim-icons icon-molecule-40'
           }"
-        ></sidebar-item>
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Graphical Method'),
+              path: '/graphical'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Simplex Method'),
+              path: '/simplex'
+            }"
+          >
+          </sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Branch & Bound'),
+              path: '/branch'
+            }"
+          >
+          </sidebar-item>
+        </sidebar-item>
+
         <sidebar-item
           :link="{
-            name: $t('Branch And Bound'),
-            icon: 'tim-icons icon-book-bookmark',
-            path: '/branch'
+            name: $t('Facility Planning'),
+            icon: 'tim-icons icon-components'
           }"
-        ></sidebar-item>
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Craft Algorithm'),
+              path: '/craft'
+            }"
+          >
+          </sidebar-item>
+        </sidebar-item>
         <sidebar-item
           :link="{
-            name: $t('Craft Algorithm'),
-            icon: 'tim-icons icon-palette',
-            path: '/craft'
+            name: $t('Master Plan Schedule'),
+            icon: 'tim-icons icon-calendar-60'
           }"
-        ></sidebar-item>
-        <sidebar-item
-          :link="{
-            name: $t('Graphical Method'),
-            icon: 'tim-icons icon-chart-bar-32',
-            path: '/graphical'
-          }"
-        ></sidebar-item>
-        <sidebar-item
-          :link="{
-            name: $t('Master Production Schedule'),
-            icon: 'tim-icons icon-components',
-            path: '/master-production-schedule'
-          }"
-        ></sidebar-item>
-        <sidebar-item
-          :link="{
-            name: $t('Material Requirements Planning'),
-            icon: 'tim-icons icon-calendar-60',
-            path: '/material-requirements-planning'
-          }"
-        ></sidebar-item>
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Master Production Schedule'),
+              path: '/master-production-schedule'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Material Requirements Planning'),
+              path: '/material-requirements-planning'
+            }"
+          ></sidebar-item>
+        </sidebar-item>
       </template>
     </side-bar>
     <div class="main-panel" :data="sidebarBackground">
@@ -107,7 +126,7 @@ export default {
   },
   data() {
     return {
-      sidebarBackground: "vue" //vue|blue|orange|green|red|primary
+      sidebarBackground: "primary" //vue|blue|orange|green|red|primary
     };
   },
   methods: {
