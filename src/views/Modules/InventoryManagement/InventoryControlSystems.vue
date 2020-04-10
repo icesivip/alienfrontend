@@ -1,0 +1,120 @@
+<template>
+  <div>
+    <div class="col-12" align="center">
+      <h1>Inventory Control Systems</h1>
+    </div>
+    <!-- Small charts -->
+    <div class="row">
+      <div class="col-lg-4">
+        <card>
+          <template slot="header">
+            <h3 class="card-title">
+              <i class="tim-icons icon-book-bookmark text-primary"></i> What is it?
+            </h3>
+          </template>
+          <div style="height: 80px">
+            <h5
+              align="justify"
+            >It is an analytic method for solving problems of linear programming using algebraic operations. This method provides a strategy for evaluating the feasible results finding the optimal value of the objective function.</h5>
+          </div>
+        </card>
+      </div>
+      <div class="col-lg-4">
+        <card>
+          <template slot="header">
+            <h3 class="card-title">
+              <i class="tim-icons icon-notes text-info"></i> When to use it?
+            </h3>
+          </template>
+          <div style="height: 80px">
+            <h5
+              align="justify"
+            >This method can be applied for problems of linear programming that use two or more variables.</h5>
+          </div>
+        </card>
+      </div>
+      <div class="col-lg-4">
+        <card>
+          <template slot="header">
+            <h3 class="card-title">
+              <i class="tim-icons icon-paper text-success"></i> Instructions
+            </h3>
+          </template>
+          <div style="height: 80px">
+            <h5
+              align="justify"
+            >For using the program you will need an objective function and the respective constraints. As a result, the program is going to show the type and value of the optimal solution (if there is one) and the values of the basic and non basic variables.</h5>
+          </div>
+        </card>
+      </div>
+    </div>
+    <br />
+    <br />
+
+    <div class="col-lg-12" align="center">
+      <form>
+        <card>
+          <div>
+            <div class="row">
+              <label class="col-sm-2 col-form-label" style="font-size: 1.00rem">Problem Title</label>
+              <div class="col-sm-8">
+                <base-input
+                  name="required"
+                  v-validate="modelValidations.required"
+                  v-model="model.required"
+                  :error="getError('required')"
+                ></base-input>
+              </div>
+            </div>
+
+            <div class="row">
+            
+             
+            </div>
+          </div>
+         
+        </card>
+      </form>
+    </div>
+    <div class="col-lg-12">
+      
+
+     </div>
+  </div>
+
+</template>
+<script>
+export default { 
+    data (){
+
+        return {
+            model: {
+        required: "",
+        number: ""
+      },
+      modelValidations: {
+        required: {
+          required: true
+        }
+      }
+      };
+},
+
+    name: "inventory",
+    methods: {
+    nextPage() {
+      this.$router.push("dashboard");
+    },
+    getError(fieldName) {
+      return this.errors.first(fieldName);
+    },
+    validate() {
+      this.$validator.validateAll().then(isValid => {
+        this.$emit("on-submit", this.registerForm, isValid);
+      });
+    }
+    }
+} 
+
+</script>
+<style></style>
