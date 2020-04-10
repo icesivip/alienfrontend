@@ -114,7 +114,7 @@
       <td class="text-center" v-else>{{varsBase[j-1]}}</td>
       <td v-for="(n, i) in m" :key="i" class="text-center">{{n}}
       </td>
-      <td class="text-center" v-if="j>=1 && theta != null && theta[j-1]<999999999999"> {{theta[j-1]}}
+      <td class="text-center" v-if="j>=1 && theta != null && theta[j-1]<maxValue"> {{theta[j-1]}}
       </td>
         <td class="text-center" v-else-if="j>=1 && theta != null">&#8734;
         </td>
@@ -206,15 +206,17 @@
         {{variableNames[i-1]}}
       <td class="text-center" v-if="varsValuesSolution != null">{{varsValuesSolution[i-1]}}
         </td>
-      <td class="text-center" v-if="reducedCosts != null">{{reducedCosts[i-1]}}
-        </td>
-        <td class="text-center" v-if="fobj != null">{{fobj[i-1][0]}}
-        </td>
-        <td class="text-center" v-if="intervalsDFO != null && intervalsDFO[i-1][0]<999999999999">{{intervalsDFO[i-1][0]}}
+      <td class="text-center" v-if="reducedCosts != null && reducedCosts[i-1]<maxValue">{{reducedCosts[i-1]}}
         </td>
         <td class="text-center" v-else>&#8734;
         </td>
-        <td class="text-center" v-if="intervalsDFO != null && intervalsDFO[i-1][1]<999999999999">{{intervalsDFO[i-1][1]}}
+        <td class="text-center" v-if="fobj != null">{{fobj[i-1][0]}}
+        </td>
+        <td class="text-center" v-if="intervalsDFO != null && intervalsDFO[i-1][0]<maxValue">{{intervalsDFO[i-1][0]}}
+        </td>
+        <td class="text-center" v-else>&#8734;
+        </td>
+        <td class="text-center" v-if="intervalsDFO != null && intervalsDFO[i-1][1]<maxValue">{{intervalsDFO[i-1][1]}}
         </td>
         <td class="text-center" v-else>&#8734;
         </td>
@@ -251,15 +253,17 @@
         Constraint {{i}}
       <td class="text-center">{{finalValuesConstraints[i-1]}}
         </td>
-      <td class="text-center" v-if="shadowPrice != null">{{shadowPrice[0][i-1]}}
-        </td>
-        <td class="text-center" v-if="rhsinitialM != null">{{rhsinitialM[i]}}
-        </td>
-        <td class="text-center" v-if="intervalsDConstraints != null && intervalsDConstraints[i-1][0]<999999999999">{{intervalsDConstraints[i-1][0]}}
+      <td class="text-center" v-if="shadowPrice != null && shadowPrice[0][i-1]<maxValue">{{shadowPrice[0][i-1]}}
         </td>
         <td class="text-center" v-else>&#8734;
         </td>
-        <td class="text-center" v-if="intervalsDConstraints != null && intervalsDConstraints[i-1][1]<999999999999">{{intervalsDConstraints[i-1][1]}}
+        <td class="text-center" v-if="rhsinitialM != null">{{rhsinitialM[i]}}
+        </td>
+        <td class="text-center" v-if="intervalsDConstraints != null && intervalsDConstraints[i-1][0]<maxValue">{{intervalsDConstraints[i-1][0]}}
+        </td>
+        <td class="text-center" v-else>&#8734;
+        </td>
+        <td class="text-center" v-if="intervalsDConstraints != null && intervalsDConstraints[i-1][1]<maxValue">{{intervalsDConstraints[i-1][1]}}
         </td>
         <td class="text-center" v-else>&#8734;
         </td>
@@ -274,7 +278,8 @@
 <script>
 import Tablex from "./../../../components/Modules/Table";
 import axios from "axios";
-import LPTable from "../Auxiliary/LPTable.vue";
+import LPTable from "./../../../components/Modules/LinearProgramming/LPTable";
+import { isNull } from 'util';
 export default {
   name: "starter-page",
   data() {
@@ -289,6 +294,7 @@ export default {
       messageSol: null,
       query: "",
       iteration: -1,
+      backAble: false,
       operationsDone: "",
       equationsFO: null,
       equationsConstraints: null,
@@ -299,6 +305,7 @@ export default {
       shadowPrice: null,
       finalValuesConstraints:[],
       varsBase: null,
+      maxValue: Number.MAX_SAFE_INTEGER,
       model: {
         required: "",
         number: ""
@@ -372,7 +379,8 @@ export default {
     callServer(route, isFinal){
       axios
         .get(
-          "https://icesiviptest.herokuapp.com/simplexMethod/"+route
+          "https://alien-backend-v2.herokuapp.com/api/simplexAlgorithmModule/simplexMethod/"+route
+          //"http://localhost:8080/api/simplexAlgorithmModule/simplexMethod/"+route
         )
         .then(response => {
           this.messageSol = response.data.messageSol;
