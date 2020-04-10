@@ -15,7 +15,7 @@
           <div style="height: 80px">
             <h5
               align="justify"
-            >It is an analytic method for solving problems of linear programming using algebraic operations. This method provides a strategy for evaluating the feasible results finding the optimal value of the objective function.</h5>
+            >Inventory management is a component of supply chain management that involves supervising inventory, and stock items. The inventory control systems, by applying methods and precedures, helps business owners to know when it is time to restock products or buy more material to make them. </h5>
           </div>
         </card>
       </div>
@@ -29,7 +29,7 @@
           <div style="height: 80px">
             <h5
               align="justify"
-            >This method can be applied for problems of linear programming that use two or more variables.</h5>
+            >Inventory control systems are used to determine the quantity and the moment to order or produce an specific item. The system you choose depends on the type of review used and the way orders are made.</h5>
           </div>
         </card>
       </div>
@@ -43,7 +43,7 @@
           <div style="height: 80px">
             <h5
               align="justify"
-            >For using the program you will need an objective function and the respective constraints. As a result, the program is going to show the type and value of the optimal solution (if there is one) and the values of the basic and non basic variables.</h5>
+            >After you choose the type of system to control the inventory, you will need to fill the information required. The program gives the outputs associated to the system selected.   </h5>
           </div>
         </card>
       </div>
@@ -80,11 +80,35 @@
       
 
      </div>
+     <div class="col-lg-12" align="center">
+         <card>
+             <h2 class="card-title">
+                 Type of System
+             </h2>
+
+               <el-select class="select-succes"
+             placeholder="Single Select"
+             v-model="selects.simple">
+    <el-option v-for="option in selects.systemType"
+               class="select-succes"
+               :value="option.value"
+               :label="option.label"
+               :key="option.label">
+    </el-option>
+  </el-select>
+
+         </card>
+</div>
   </div>
 
 </template>
 <script>
+import {Select, Option} from 'element-ui'
 export default { 
+    components: {
+    [Select.name]: Select,
+    [Option.name]: Option
+  },
     data (){
 
         return {
@@ -96,9 +120,17 @@ export default {
         required: {
           required: true
         }
+      }, selects: {
+            simple: 'Choose the system type',
+            systemType: [{value: '(s,Q) Continuous review fixed-order-quantity system', label: '(s,Q) Continuous review fixed-order-quantity system'},
+              {value: '(s,S) Continuous review order-up-to system', label: '(s,S) Continuous review order-up-to system'},
+              {value: '(R,S) Periodic review fixed-order interval system', label: '(R,S) Periodic review fixed-order interval system'},
+              {value: '(R,s,S) Periodic review optional replenishment system', label: '(R,s,S) Periodic review optional replenishment system'}
+              ]
+          }
       }
-      };
 },
+
 
     name: "inventory",
     methods: {

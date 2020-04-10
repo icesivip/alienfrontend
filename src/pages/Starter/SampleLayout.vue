@@ -42,7 +42,7 @@
       <sidebar-item
           :link="{
             name: $t('Inventory Management'),
-            icon: 'tim-icons icon-molecule-40'
+            icon: 'tim-icons icon-notes'
           }"
         >
           <sidebar-item
