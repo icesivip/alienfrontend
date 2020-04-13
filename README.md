@@ -13,8 +13,6 @@ Check the [Live Demo here](http://demos.creative-tim.com/vue-black-dashboard-pro
 
 ### install dependencies
 `npm install`
-### install vue cli
-`npm install -g @vue/cli`
 ### serve with hot reload at localhost:8000
 `npm run dev`
 ### build for production with minification
