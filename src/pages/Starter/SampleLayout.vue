@@ -72,6 +72,31 @@
               path: '/material-requirements-planning'
             }"
           ></sidebar-item>
+          </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Networks'),
+            icon: 'tim-icons icon-atom'
+          }"
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Shortest Path'),
+              path: '/shortest-path'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Minimum Spanning Tree'),
+              path: '/minimum-spanning-tree'
+            }"
+          ></sidebar-item>
+           <sidebar-item
+            :link="{
+              name: $t('Maximum Flow Problem'),
+              path: '/maximum-flow-problem'
+            }"
+          ></sidebar-item>
         </sidebar-item>
       </template>
     </side-bar>

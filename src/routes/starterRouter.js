@@ -14,6 +14,11 @@ import MRP from 'src/views/Modules/MasterPlanSchedule/MRP';
 import LPTable from 'src/components/Modules/LinearProgramming/LPTable';
 import TestEmit from 'src/views/Modules/LinearProgramming/Test/testEmit';
 
+import ShortestPath from 'src/views/Modules/Networks/ShortestPath';
+import MST from 'src/views/Modules/Networks/MST';
+import MFP from 'src/views/Modules/Networks/MFP';
+
+
 Vue.use(Router);
 
 export default new Router({
@@ -70,6 +75,21 @@ export default new Router({
           path: 'testTable',
           name: 'testTable',
           components: { default: TestEmit }
+        },
+        {
+          path: 'shortest-path',
+          name: 'shortest path',
+          components: { default: ShortestPath }
+        },
+        {
+          path: 'minimum-spanning-tree',
+          name: 'mst',
+          components: { default: MST }
+        },
+        {
+          path: 'maximum-flow-problem',
+          name: 'mfp',
+          components: { default: MFP }
         },
       ]
     }
