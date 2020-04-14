@@ -10,6 +10,7 @@
 
     <h2 class="text-center">Solution Space Chart</h2>
    <line-chart style="height: 25%"
+              ref="Chart"
               :chart-data="myChart.data" v-if="myChart"
               :extra-options="myChart.options">
   </line-chart>
@@ -444,7 +445,7 @@ export default {
                     },
                     // Speed of zoom via mouse wheel
                     // (percentage of zoom on a wheel event)
-                    speed: 0.1,
+                    speed: 0.01,
                     // Function called once zooming is completed
                     // Useful for dynamic data loading
                     onZoom: function({ chart }) {
@@ -455,6 +456,7 @@ export default {
               }
             }
           }
+          this.$refs.Chart.updateGradients(dataframe);
         });
       return null;
     }
