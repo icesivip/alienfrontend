@@ -28,6 +28,7 @@ export default {
     },
     log(){
       console.log(this.model)
+      console.log(process.env.NODE_ENV)
     }
   }
 };
