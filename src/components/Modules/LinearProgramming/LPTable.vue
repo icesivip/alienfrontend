@@ -38,6 +38,7 @@
                     placement="top"
                   >
                     <el-select
+                    class="select-primary"
                       placeholder="Function Type"
                       v-model="model.variables[i]"
                       @change="emitModel"
@@ -116,6 +117,7 @@
                   placement="top"
                 >
                   <el-select
+                  class="select-primary"
                     placeholder="Function Type"
                     v-model="model.objectiveFunction.type"
                     @change="emitModel"
@@ -213,13 +215,14 @@
                   placement="top"
                 >
                   <el-select
+                  class="select-primary"
                     placeholder="Type"
                     v-model="model.constraints[i].type"
                     @change="emitModel"
                   >
-                    <el-option class="select" value="<=" label="<=" key="<=">
+                    <el-option class="select" value="<=" :label="'\u2264'" key="<=">
                     </el-option>
-                    <el-option class="select" value=">=" label=">=" key=">=">
+                    <el-option class="select" value=">=" :label="'\u2265'" key=">=">
                     </el-option>
                     <el-option class="select" value="=" label="=" key="=">
                     </el-option>
@@ -295,8 +298,8 @@ export default {
   },
   created: function() {
     this.model = {
-      objectiveFunction: { coefficients: [1, 1], type: "Maximize" },
-      constraints: [{ coefficients: [1, 1], type: "<=", limit: 10 }],
+      objectiveFunction: { coefficients: [1,1 ], type: "Maximize" },
+      constraints: [{ coefficients: [1, 1], type: "<=", limit: 1 }],
       variables: ["Continuous", "Continuous"]
     };
     this.emitModel();

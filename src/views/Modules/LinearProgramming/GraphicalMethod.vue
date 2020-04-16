@@ -3,44 +3,67 @@
     <div>
       <h2 class="text-center">Graphical Method Solver</h2>
     </div>
-    <LPTable v-model="lpModel" maximumVars="2" problemType="Continuous"> </LPTable>
+    <LPTable v-model="lpModel" maximumVars="2" problemType="Continuous">
+    </LPTable>
     <base-button type="primary" block @click="solveSolution">
       Solve
     </base-button>
+  <div v-if="myChart">
+<h2  class="text-center">Solution Space Chart</h2>
+    <scatter-chart
+      style="height: 25%"
+      ref="Chart"
+      :chart-data="myChart.data"
+      :extra-options="myChart.options"
+    >
+    </scatter-chart>
+  </div>
 
-    <h2 class="text-center">Solution Space Chart</h2>
-   <line-chart style="height: 25%"
-              :chart-data="myChart.data" v-if="myChart"
-              :extra-options="myChart.options">
-  </line-chart>
 
-    <h2 class="text-center">Basic Feasible Solution</h2>
+    <div v-if="solList">
+          <h2 class="text-center">Basic Feasible Solution</h2>
     <table class="table">
       <thead>
         <tr>
           <th
             class="text-center"
-            v-for="item in headSolution"
-            v-bind:key="item.title"
           >
-            {{ item.title }}
+            <p>
+                  X<sub>{{ 1 }}</sub>
+                </p>
+          </th>
+                    <th
+            class="text-center"
+          >
+            <p>
+                  X<sub>{{ 2 }}</sub>
+                </p>
+          </th>
+                    <th
+            class="text-center"
+          >
+            <p>
+                  Z
+                </p>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="n in elements" :key="n">
+        <tr  v-for="(item,index) in solList" :key="index">
           <td class="text-center">
-            {{ solutionsX[n] }}
+            {{ item.variables.X1}}
           </td>
           <td class="text-center">
-            {{ solutionsY[n] }}
+            {{ item.variables.X2 }}
           </td>
           <td class="text-center">
-            {{ solutionsZ[n] }}
+            {{ item.z }}
           </td>
         </tr>
       </tbody>
     </table>
+    </div>
+
   </div>
 </template>
 <script>
@@ -50,19 +73,17 @@ import Chart from "chart.js";
 import zoom from "chartjs-plugin-zoom";
 import LPTable from "./../../../components/Modules/LinearProgramming/LPTable";
 
-import LineChart from 'src/components/Charts/LineChart'
-import BarChart from 'src/components/Charts/BarChart'
-import PieChart from 'src/components/Charts/PieChart'
+import LineChart from "src/components/Charts/LineChart";
+import BarChart from "src/components/Charts/BarChart";
+import PieChart from "src/components/Charts/PieChart";
+import ScatterChart from "src/components/Charts/ScatterChart";
 
 export default {
   data() {
     return {
       myChart: null,
       lpModel: {},
-      headSolution: [],
-      solutionsX: [],
-      solutionsY: [],
-      solutionsZ: [],
+      solList: null,
       elements: 0,
       height: "device-height"
     };
@@ -72,7 +93,8 @@ export default {
     LPTable,
     LineChart,
     BarChart,
-    PieChart
+    PieChart,
+    ScatterChart
   },
   mounted() {},
   methods: {
@@ -117,27 +139,37 @@ export default {
         query += this.lpModel.constraints[i].type + ",";
         query += this.lpModel.constraints[i].limit + ";";
       }
-      return query
+      return query;
     },
     solveSolution() {
       var qwery = this.buildQuery();
+
       axios
-        .get("https://viptest1.herokuapp.com/graphicalMethod/" + qwery)
+        .get(
+          this.$store.state.backend +
+            "/graphicalMethodModule/graphicalMethod" +
+            qwery
+        )
         .then(response => {
           console.log(response);
           var constraints = response.data.constraints;
           var optimal = response.data.optimalSolution;
           var solList = response.data.solutionList;
-          for(var i=0;i<solList.length;i++){
-            for(var j=i+1;j<solList.length;j++){
-              if(solList[i].z==solList[j].z && solList[i].variables.X1==solList[j].variables.X1 && solList[i].variables.X2==solList[j].variables.X2){
-                solList.splice(j,1)
+          for (var i = 0; i < solList.length; i++) {
+            for (var j = i + 1; j < solList.length; j++) {
+              if (
+                solList[i].z == solList[j].z &&
+                solList[i].variables.X1 == solList[j].variables.X1 &&
+                solList[i].variables.X2 == solList[j].variables.X2
+              ) {
+                solList.splice(j, 1);
                 j--;
                 break;
               }
             }
           }
-          console.log(solList)
+          this.solList=solList.filter(sol=>sol.feasible).sort(function(a,b){return a.z-b.z})
+          console.log(solList);
           var solX = [];
           var solY = [];
           constraints.forEach(element => {
@@ -166,15 +198,10 @@ export default {
           this.headSolution.push({ title: "X2" });
           this.headSolution.push({ title: "Z" });
           var contador = 0;
-          this.solutionsY = [];
-          this.solutionsZ = [];
-          this.solutionsX = [];
           solList.forEach(element => {
             solX.push(element.variables.X1);
-            this.solutionsX.push(element.variables.X1);
+
             solY.push(element.variables.X2);
-            this.solutionsY.push(element.variables.X2);
-            this.solutionsZ.push(element.z);
             contador++;
           });
           this.elements = contador;
@@ -224,7 +251,11 @@ export default {
           colorAux = [];
           solList.forEach(element => {
             dataAux.push({ x: element.variables.X1, y: element.variables.X2 });
-            colorAux.push("rgba(255, 255, 0, 1)");
+            if (element.feasible) {
+              colorAux.push("rgba(0, 255, 0, 1)");
+            } else {
+              colorAux.push("rgba(255, 0, 0, 1)");
+            }
           });
           dataframe.push({
             label: "Y ",
@@ -326,7 +357,7 @@ export default {
             //console.log(dataframe);
             dataframe.push({
               label: "C" + count,
-              //showLine = 'true',
+              showLine: "true",
               data: dataAux,
               pointRadius: 0,
               borderDash: [10, 5],
@@ -338,122 +369,127 @@ export default {
               fill: area,
               steppedLine: false,
               lineTension: 0
-              //fillBetweenSet: 1,
-              //fillBetweenColor: "rgba(255,0,0, 0.2)"
+              // fillBetweenSet: 1,
+              // fillBetweenColor: "rgba(255,0,0, 0.2)"
             });
             count++;
           });
-          this.myChart ={
-            //type: 'scatter',
-            type: "line",
-            data: {
-              datasets: dataframe
-            },
-            options: {
-              scales: {
-                yAxes: [
-                  {
-                    ticks: {
-                      beginAtZero: false
-                      //min: minY,
-                      //max: maxY
-                    },
-                    scaleLabel: {
-                      display: true,
-                      labelString: "X2"
-                    },
-                    gridLines: {
-                      // You can change the color, the dash effect, the main axe color, etc.
-                      borderDash: [1, 2],
-                      zeroLineColor: "rgba(0,0,0,1)"
-                    }
-                  }
-                ],
-                xAxes: [
-                  {
-                    ticks: {
-                      beginAtZero: false,
-                      min: minX,
-                      max: maxX
-                    },
-                    type: "linear",
-                    position: "bottom",
-                    scaleLabel: {
-                      display: true,
-                      labelString: "X1"
-                    },
-                    gridLines: {
-                      // You can change the color, the dash effect, the main axe color, etc.
-                      borderDash: [1, 2],
-                      zeroLineColor: "rgba(0,0,0,1)"
-                    }
-                  }
-                ]
-              },
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                zoom: {
-                  // Container for pan options
-                  pan: {
-                    // Boolean to enable panning
-                    enabled: true,
-                    // Panning directions. Remove the appropriate direction to disable
-                    // Eg. 'y' would only allow panning in the y direction
-                    mode: "xy",
-                    rangeMin: {
-                      // Format of min pan range depends on scale type
-                      x: null,
-                      y: null
-                    },
-                    rangeMax: {
-                      // Format of max pan range depends on scale type
-                      x: null,
-                      y: null
-                    },
-                    // Function called once panning is completed
-                    // Useful for dynamic data loading
-                    onPan: function({ chart }) {
-                      console.log(`I was panned!!!`);
-                    }
+          let data = { datasets: dataframe };
+          let options = {
+            scales: {
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: false
+                    //min: minY,
+                    //max: maxY
                   },
-                  // Container for zoom options
-                  zoom: {
-                    // Boolean to enable zooming
-                    enabled: true,
-                    // Enable drag-to-zoom behavior
-                    drag: false,
-                    // Drag-to-zoom rectangle style can be customized
-                    // drag: {
-                    // 	 borderColor: 'rgba(225,225,225,0.3)'
-                    // 	 borderWidth: 5,
-                    // 	 backgroundColor: 'rgb(225,225,225)'
-                    // },
-                    // Zooming directions. Remove the appropriate direction to disable
-                    // Eg. 'y' would only allow zooming in the y direction
-                    mode: "xy",
-                    rangeMin: {
-                      // Format of min zoom range depends on scale type
-                      x: null,
-                      y: null
-                    },
-                    rangeMax: {
-                      // Format of max zoom range depends on scale type
-                      x: null,
-                      y: null
-                    },
-                    // Speed of zoom via mouse wheel
-                    // (percentage of zoom on a wheel event)
-                    speed: 0.1,
-                    // Function called once zooming is completed
-                    // Useful for dynamic data loading
-                    onZoom: function({ chart }) {
-                      console.log(`I was zoomed!!!`);
-                    }
+                  scaleLabel: {
+                    display: true,
+                    labelString: "X2"
+                  },
+                  gridLines: {
+                    // You can change the color, the dash effect, the main axe color, etc.
+                    borderDash: [1, 2],
+                    zeroLineColor: "rgba(0,0,0,1)"
+                  }
+                }
+              ],
+              xAxes: [
+                {
+                  ticks: {
+                    beginAtZero: false,
+                    min: minX,
+                    max: maxX
+                  },
+                  type: "linear",
+                  position: "bottom",
+                  scaleLabel: {
+                    display: true,
+                    labelString: "X1"
+                  },
+                  gridLines: {
+                    // You can change the color, the dash effect, the main axe color, etc.
+                    borderDash: [1, 2],
+                    zeroLineColor: "rgba(0,0,0,1)"
+                  }
+                }
+              ]
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              zoom: {
+                // Container for pan options
+                pan: {
+                  // Boolean to enable panning
+                  enabled: true,
+                  // Panning directions. Remove the appropriate direction to disable
+                  // Eg. 'y' would only allow panning in the y direction
+                  mode: "xy",
+                  rangeMin: {
+                    // Format of min pan range depends on scale type
+                    x: minX,
+                    y: minY
+                  },
+                  rangeMax: {
+                    // Format of max pan range depends on scale type
+                    x: maxX,
+                    y: maxY
+                  },
+                  // Function called once panning is completed
+                  // Useful for dynamic data loading
+                  onPan: function({ chart }) {
+                    //console.log(`I was panned!!!`);
+                  }
+                },
+                // Container for zoom options
+                zoom: {
+                  // Boolean to enable zooming
+                  enabled: true,
+                  // Enable drag-to-zoom behavior
+                  drag: false,
+                  // Drag-to-zoom rectangle style can be customized
+                  // drag: {
+                  // 	 borderColor: 'rgba(225,225,225,0.3)'
+                  // 	 borderWidth: 5,
+                  // 	 backgroundColor: 'rgb(225,225,225)'
+                  // },
+                  // Zooming directions. Remove the appropriate direction to disable
+                  // Eg. 'y' would only allow zooming in the y direction
+                  mode: "xy",
+                  rangeMin: {
+                    // Format of min zoom range depends on scale type
+                    x: minX,
+                    y: minY
+                  },
+                  rangeMax: {
+                    // Format of max zoom range depends on scale type
+                    x: maxX,
+                    y: maxY
+                  },
+                  // Speed of zoom via mouse wheel
+                  // (percentage of zoom on a wheel event)
+                  speed: 0.01,
+                  // Function called once zooming is completed
+                  // Useful for dynamic data loading
+                  onZoom: function({ chart }) {
+                    console.log(`I was zoomed!!!`);
                   }
                 }
               }
             }
+          };
+          if (!this.myChart) {
+            this.myChart = {
+              //type: 'scatter',
+              data: data,
+              options: options
+            };
+          } else {
+            this.myChart.options = options;
+            this.myChart.data = data;
+            this.$refs.Chart.updateGradients(data);
           }
         });
       return null;
