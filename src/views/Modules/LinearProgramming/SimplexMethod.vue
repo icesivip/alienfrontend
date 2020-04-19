@@ -17,7 +17,9 @@
       <h5 slot="header" class="title title-up">About Simplex</h5>
       <div class="instruction">
         <div class="row">
-          <strong><i class="tim-icons icon-book-bookmark text-primary"></i>What is it?</strong>
+          <strong>
+            <i class="tim-icons icon-book-bookmark text-primary"></i>What is it?
+          </strong>
           <p class="description">
             It is an analytic method for solving problems of linear programming using algebraic operations.
             This method provides a strategy for evaluating the feasible results finding the
@@ -27,7 +29,9 @@
       </div>
       <div class="instruction">
         <div class="row">
-          <strong><i class="tim-icons icon-notes text-info"></i>When to use it?</strong>
+          <strong>
+            <i class="tim-icons icon-notes text-info"></i>When to use it?
+          </strong>
           <p
             class="description"
           >This method can be applied for problems of linear programming that use two or more variables.</p>
@@ -35,7 +39,9 @@
       </div>
       <div class="instruction">
         <div class="row">
-          <strong><i class="tim-icons icon-paper text-success"></i>Instructions</strong>
+          <strong>
+            <i class="tim-icons icon-paper text-success"></i>Instructions
+          </strong>
           <p class="description">
             For using the program you will need an objective function and the respective constraints.
             As a result, the program is going to show the type and value of the optimal
@@ -55,22 +61,20 @@
         <card>
           <div>
             <div class="row">
-              
-                <label class="col-sm-2 col-form-label" style="font-size: 1.00rem">Problem Title</label>
-              
+              <label class="col-sm-2 col-form-label" style="font-size: 1.00rem">Problem Title</label>
+
               <div class="col-sm-8">
                 <el-tooltip
-                content="Type the name of the problem here"
-                effect="light"
-                :open-delay="300"
-                placement="top"
-              >
-                <base-input
-                  name="required"
-                  v-validate="modelValidations.required"
-                  v-model="model.required"
-                  :error="getError('required')"
-                ></base-input></el-tooltip>
+                  content="Type the name of the problem here"
+                  effect="light"
+                  :open-delay="300"
+                  placement="top"
+                >
+                  <base-input
+                    v-model="title"
+                    :error="getError('required')"
+                  ></base-input>
+                </el-tooltip>
               </div>
             </div>
 
@@ -89,35 +93,33 @@
         :open-delay="300"
         placement="top"
       >
-        <base-button style="width: 50%" round type="primary" @click="solveSolution">Start solving</base-button>
+        <base-button style="width: 50%" round :loading="loading.solve" type="primary" @click="solve">Start solving</base-button>
       </el-tooltip>
     </div>
     <br />
-    <div v-if="iteration >= 0" class="col-lg-12">
+    <div v-if="simplex.iteration >= 0" class="col-lg-12">
       <card>
         <h2 class="text-center card-title">Solution Data Table</h2>
         <hr />
-        <h4 v-if="iteration == 0">Slack variables created</h4>
-        <h4 v-else>Iteration {{iteration}}: {{operationsDone}}</h4>
+        <h4 v-if="simplex.iteration == 0">Slack variables created</h4>
+        <h4 v-else>Iteration {{simplex.iteration}}: {{simplex.operationsDone}}</h4>
 
         <table class="text-center table solution-table">
           <thead>
             <tr>
               <th>Basic Variables</th>
-              <th v-for="item in variableNames" v-bind:key="item" v-html="item"></th>
+              <th v-for="item in simplex.variableNames" v-bind:key="item" v-html="item"></th>
               <th>RHS</th>
               <th>Theta</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(m,j) in tablaResultados" v-bind:key="j">
+            <tr v-for="(m,j) in simplex.tablaResultados" v-bind:key="j">
               <td v-if="j==0">Z</td>
-              <td v-else>{{varsBase[j-1]}}</td>
+              <td v-else>{{simplex.varsBase[j-1]}}</td>
               <td v-for="(n, i) in m" :key="i">{{n}}</td>
-              <td
-                v-if="j>=1 && theta != null && theta[j-1]<maxValue"
-              >{{theta[j-1]}}</td>
-              <td v-else-if="j>=1 && theta != null">&#8734;</td>
+              <td v-if="j>=1 && simplex.theta != null && simplex.theta[j-1]<maxValue">{{simplex.theta[j-1]}}</td>
+              <td v-else-if="j>=1 && simplex.theta != null">&#8734;</td>
               <td v-else>-</td>
             </tr>
           </tbody>
@@ -133,6 +135,7 @@
           >
             <base-button
               native-type="submit"
+              :loading="loading.back"
               v-on:click="stepByStep(-1)"
               type="primary"
               :disabled="itAble"
@@ -148,6 +151,7 @@
           >
             <base-button
               native-type="submit"
+              :loading="loading.next"
               v-on:click="stepByStep(1)"
               type="primary"
               :disabled="nextAble"
@@ -167,6 +171,7 @@
             <base-button
               round
               native-type="submit"
+              :loading="loading.final"
               v-on:click="finalSol()"
               type="primary"
               :disabled="nextAble"
@@ -175,10 +180,10 @@
         </div>
       </div>
     </div>
-    <br/>
+    <br />
     <!-- <h3>{{messageSol}}</h3> -->
 
-    <div v-if="messageSol != null" class="col-lg-12">
+    <div v-if="simplex.messageSol != null" class="col-lg-12">
       <div class="row">
         <div class="col-md-6">
           <card>
@@ -191,38 +196,30 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(n, i) in variableNames" :key="i">
+                <tr v-for="(n, i) in simplex.variableNames" :key="i">
                   <td v-html="n"></td>
-                  <td
-                    v-if="varsValuesSolution != null"
-                  >{{varsValuesSolution[i]}}</td>
+                  <td v-if="simplex.varsValuesSolution != null">{{simplex.varsValuesSolution[i]}}</td>
                 </tr>
                 <tr>
                   <td>Z</td>
-                  <td
-                    v-if="varsValuesSolution != null"
-                  >{{varsValuesSolution[variableNames.length]}}</td>
+                  <td v-if="simplex.varsValuesSolution != null">{{simplex.varsValuesSolution[simplex.variableNames.length]}}</td>
                 </tr>
               </tbody>
             </table>
           </card>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" >
           <card>
-          <h2 class="text-center card-title">Sensitivity Analysis</h2>
-          <li class="list-group-item">
-          <h4>
-            Equations for Shadow Prices intervals
-          </h4>
-          <h4 class="text-center" v-html="equationsConstraints"></h4>
-          </li>
-          <li class="list-group-item">
-          <h4>
-            Equations for Reduced Costs intervals
-          </h4>
-          <h4 class="text-center" v-html="equationsFO"></h4>
-          </li>
+            <h2 class="text-center card-title">Sensitivity Analysis</h2>
+            <li class="list-group-item">
+              <h4>Equations for Shadow Prices intervals</h4>
+              <h4 class="text-center" v-html="simplex.equationsConstraints"></h4>
+            </li>
+            <li class="list-group-item">
+              <h4>Equations for Reduced Costs intervals</h4>
+              <h4 class="text-center" v-html="simplex.equationsFO"></h4>
+            </li>
           </card>
         </div>
       </div>
@@ -240,21 +237,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="i in nVarDecision" :key="i">
-              <td v-html="variableNames[i-1]"></td>
-              <td v-if="varsValuesSolution != null">{{varsValuesSolution[i-1]}}</td>
-              <td
-                v-if="reducedCosts != null && reducedCosts[i-1]<maxValue"
-              >{{reducedCosts[i-1]}}</td>
+            <tr v-for="i in simplex.nVarDecision" :key="i">
+              <td v-html="simplex.variableNames[i-1]"></td>
+              <td v-if="simplex.varsValuesSolution != null">{{simplex.varsValuesSolution[i-1]}}</td>
+              <td v-if="simplex.reducedCosts != null && simplex.reducedCosts[i-1]<maxValue">{{simplex.reducedCosts[i-1]}}</td>
               <td v-else>&#8734;</td>
-              <td v-if="fobj != null">{{fobj[i-1][0]}}</td>
+              <td v-if="simplex.fobj != null">{{simplex.fobj[i-1][0]}}</td>
               <td
-                v-if="intervalsDFO != null && intervalsDFO[i-1][0]<maxValue"
-              >{{intervalsDFO[i-1][0]}}</td>
+                v-if="simplex.intervalsDFO != null && simplex.intervalsDFO[i-1][0]<maxValue"
+              >{{simplex.intervalsDFO[i-1][0]}}</td>
               <td v-else>&#8734;</td>
               <td
-                v-if="intervalsDFO != null && intervalsDFO[i-1][1]<maxValue"
-              >{{intervalsDFO[i-1][1]}}</td>
+                v-if="simplex.intervalsDFO != null && simplex.intervalsDFO[i-1][1]<maxValue"
+              >{{simplex.intervalsDFO[i-1][1]}}</td>
               <td v-else>&#8734;</td>
             </tr>
           </tbody>
@@ -274,21 +269,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="i in finalValuesConstraints.length" :key="i">
+            <tr v-for="i in simplex.finalValuesConstraints.length" :key="i">
               <td>Constraint {{i}}</td>
-              <td>{{finalValuesConstraints[i-1]}}</td>
-              <td
-                v-if="shadowPrice != null && shadowPrice[0][i-1]<maxValue"
-              >{{shadowPrice[0][i-1]}}</td>
+              <td>{{simplex.finalValuesConstraints[i-1]}}</td>
+              <td v-if="simplex.shadowPrice != null && simplex.shadowPrice[0][i-1]<maxValue">{{simplex.shadowPrice[0][i-1]}}</td>
               <td v-else>&#8734;</td>
-              <td v-if="rhsinitialM != null">{{rhsinitialM[i]}}</td>
+              <td v-if="simplex.rhsinitialM != null">{{simplex.rhsinitialM[i]}}</td>
               <td
-                v-if="intervalsDConstraints != null && intervalsDConstraints[i-1][0]<maxValue"
-              >{{intervalsDConstraints[i-1][0]}}</td>
+                v-if="simplex.intervalsDConstraints != null && simplex.intervalsDConstraints[i-1][0]<maxValue"
+              >{{simplex.intervalsDConstraints[i-1][0]}}</td>
               <td v-else>&#8734;</td>
               <td
-                v-if="intervalsDConstraints != null && intervalsDConstraints[i-1][1]<maxValue"
-              >{{intervalsDConstraints[i-1][1]}}</td>
+                v-if="simplex.intervalsDConstraints != null && simplex.intervalsDConstraints[i-1][1]<maxValue"
+              >{{simplex.intervalsDConstraints[i-1][1]}}</td>
               <td v-else>&#8734;</td>
             </tr>
           </tbody>
@@ -310,43 +303,39 @@ export default {
     return {
       type: ["", "info", "success", "warning", "danger"],
       lpModel: {},
-      variableNames: [],
-      tablaResultados: [],
-      intervalsDFO: null,
-      theta: null,
-      intervalsDConstraints: null,
-      rhsinitialM: [],
-      messageSol: null,
-      query: "",
-      iteration: -1,
+      title: "",
+      simplex: {
+        variableNames: [],
+        tablaResultados: [],
+        intervalsDFO: null,
+        theta: null,
+        intervalsDConstraints: null,
+        rhsinitialM: [],
+        messageSol: null,
+        iteration: -1,
+        operationsDone: "",
+        equationsFO: null,
+        equationsConstraints: null,
+        reducedCosts: null,
+        varsValuesSolution: [],
+        nVarDecision: 0,
+        fobj: null,
+        shadowPrice: null,
+        finalValuesConstraints: [],
+        varsBase: null
+      },
+      loading: {
+        solve: false,
+        back: false,
+        next: false,
+        final: false
+      },
       itAble: true,
       nextAble: false,
-      operationsDone: "",
-      equationsFO: null,
-      equationsConstraints: null,
-      reducedCosts: null,
-      varsValuesSolution: [],
-      nVarDecision: 0,
-      fobj: null,
-      shadowPrice: null,
-      finalValuesConstraints: [],
-      varsBase: null,
+      query: "",
       maxValue: Number.MAX_SAFE_INTEGER,
       modals: {
         notice: false
-      },
-      model: {
-        required: "",
-        number: ""
-      },
-      modelValidations: {
-        required: {
-          required: true
-        },
-
-        number: {
-          numeric: true
-        }
       }
     };
   },
@@ -399,75 +388,89 @@ export default {
         this.query += this.lpModel.constraints[i].limit + "n";
       }
     },
-    solveSolution() {
+    solve() {
+      this.loading.solve = true;
       this.buildQuery();
-      this.iteration = -1;
+      this.simplex.iteration = -1;
       this.stepByStep(1);
-      return null;
     },
     stepByStep(val) {
       var next = this.query;
-      if (val == 1 && (this.messageSol == null || this.iteration == -1))
-        this.iteration++;
-      else if (val == -1 && this.iteration > 0) this.iteration--;
-      if (this.iteration > 0) this.itAble = false;
+      if (val == 1 && (this.simplex.messageSol == null || this.simplex.iteration == -1)){
+        this.simplex.iteration++;
+        this.loading.next = true;
+      }
+      else if (val == -1 && this.simplex.iteration > 0) {
+        this.simplex.iteration--;
+        this.loading.back = true;
+        }
+      if (this.simplex.iteration > 0) this.itAble = false;
       else this.itAble = true;
-      next = next.replace("?", "?iteration=" + this.iteration + "&");
+      next = next.replace("?", "?iteration=" + this.simplex.iteration + "&");
       this.callServer(next, false);
     },
     finalSol() {
+      this.loading.final = true;
       this.callServer(this.query, true);
     },
     callServer(route, isFinal) {
       axios
         .get(
-          "https://alien-backend-v2.herokuapp.com/api/simplexAlgorithmModule/simplexMethod/" +
-            route
+          "https://alien-backend-v2.herokuapp.com/api/simplexAlgorithmModule/simplexMethod/" + route
           //"http://localhost:8080/api/simplexAlgorithmModule/simplexMethod/"+route
         )
         .then(response => {
-          this.messageSol = response.data.messageSol;
-          this.tablaResultados = response.data.actualMatrix;
-          this.variableNames = response.data.everyVariableName;
+          this.simplex.messageSol = response.data.messageSol;
+          this.simplex.tablaResultados = response.data.actualMatrix;
+          this.simplex.variableNames = response.data.everyVariableName;
           this.convertSubIndex();
-          this.rhsinitialM = response.data.rhsinitialM;
-          this.operationsDone = response.data.operationsDone;
+          this.simplex.rhsinitialM = response.data.rhsinitialM;
+          this.simplex.operationsDone = response.data.operationsDone;
           if (isFinal) {
-            this.iteration = response.data.iterationID + 1;
+            this.simplex.iteration = response.data.iterationID + 1;
           }
           if (response.data.analysis != null) {
-            this.intervalsDFO = response.data.analysis.intervalsDFO;
-            this.intervalsDConstraints =
+            this.simplex.intervalsDFO = response.data.analysis.intervalsDFO;
+            this.simplex.intervalsDConstraints =
               response.data.analysis.intervalsDConstraints;
-            this.equationsConstraints =
+            this.simplex.equationsConstraints =
               response.data.analysis.equationsConstraints;
-            this.equationsFO = response.data.analysis.equationsFO;
+            this.simplex.equationsFO = response.data.analysis.equationsFO;
             console.log(this.equationsFO);
-            this.shadowPrice = response.data.analysis.shadowPrice;
+            this.simplex.shadowPrice = response.data.analysis.shadowPrice;
             this.nextAble = true;
             this.itAble = false;
             this.notifyVue("bottom", "left");
           } else this.nextAble = false;
-          this.reducedCosts = response.data.reducedCosts;
-          this.varsValuesSolution = response.data.varsValuesSolution;
-          this.nVarDecision = response.data.nVarDecision;
-          this.fobj = response.data.fobj;
-          this.finalValuesConstraints = response.data.finalValuesConstraints;
-          this.theta = response.data.theta;
-          this.varsBase = response.data.varsBase;
+          this.simplex.reducedCosts = response.data.reducedCosts;
+          this.simplex.varsValuesSolution = response.data.varsValuesSolution;
+          this.simplex.nVarDecision = response.data.nVarDecision;
+          this.simplex.fobj = response.data.fobj;
+          this.simplex.finalValuesConstraints = response.data.finalValuesConstraints;
+          this.simplex.theta = response.data.theta;
+          this.simplex.varsBase = response.data.varsBase;
+          this.loading.solve = false;
+          this.loading.back = false;
+          this.loading.next = false;
+          this.loading.final = false;
           console.log(response.data);
         });
     },
     convertSubIndex() {
-      for (let index = 0; index < this.variableNames.length; index++) {
-        var element = this.variableNames[index];
-        this.variableNames[index] = "<html>" +element.charAt(0) + "<sub>" + element.substring(1) + "</sub></html>";
+      for (let index = 0; index < this.simplex.variableNames.length; index++) {
+        var element = this.simplex.variableNames[index];
+        this.simplex.variableNames[index] =
+          "<html>" +
+          element.charAt(0) +
+          "<sub>" +
+          element.substring(1) +
+          "</sub></html>";
       }
     },
     notifyVue(verticalAlign, horizontalAlign) {
       let color = "success";
       this.$notify({
-        message: "<b>" + this.messageSol + "</b>",
+        message: "<b>" + this.simplex.messageSol + "</b>",
         timeout: 10000,
         icon: "tim-icons icon-alert-circle-exc",
         horizontalAlign: horizontalAlign,
@@ -479,7 +482,7 @@ export default {
 };
 </script>
 <style>
-.solution-table th{
+.solution-table th {
   width: 130px;
   overflow: auto;
 }
