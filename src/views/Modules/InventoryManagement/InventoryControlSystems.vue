@@ -363,8 +363,7 @@ export default {
     callServer(route) {
       axios
         .get(
-          //"https://alien-backend-v2.herokuapp.com/api/inventoryManagementModule/solve" + route
-          "http://localhost:8080/api/inventoryManagementModule/solve" + route
+          this.$store.state.backend + "/inventoryManagementModule/solve" + route
         )
         .then(response => {
             console.log(response.data);

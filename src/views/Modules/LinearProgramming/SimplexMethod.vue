@@ -416,8 +416,7 @@ export default {
     callServer(route, isFinal) {
       axios
         .get(
-          "https://alien-backend-v2.herokuapp.com/api/simplexAlgorithmModule/simplexMethod/" + route
-          //"http://localhost:8080/api/simplexAlgorithmModule/simplexMethod/"+route
+           this.$store.state.backend + "/simplexAlgorithmModule/simplexMethod/" + route
         )
         .then(response => {
           this.simplex.messageSol = response.data.messageSol;
