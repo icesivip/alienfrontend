@@ -39,7 +39,19 @@
           >
           </sidebar-item>
         </sidebar-item>
-
+      <sidebar-item
+          :link="{
+            name: $t('Inventory Management'),
+            icon: 'tim-icons icon-notes'
+          }"
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Inventory Control Systems'),
+              path: '/inventory'
+            }"
+          ></sidebar-item>
+      </sidebar-item>
         <sidebar-item
           :link="{
             name: $t('Facility Planning'),
