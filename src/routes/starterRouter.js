@@ -15,9 +15,14 @@ import MRP from 'src/views/Modules/MasterPlanSchedule/MRP';
 import LPTable from 'src/components/Modules/LinearProgramming/LPTable';
 import TestEmit from 'src/views/Modules/LinearProgramming/Test/testEmit';
 
+import Forecasts from 'src/views/Modules/Forecasts/Forecasts';
+
 import ShortestPath from 'src/views/Modules/Networks/ShortestPath';
 import MST from 'src/views/Modules/Networks/MST';
 import MFP from 'src/views/Modules/Networks/MFP';
+
+import NEOSServer from 'src/views/Modules/LinearProgramming/NEOSServer';
+
 
 
 Vue.use(Router);
@@ -73,9 +78,14 @@ export default new Router({
           components: { default: MRP }
         },
         {
+          path: 'forecasts',
+          name: 'forecasts',
+          components: { default: Forecasts }
+        },
+        {
           path: 'test',
           name: 'test',
-          components: { default: LPTable }
+          components: { default: NEOSServer }
         },
         {
           path: 'testTable',
