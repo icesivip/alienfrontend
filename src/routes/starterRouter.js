@@ -20,6 +20,8 @@ import ShortestPath from 'src/views/Modules/Networks/ShortestPath';
 import MST from 'src/views/Modules/Networks/MST';
 import MFP from 'src/views/Modules/Networks/MFP';
 
+import NEOSServer from 'src/views/Modules/LinearProgramming/NEOSServer';
+
 
 
 Vue.use(Router);
@@ -77,7 +79,7 @@ export default new Router({
         {
           path: 'test',
           name: 'test',
-          components: { default: LPTable }
+          components: { default: NEOSServer }
         },
         {
           path: 'testTable',
