@@ -4,6 +4,7 @@ import DashboardLayout from './../pages/Starter/SampleLayout';
 import Starter from './../pages/Starter/SamplePage';
 
 import SimplexMethod from 'src/views/Modules/LinearProgramming/SimplexMethod';
+import InventoryControlSystems from 'src/views/Modules/InventoryManagement/InventoryControlSystems';
 import BranchAndBound from 'src/views/Modules/LinearProgramming/BranchAndBound';
 import CraftMethod from 'src/views/Modules/LinearProgramming/CraftMethod';
 import GraphicalMethod from 'src/views/Modules/LinearProgramming/GraphicalMethod';
@@ -60,6 +61,11 @@ export default new Router({
           path: 'graphical',
           name: 'graphical',
           components: { default: GraphicalMethod }
+        },
+        {
+          path: 'inventory',
+          name: 'inventory',
+          components: { default: InventoryControlSystems}
         },
         {
           path: 'master-production-schedule',
