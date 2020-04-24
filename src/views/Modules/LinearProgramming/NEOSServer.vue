@@ -61,7 +61,13 @@
         label="User E-mail"
       />
     </card>
+    <card class="text-center">
+      <base-button type="primary" block :loading="processing" @click="solve">
+        Solve
+      </base-button>
+    </card>
 
+    
     <div id="results" v-if="results">
       <hr />
       <card>
@@ -69,10 +75,6 @@
         <codemirror v-model="results" :options="cmOptions2" />
       </card>
     </div>
-
-    <base-button type="primary" block :loading="processing" @click="solve">
-      Solve
-    </base-button>
   </div>
 </template>
 
@@ -98,8 +100,8 @@ export default {
       model: "## Define your LP model here",
       commands: "## Specify how you want to solve your model",
       email: "",
-      processing:false,
-      results:null,
+      processing: false,
+      results: null,
       cmOptions: {
         tabSize: 4,
         mode: "text/javascript",
@@ -108,7 +110,7 @@ export default {
         line: true
         // more CodeMirror options...
       },
-            cmOptions2: {
+      cmOptions2: {
         tabSize: 4,
         mode: "text/javascript",
         theme: "monokai",
@@ -125,22 +127,22 @@ export default {
   },
   methods: {
     solve() {
-      this.processing=true
+      this.processing = true;
       axios
         .post(this.$store.state.backend + "/neosModule/neosServer", {
           data: this.data,
           model: this.model,
           commands: this.commands,
-          email:this.email
+          email: this.email
         })
         .then(response => {
-                    swal({
+          swal({
             type: "success",
             title: "Process Completed!",
             text: "NEOS Server has responded to your request"
           });
-          this.results=response.data
-          this.processing=false
+          this.results = response.data;
+          this.processing = false;
         })
         .catch(error => {
           swal({
@@ -148,7 +150,7 @@ export default {
             title: "An error ocurred!",
             text: error.response.data.errors[0].defaultMessage
           });
-          this.processing=false
+          this.processing = false;
         });
     },
     change() {}

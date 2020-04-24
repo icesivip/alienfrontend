@@ -2,7 +2,11 @@
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
     <notifications></notifications>
     <sidebar-fixed-toggle-button />
-    <side-bar :background-color="sidebarBackground" short-title="CT" title="VIP - Alien">
+    <side-bar
+      :background-color="sidebarBackground"
+      short-title="CT"
+      title="VIP - Alien"
+    >
       <template slot-scope="props" slot="links">
         <!-- <sidebar-item
           :link="{
@@ -38,8 +42,16 @@
             }"
           >
           </sidebar-item>
+
+          <sidebar-item
+            :link="{
+              name: $t('AMPL'),
+              path: '/ampl'
+            }"
+          >
+          </sidebar-item>
         </sidebar-item>
-      <sidebar-item
+        <sidebar-item
           :link="{
             name: $t('Inventory Management'),
             icon: 'tim-icons icon-notes'
@@ -51,7 +63,7 @@
               path: '/inventory'
             }"
           ></sidebar-item>
-      </sidebar-item>
+        </sidebar-item>
         <sidebar-item
           :link="{
             name: $t('Facility Planning'),
@@ -84,7 +96,7 @@
               path: '/material-requirements-planning'
             }"
           ></sidebar-item>
-          </sidebar-item>
+        </sidebar-item>
         <sidebar-item
           :link="{
             name: $t('Networks'),
@@ -103,7 +115,7 @@
               path: '/minimum-spanning-tree'
             }"
           ></sidebar-item>
-           <sidebar-item
+          <sidebar-item
             :link="{
               name: $t('Maximum Flow Problem'),
               path: '/maximum-flow-problem'
@@ -115,7 +127,7 @@
             name: $t('Forecasts'),
             icon: 'tim-icons icon-sound-wave'
           }"
-        ><sidebar-item
+          ><sidebar-item
             :link="{
               name: $t('Forecasts'),
               path: '/forecasts'
@@ -128,7 +140,10 @@
       <dashboard-navbar></dashboard-navbar>
       <router-view name="header"></router-view>
 
-      <div :class="{ content: !$route.meta.hideContent }" @click="toggleSidebar">
+      <div
+        :class="{ content: !$route.meta.hideContent }"
+        @click="toggleSidebar"
+      >
         <zoom-center-transition :duration="200" mode="out-in">
           <!-- your content here -->
           <router-view></router-view>

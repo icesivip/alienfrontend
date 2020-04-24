@@ -41,6 +41,14 @@ export default new Router({
 
           components: { default: Starter }
         },
+
+        {
+          path: 'ampl',
+          name: 'ampl',
+
+          components: { default: NEOSServer }
+        }
+        ,
         {
           path: 'craft',
           name: 'craft',
