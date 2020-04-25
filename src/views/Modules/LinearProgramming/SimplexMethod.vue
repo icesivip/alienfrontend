@@ -103,7 +103,7 @@
         <hr />
         <h4 v-if="simplex.iteration == 0">Slack variables created</h4>
         <h4 v-else>Iteration {{simplex.iteration}}: {{simplex.operationsDone}}</h4>
-
+      <div class="table-responsive">
         <table class="text-center table solution-table">
           <thead>
             <tr>
@@ -117,13 +117,14 @@
             <tr v-for="(m,j) in simplex.tablaResultados" v-bind:key="j">
               <td v-if="j==0">Z</td>
               <td v-else>{{simplex.varsBase[j-1]}}</td>
-              <td v-for="(n, i) in m" :key="i">{{n}}</td>
+              <td class="data-table" v-for="(n, i) in m" :key="i">{{n}}</td>
               <td v-if="j>=1 && simplex.theta != null && simplex.theta[j-1]<maxValue">{{simplex.theta[j-1]}}</td>
               <td v-else-if="j>=1 && simplex.theta != null">&#8734;</td>
               <td v-else>-</td>
             </tr>
           </tbody>
         </table>
+      </div>
       </card>
       <div class="row">
         <div class="col-md-6 ml-auto mr-auto" align="center">
@@ -484,6 +485,12 @@ export default {
 .solution-table th {
   width: 130px;
   overflow: auto;
+}
+.data-table {
+  padding: 1px;
+  vertical-align: center;
+  min-width: 70px;
+  margin: 0;
 }
 .card .alert {
   position: relative !important;

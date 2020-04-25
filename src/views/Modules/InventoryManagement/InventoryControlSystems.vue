@@ -73,145 +73,189 @@
     <div class="col-lg-12" align="center">
       <card>
         <h2 class="card-title">Type of System</h2>
-
         <el-select
           class="select-primary"
           id="selector"
-          placeholder="System Type"
-          v-model="selects.simple"
+          placeholder="Choose the system type"
+          v-model="selects.chooseSystem"
         >
           <el-option
             v-for="option in selects.systemType"
-            class="select-succes"
-            :value="option.value"
-            :label="option.label"
-            :key="option.label"
+            class="select-primary"
+            :value="option"
+            :label="option"
+            :key="option"
           ></el-option>
         </el-select>
       </card>
     </div>
-    <form class="form-horizontal col-lg-12" v-if="!selects.simple.startsWith('Choose')">
+    <form class="form-horizontal col-lg-12" v-if="selects.chooseSystem!=null">
       <card>
-        <h4 slot="header" class="card-title">{{selects.simple}}</h4>
+        <h4 slot="header" class="card-title">{{selects.chooseSystem}}</h4>
         <div>
           <div class="row">
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,Q)')">
-              <div class="row">
-                <label class="col-6 col-form-label">Annual Demand</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.annualDemand"></base-input>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(R,S)')">
-              <div class="row">
-                <label class="col-6 col-form-label">Daily Demand</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.dailyDemand"></base-input>
-                </div>
-              </div>
-            </div>
             <div
               class="col-md-6 col-lg-4"
-              v-if="selects.simple.startsWith('(s,Q)') || selects.simple.startsWith('(R,S)')"
+              v-if="selects.chooseSystem.startsWith('(s,Q)') || selects.chooseSystem.startsWith('(R,S)')"
             >
               <div class="row">
-                <label class="col-form-label">Standard Dev Daily Demand</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.standardDeviationDailyDemand"></base-input>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(R,S)')">
-              <div class="row">
-                <label class="col-6 col-form-label">Review Time</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.reviewTime"></base-input>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(R,S)')">
-              <div class="row">
-                <label class="col-6 col-form-label">Available Inventory</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.availableInventory"></base-input>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,Q)')">
-              <div class="row">
-                <label class="col-6 col-form-label">Order Costs</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.orderCost"></base-input>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,Q)')">
-              <div class="row">
-                <label class="col-6 col-form-label">Keeping Costs</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.keepingCost"></base-input>
+                <label class="col-6 col-form-label">Demand Type</label>
+                <div class="col-6">
+                  <el-select
+                    class="select-primary"
+                    placeholder="Demand Type"
+                    v-model="inventorySystemDTO.demandType"
+                  >
+                    <el-option
+                      v-for="option in selects.demandType"
+                      class="select-primary"
+                      :value="option"
+                      :label="option"
+                      :key="option"
+                    ></el-option>
+                  </el-select>
                 </div>
               </div>
             </div>
             <div
               class="col-md-6 col-lg-4"
-              v-if="selects.simple.startsWith('(s,Q)') || selects.simple.startsWith('(R,S)')"
+              v-if="selects.chooseSystem.startsWith('(s,Q)') || selects.chooseSystem.startsWith('(R,S)')"
+            >
+              <div class="row">
+                <label class="col-6 col-form-label">Demand</label>
+                <div class="col-6">
+                  <base-input placeholder="Demand" type="number" :error="getError('demand')" v-model="inventorySystemDTO.demand"></base-input>
+                </div>
+              </div>
+            </div>
+            <div
+              class="col-md-6 col-lg-4"
+              v-if="selects.chooseSystem.startsWith('(s,Q)') || selects.chooseSystem.startsWith('(R,S)')"
+            >
+              <div class="row">
+                <label class="col-6 col-form-label">Demand Standard Dev</label>
+                <div class="col-6">
+                  <base-input type="number" placeholder="Demand SD" v-model="inventorySystemDTO.standardDeviationDemand"></base-input>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4" v-if="selects.chooseSystem.startsWith('(R,S)')">
+              <div class="row">
+                <label class="col-6 col-form-label">Review Time</label>
+                <div class="col-6">
+                  <base-input type="number" placeholder="Review Time" v-model="inventorySystemDTO.reviewTime"></base-input>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4" v-if="selects.chooseSystem.startsWith('(R,S)')">
+              <div class="row">
+                <label class="col-6 col-form-label">Available Inventory</label>
+                <div class="col-6">
+                  <base-input type="number" placeholder="Available Inventory" v-model="inventorySystemDTO.availableInventory"></base-input>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4" v-if="selects.chooseSystem.startsWith('(s,Q)')">
+              <div class="row">
+                <label class="col-6 col-form-label">Order Cost</label>
+                <div class="col-6">
+                  <base-input type="number" placeholder="Order Cost" v-model="inventorySystemDTO.orderCost"></base-input>
+                </div>
+              </div>
+            </div>
+            <div
+              class="col-md-6 col-lg-4"
+              v-if="selects.chooseSystem.startsWith('(s,Q)') || selects.chooseSystem.startsWith('(R,S)')"
             >
               <div class="row">
                 <label class="col-6 col-form-label">Lead Time</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.leadTime"></base-input>
+                <div class="col-6">
+                  <base-input type="number" placeholder="Lead Time" v-model="inventorySystemDTO.leadTime"></base-input>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,Q)')">
+            <div class="col-md-6 col-lg-4" v-if="selects.chooseSystem.startsWith('(s,Q)')">
               <div class="row">
-                <label class="col-6 col-form-label">Standard Dev Lead Time</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.standardDeviationLeadTime"></base-input>
+                <label class="col-6 col-form-label">Lead Time Standard Dev</label>
+                <div class="col-6">
+                  <base-input type="number" placeholder="Lead Time SD" v-model="inventorySystemDTO.standardDeviationLeadTime"></base-input>
                 </div>
               </div>
             </div>
             <div
               class="col-md-6 col-lg-4"
-              v-if="selects.simple.startsWith('(s,Q)') || selects.simple.startsWith('(R,S)')"
+              v-if="selects.chooseSystem.startsWith('(s,Q)') || selects.chooseSystem.startsWith('(R,S)')"
             >
               <div class="row">
                 <label class="col-6 col-form-label">Service Level</label>
-                <div class="col-7 text-center">
-                  <label>{{invParams.serviceLevel}}%</label>
-                  <slider v-model="invParams.serviceLevel" type="primary" :options="{step: 0.5}"></slider>
+                <div class="col-6 text-center">
+                  <label>{{inventorySystemDTO.serviceLevel}}%</label>
+                  <slider
+                    v-model="inventorySystemDTO.serviceLevel"
+                    type="primary"
+                    :options="{step: 0.5}"
+                  ></slider>
                 </div>
               </div>
             </div>
-
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,Q)')">
+            <div class="col-md-6 col-lg-4" v-if="selects.chooseSystem.startsWith('(s,Q)')">
+              <div class="row">
+                <label class="col-6 col-form-label">Keeping Cost: 
+                  <div class="row">
+                  <div class="col-6">
+                <base-radio name="iC" class="mb-3" v-model="radio.kC">Calculated</base-radio>
+                  </div>
+                   <div class="col-6">
+                     <div>
+                <base-radio name="H" class="mb-3" v-model="radio.kC">Known</base-radio>
+                     </div>
+                </div>
+                  </div>
+                </label>
+                <div class="col-6">
+                  <base-input v-if="radio.kC=='H'" placeholder="Keeping Cost" type="number" text="hola" v-model="inventorySystemDTO.keepingCost"></base-input>
+                  <base-input v-if="radio.kC=='iC'" placeholder="Unit Cost" type="number" v-model="unitCost"></base-input>
+                  <div class="text-center">
+                  <label v-if="radio.kC=='iC'">Keeping Percentage: {{keepingPercentage}}%</label>
+                  <label v-else>Disabled</label>
+                  <slider
+                  :disabled="radio.kC=='H'"
+                    v-model="keepingPercentage"
+                    type="danger"
+                    :options="{step: 0.5}"
+                  ></slider>
+                </div>
+                  <!-- <base-input type="number" placeholder="Keeping Percentage" :disabled="radio.kC=='H'" v-model="inventorySystemDTO.keepingPercentage"></base-input> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4" v-if="selects.chooseSystem.startsWith('(s,Q)')">
               <div class="row">
                 <label class="col-6 col-form-label">Business Days</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.businessDays"></base-input>
+                <div class="col-6">
+                  <base-input type="number" placeholder="Business Days" v-model="inventorySystemDTO.businessDays"></base-input>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,S)')">
+            <div class="col-md-6 col-lg-4" v-if="selects.chooseSystem.startsWith('(s,S)')">
               <div class="row">
-                <label class="col-6 col-form-label">Max Level Inventory</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.maxLevelInventory"></base-input>
+                <label class="col-6 col-form-label">Inventory Max Level</label>
+                <div class="col-6">
+                  <base-input type="number" placeholder="Inventory Max Lvl" v-model="inventorySystemDTO.maxLevelInventory"></base-input>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,S)')">
+            <div class="col-md-6 col-lg-4" v-if="selects.chooseSystem.startsWith('(s,S)')">
               <div class="row">
-                <label class="col-6 col-form-label">Min Level Inventory</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.minLevelInventory"></base-input>
+                <label class="col-6 col-form-label">Inventory Min Level</label>
+                <div class="col-6">
+                  <base-input type="number" placeholder="Inventory Min Lvl" v-model="inventorySystemDTO.minLevelInventory"></base-input>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <br>
         <div class="text-center">
           <base-button @click="solve()" type="primary">Solve</base-button>
         </div>
@@ -223,6 +267,7 @@
 import { Select, Option } from "element-ui";
 import { Modal, BaseAlert } from "src/components";
 import { Slider } from "src/components";
+import { BaseCheckbox, BaseRadio } from "src/components/index";
 import axios from "axios";
 export default {
   components: {
@@ -230,31 +275,38 @@ export default {
     [Option.name]: Option,
     Modal,
     BaseAlert,
-    Slider
+    Slider,
+    BaseCheckbox,
+    BaseRadio
   },
   data() {
     return {
       title: "",
-      invParams: {
-        annualDemand: null,
-        dailyDemand: null,
+      radio: {
+        kC: "H"
+      },
+      inventorySystemDTO: {
+        demand: null,
         orderCost: null,
         keepingCost: null,
         serviceLevel: 98,
-        standardDeviationDailyDemand: null,
+        standardDeviationDemand: null,
         standardDeviationLeadTime: null,
         businessDays: null,
         leadTime: null,
         maxLevelInventory: null,
         minLevelInventory: null,
         reviewTime: null,
-        availableInventory: null
+        availableInventory: null,
+        demandType: null
       },
       invSolution: {
         quantity: -1,
         safetyStock: -1,
         reorderPoint: -1
       },
+        unitCost: null,
+        keepingPercentage: 30,
       modals: {
         notice: false
       },
@@ -263,31 +315,35 @@ export default {
         number: ""
       },
       selects: {
-        simple: "Choose the system type",
+        chooseSystem: null,
         systemType: [
-          {
-            value: "(s,Q) Continuous review fixed-order-quantity system",
-            label: "(s,Q) Continuous review fixed-order-quantity system"
-          },
-          {
-            value: "(s,S) Continuous review order-up-to system",
-            label: "(s,S) Continuous review order-up-to system"
-          },
-          {
-            value: "(R,S) Periodic review fixed-order interval system",
-            label: "(R,S) Periodic review fixed-order interval system"
-          },
-          {
-            value: "(R,s,S) Periodic review optional replenishment system",
-            label: "(R,s,S) Periodic review optional replenishment system"
-          }
-        ]
+          "(s,Q) Continuous review fixed-order-quantity system",
+          "(s,S) Continuous review order-up-to system",
+          "(R,S) Periodic review fixed-order interval system",
+          "(R,s,S) Periodic review optional replenishment system"
+        ],
+        demandType: ["Annual"]
       }
     };
   },
-
   name: "inventory",
+  created() {
+    axios
+      .get(this.$store.state.backend + "/inventoryManagementModule/toFill")
+      .then(response => {
+        console.log(response.data);
+        this.selects.demandType = response.data;
+      });
+  },
   methods: {
+    getError (fieldName) {
+      return this.errors.first(fieldName)
+    },
+    validate() {
+      this.$validator.validateAll().then(isValid => {
+        this.$emit("on-submit", this.registerForm, isValid);
+      });
+    },
     nextPage() {
       this.$router.push("dashboard");
     },
@@ -296,84 +352,36 @@ export default {
       this.callServer(query);
     },
     buildQuery() {
-      var problem = this.selects.simple.split(" ");
-      var query = problem[0] + "/?system=" + problem[0];
-      if (
-        this.invParams.annualDemand != null &&
-        this.invParams.annualDemand != ""
-      )
-        query += "&annualDemand=" + this.invParams.annualDemand;
-      if (
-        this.invParams.dailyDemand != null &&
-        this.invParams.dailyDemand != ""
-      )
-        query += "&dailyDemand=" + this.invParams.dailyDemand;
-      if (this.invParams.orderCost != null && this.invParams.orderCost != "")
-        query += "&orderCost=" + this.invParams.orderCost;
-      if (
-        this.invParams.keepingCost != null &&
-        this.invParams.keepingCost != ""
-      )
-        query += "&keepingCost=" + this.invParams.keepingCost;
-      if (
-        this.invParams.serviceLevel != null &&
-        this.invParams.serviceLevel != ""
-      )
-        query += "&serviceLevel=" + this.invParams.serviceLevel / 100;
-      if (
-        this.invParams.standardDeviationDailyDemand != null &&
-        this.invParams.standardDeviationDailyDemand != ""
-      )
-        query +=
-          "&standardDeviationDailyDemand=" +
-          this.invParams.standardDeviationDailyDemand;
-      if (
-        this.invParams.standardDeviationLeadTime != null &&
-        this.invParams.standardDeviationLeadTime != ""
-      )
-        query +=
-          "&standardDeviationLeadTime=" +
-          this.invParams.standardDeviationLeadTime;
-      if (
-        this.invParams.businessDays != null &&
-        this.invParams.businessDays != ""
-      )
-        query += "&businessDays=" + this.invParams.businessDays;
-      if (this.invParams.leadTime != null && this.invParams.leadTime != "")
-        query += "&leadTime=" + this.invParams.leadTime;
-      if (
-        this.invParams.maxLevelInventory != null &&
-        this.invParams.maxLevelInventory != ""
-      )
-        query += "&maxLevelInventory=" + this.invParams.maxLevelInventory;
-      if (
-        this.invParams.minLevelInventory != null &&
-        this.invParams.minLevelInventory != ""
-      )
-        query += "&minLevelInventory=" + this.invParams.minLevelInventory;
-      if (this.invParams.reviewTime != null && this.invParams.reviewTime != "")
-        query += "&reviewTime=" + this.invParams.reviewTime;
-      if (
-        this.invParams.availableInventory != null &&
-        this.invParams.availableInventory != ""
-      )
-        query += "&availableInventory=" + this.invParams.availableInventory;
+      var problem = this.selects.chooseSystem.split(" ");
+      var query = problem[0];
       return query;
     },
     callServer(route) {
+      this.errors.clear();
+      if(this.radio.kC == 'iC')
+      this.inventorySystemDTO.keepingCost = this.unitCost * this.keepingPercentage/100;
       axios
-        .get(
-          this.$store.state.backend + "/inventoryManagementModule/solve" + route
+        .post(
+          this.$store.state.backend +
+            "/inventoryManagementModule/solve" +
+            route,
+          this.inventorySystemDTO
         )
         .then(response => {
-            console.log(response.data);
+          console.log(response.data);
         })
         .catch(error => {
           console.log(error.response);
-          if(typeof error.response.data == 'string')
-          this.notifyError("bottom", "left", error.response.data);
-          else
-          this.notifyError("bottom", "left", error.response.data.message);
+          if (typeof error.response.data == "string")
+            this.notifyError("bottom", "left", error.response.data);
+          else{
+            var list = error.response.data;
+            for (let index = 0; index < list.length; index++) {
+             this.errors.add({field: list[index].field, msg: list[index].defaultMessage});
+            }
+            
+          }
+          // this.notifyError("bottom", "left", error.response.data.message);
         });
     },
     notifyError(verticalAlign, horizontalAlign, message) {
@@ -392,6 +400,6 @@ export default {
 </script>
 <style>
 #selector {
-  width: 500px;
+  width: 450px;
 }
 </style>
