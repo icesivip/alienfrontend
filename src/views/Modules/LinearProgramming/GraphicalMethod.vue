@@ -25,7 +25,8 @@
       <hr />
       <div v-if="solList">
         <h3 class="text-center card-subtitle">Basic Feasible Solutions</h3>
-        <table class="table">
+      <div class="table-responsive">
+        <table class="table table-striped">
           <thead>
             <tr>
               <th class="text-center">
@@ -59,6 +60,8 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
       </div>
     </card>
   </div>

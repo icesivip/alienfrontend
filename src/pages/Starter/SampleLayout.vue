@@ -35,6 +35,14 @@
             }"
           >
           </sidebar-item>
+
+          <sidebar-item
+            :link="{
+              name: $t('Interior Point Method'),
+              path: '/interior'
+            }"
+          >
+          </sidebar-item>
           <sidebar-item
             :link="{
               name: $t('Branch & Bound'),
