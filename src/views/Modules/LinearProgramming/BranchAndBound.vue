@@ -161,6 +161,7 @@ export default {
         tempEdge.from = node.id;
         tempEdge.to = child.id;
         tempEdge.label = child.text.addedConstraint;
+        tempEdge.arrows="to"
         edges.push(tempEdge);
 
         this.recurseOnEdges(child, edges);
