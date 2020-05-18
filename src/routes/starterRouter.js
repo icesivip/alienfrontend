@@ -22,6 +22,7 @@ import MST from 'src/views/Modules/Networks/MST';
 import MFP from 'src/views/Modules/Networks/MFP';
 
 import NEOSServer from 'src/views/Modules/LinearProgramming/NEOSServer';
+import InteriorPoint from 'src/views/Modules/LinearProgramming/InteriorPoint';
 
 
 
@@ -41,6 +42,21 @@ export default new Router({
 
           components: { default: Starter }
         },
+
+        {
+          path: 'ampl',
+          name: 'ampl',
+
+          components: { default: NEOSServer }
+        }
+        ,
+        {
+          path: 'interior',
+          name: 'interior',
+
+          components: { default: InteriorPoint }
+        }
+        ,
         {
           path: 'craft',
           name: 'craft',

@@ -21,21 +21,21 @@
           <td scope="col">Lot sizing rule</td>
         </tr>
         <tr :key="'prod' + i" v-for="(product, i) in products">
-          <td><input class="form-control" type='text' v-model="products[i].id"></td>
-          <td><input class="form-control" type='text' v-model="products[i].productName"></td>
-          <td><input class="form-control" min='0' v-model="products[i].availableInventory"></td>
-          <td><input class="form-control" min='0' v-model="products[i].securityInventory"></td>
-          <td><input class="form-control" type='text' v-model="products[i].parentProductId"></td>
-          <td><input class="form-control" min='0' v-model="products[i].amountOfParent"></td>
-          <td><input class="form-control" min='0' v-model="products[i].leadTime"></td>
-          <td><input class="form-control" type='text' v-model="products[i].costOfArticle"></td>
-          <td><input class="form-control" type='text' v-model="products[i].maintenanceCost"></td>
-          <td><input class="form-control" type='text' v-model="products[i].orderingCost"></td>
-          <td>
+          <td><base-input class="user-input" type='text' v-model="products[i].itemCode"></base-input></td>
+          <td><base-input class="user-input" type='text' v-model="products[i].itemName"></base-input></td>
+          <td><base-input class="user-input" type='number' min='0' v-model="products[i].initialInventory"></base-input></td>
+          <td><base-input class="user-input" type='number' min='0' v-model="products[i].securityStock"></base-input></td>
+          <td><base-input class="user-input" type='text' v-model="products[i].parentProductId"></base-input></td>
+          <td><base-input class="user-input" type='number' min='0' v-model="products[i].amountOfParent"></base-input></td>
+          <td><base-input class="user-input" type='number' min='0' v-model="products[i].leadTime"></base-input></td>
+          <td><base-input class="user-input" type='text' v-model="products[i].costOfTheArticle"></base-input></td>
+          <td><base-input class="user-input" type='text' v-model="products[i].maintenanceCost"></base-input></td>
+          <td><base-input class="user-input" type='text' v-model="products[i].orderingCost"></base-input></td>
+          <td class="col-md-2 pt-0">
             <el-select
               v-validate="'required'"
               name="lotSizingRule"
-              class="col-sm-3 select-danger"
+              class="col-sm-12 pt-1 select-danger"
               placeholder="Lot Sizing Rule"
               v-model="products[i].lotSizingRule"
             >
@@ -97,51 +97,51 @@
             <th :colspan="numberOfPeriods+2" scope='col' id='MPStableHeader' class='text-center'>MPS</th>
           </tr>
         </thead>
-        <tbody :key="'mrp' + j" v-for="(mrp, j) in productsMRP">
+        <tbody :key="'mrp' + j" v-for="(mrp, j) in products">
           <tr>
             <th scope='col'>Period</th>
             <th scope='col' class='text-center' :key="'hp'+period" v-for="period in headerPeriods">{{ period }}</th>
           </tr>
           <tr v-if="j == 0">
             <td scope='row'>Gross Requeriments</td>
-            <td :key="'gr'+ j + '-' + i" v-for="(grossReq, i) in mrp.grossRequirements">
-              <input class="form-control" min='0' v-model="mrp.grossRequirements[i]">
+            <td :key="'gr'+ j + '-' + i" v-for="(grossReq, i) in products[j].grossRequirements">
+              <input class="form-control" min='0' v-model="products[j].grossRequirements[i]">
             </td>
           </tr>
           <tr v-else>
             <td scope='row'>Gross Requeriments</td>
-            <td :key="'gr'+ j + '-' + i" v-for="(grossReq, i) in mrp.grossRequirements"
-              :value="grossReq">
+            <td :key="'gr'+ j + '-' + i" v-for="(grossReq, i) in products[j].grossRequirements">
+              {{grossReq}}
             </td>
           </tr>
           <tr>
             <td scope='row'>Scheduled Receptions</td>
-            <td :key="'sr'+ j + '-' + i" v-for="(schedReq, i) in mrp.scheduledRequirements">
-              <input class="form-control" min='0' v-model="mrp.scheduledRequirements[i]">
+            <td :key="'sr'+ j + '-' + i" v-for="(schedReq, i) in products[j].scheduledRequirements">
+              <input class="form-control" min='0' v-model="products[j].scheduledRequirements[i]">
             </td>
           </tr>
           <tr>
             <td scope='row'>Available Inventory Programmed</td>
-            <td :key="'aip'+ j + '-' + i" v-for="(avaInvPro, i) in mrp.availInventProgrammed" 
-              :value="avaInvPro">
+            <td :key="'aip'+ j + '-' + i" v-for="(avaInvPro, i) in products[j].availInventProgrammed" >
+              {{avaInvPro}}
             </td>
           </tr>
           <tr>
             <td scope='row'>Net requirements</td>
-            <td :key="'aip'+ j + '-' + i" v-for="(netReq, i) in mrp.netRequirements" 
-              :value="netReq">
+            <td :key="'aip'+ j + '-' + i" v-for="(netReq, i) in products[j].netRequirements">
+              {{netReq}}
             </td>
           </tr>
           <tr>
             <td scope='row'>Receptions of planned orders</td>
-            <td :key="'rcpo'+ j + '-' + i" v-for="(recepPlOrd, i) in mrp.receptionPlannedOrders" 
-              :value="recepPlOrd">
+            <td :key="'rcpo'+ j + '-' + i" v-for="(recepPlOrd, i) in products[j].receptionPlannedOrders">
+              {{recepPlOrd}}
             </td>
           </tr>
           <tr>
             <td scope='row'>Release of planned orders</td>
-            <td :key="'rlpo'+ j + '-' + i" v-for="(relePlOrd, i) in mrp.releasePlannedOrders" 
-              :value="relePlOrd">
+            <td :key="'rlpo'+ j + '-' + i" v-for="(relePlOrd, i) in products[j].releasePlannedOrders">
+              {{relePlOrd}}
             </td>
           </tr>
         </tbody>
@@ -152,6 +152,7 @@
 
 <script>
 import { Select, Option } from "element-ui";
+import { Network } from "vis"
 import MRPRepository from './../../../repositories/Modules/MasterPlanSchedule/MaterialRequirementsPlanning';
 
 export default {
@@ -170,17 +171,23 @@ export default {
 
       allProductsIds: ['none'],
       products: [{
-        id: '',
-        productName: '',
-        availableInventory: 0,
-        securityInventory: '',
-        parentProductId: 'none',
-        amountOfParent: 1,
+        itemCode: '',
+        itemName: '',
         leadTime: 1,
-        costOfArticle: 0,
+        securityStock: '',
+        initialInventory: 0,
+        costOfTheArticle: 0,
         maintenanceCost: 0,
         orderingCost: 0,
         lotSizingRule: '',
+        parentProductId: 'none',
+        amountOfParent: 1,
+        grossRequirements: [],
+        scheduledRequirements: [],
+        availInventProgrammed: [],
+        netRequirements: [],
+        receptionPlannedOrders: [],
+        releasePlannedOrders: []
       }],
 
       periodicity: '',
@@ -190,59 +197,98 @@ export default {
       numberOfPeriods: 0,
 
       headerPeriods: [],
-      productsMRP: [{
-        grossRequirements: [],
-        scheduledRequirements: [],
-        availInventProgrammed: [],
-        netRequirements: [],
-        receptionPlannedOrders: [],
-        releasePlannedOrders: []
-      }]
     };
   },
   methods: {
     addConstraint(){
       var newProduct = {
-        id: '',
-        productName: '',
-        availableInventory: 0,
-        securityInventory: '',
-        parentProductId: 'none',
-        amountOfParent: 1,
+        itemCode: '',
+        itemName: '',
         leadTime: 1,
-        costOfArticle: 0,
+        securityStock: '',
+        initialInventory: 0,
+        costOfTheArticle: 0,
         maintenanceCost: 0,
         orderingCost: 0,
         lotSizingRule: '',
-      };
-      var newMRP = {
+        parentProductId: 'none',
+        amountOfParent: 1,
         grossRequirements: [],
         scheduledRequirements: [],
         availInventProgrammed: [],
         netRequirements: [],
         receptionPlannedOrders: [],
         releasePlannedOrders: []
-      }
+      };
       for(var i = 0; i < this.numberOfPeriods; i++){
-        newMRP.grossRequirements[i] = 0;
-        newMRP.scheduledRequirements[i] = 0;
-        newMRP.availInventProgrammed[i] = 0;
-        newMRP.netRequirements[i] = 0;
-        newMRP.receptionPlannedOrders[i] = 0;
-        newMRP.releasePlannedOrders[i] = 0;
+        newProduct.grossRequirements[i] = 0;
+        newProduct.scheduledRequirements[i] = 0;
+        newProduct.availInventProgrammed[i] = 0;
+        newProduct.netRequirements[i] = 0;
+        newProduct.receptionPlannedOrders[i] = 0;
+        newProduct.releasePlannedOrders[i] = 0;
       }
       this.products.push(newProduct)
-      this.productsMRP.push(newMRP);
     },
     removeConstraint(){
       this.products.pop()
-      this.productsMRP.pop();
+    },
+    cleanUpData(){
+      for(let i = 0; i < this.products.length; i++){
+        var parent = false;
+        if(this.products[i].parentProductId !== 'none'){
+          parent = true;
+        }
+        for(let j = 0; j < this.products[i].grossRequirements.length; j++){
+          if(parent){
+            this.products[i].grossRequirements[j] = 0;
+          }
+          this.products[i].availInventProgrammed[j] = 0;
+          this.products[i].netRequirements[j] = 0;
+          this.products[i].receptionPlannedOrders[j] = 0;
+          this.products[i].releasePlannedOrders[j] = 0;
+        }
+      }
     },
     createMrp(){
-
+      this.cleanUpData();
+      var MrpData = {
+        periodicity: this.periodicity,
+        products: this.products
+      }
+      MRPRepository.createMRP(MrpData).then((response) => {
+        if(response.status < 400){
+          this.products = response.data;
+        }
+      });
     },
     paintTree(){
-
+      let nodes = [];
+      let edges = [];
+      let nodesNames = [];
+      let nodesIds = [];
+      for(let i = 0; i < this.products.length; i++){
+        nodesNames.push(this.products[i].itemName);
+        nodesIds.push(this.products[i].itemCode);
+      }
+      for(let i = 0; i < this.products.length; i++){
+        nodes.push({id: i, label: nodesNames[i] + ' (' + this.products[i].amountOfParent + ')', 
+          font: {size:12, strokeWidth: 1, strokeColor: 'silver'}});
+        if(this.products[i].parentProductId !== 'none'){
+          edges.push({from: nodesIds.indexOf(this.products[i].parentProductId), to:i, width: 2, length: 350});
+        }
+      }
+      var container = document.getElementById("viewTree");
+			var dataTree = {
+				nodes: nodes,
+				edges: edges
+			};
+			var options = {
+				nodes: {
+					size: 40
+				}
+			};
+			var paintTree = new Network(container, dataTree, options);
     },
     createTable(){
       if(!this.tableIsCreated){
@@ -251,25 +297,25 @@ export default {
       if(this.numberOfPeriods < this.newNumberOfPeriods){
         for (let i = this.numberOfPeriods; i < this.newNumberOfPeriods; i++) {
           this.headerPeriods[i] = parseInt(i)+1;
-          for(let j = 0; j < this.productsMRP.length; j++){
-            this.productsMRP[j].grossRequirements[i] = 0;
-            this.productsMRP[j].scheduledRequirements[i] = 0;
-            this.productsMRP[j].availInventProgrammed[i] = 0;
-            this.productsMRP[j].netRequirements[i] = 0;
-            this.productsMRP[j].receptionPlannedOrders[i] = 0;
-            this.productsMRP[j].releasePlannedOrders[i] = 0;
+          for(let j = 0; j < this.products.length; j++){
+            this.products[j].grossRequirements[i] = 0;
+            this.products[j].scheduledRequirements[i] = 0;
+            this.products[j].availInventProgrammed[i] = 0;
+            this.products[j].netRequirements[i] = 0;
+            this.products[j].receptionPlannedOrders[i] = 0;
+            this.products[j].releasePlannedOrders[i] = 0;
           }
         }
       }else if(this.numberOfPeriods > this.newNumberOfPeriods){
         for (let i = this.newNumberOfPeriods; i < this.numberOfPeriods; i++) {
           this.headerPeriods.pop();
-          for(let j = 0; j < this.productsMRP.length; j++){
-            this.productsMRP[j].grossRequirements.pop();
-            this.productsMRP[j].scheduledRequirements.pop();
-            this.productsMRP[j].availInventProgrammed.pop();
-            this.productsMRP[j].netRequirements.pop();
-            this.productsMRP[j].receptionPlannedOrders.pop();
-            this.productsMRP[j].releasePlannedOrders.pop();
+          for(let j = 0; j < this.products.length; j++){
+            this.products[j].grossRequirements.pop();
+            this.products[j].scheduledRequirements.pop();
+            this.products[j].availInventProgrammed.pop();
+            this.products[j].netRequirements.pop();
+            this.products[j].receptionPlannedOrders.pop();
+            this.products[j].releasePlannedOrders.pop();
           }
         }
       }

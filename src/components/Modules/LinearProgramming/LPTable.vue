@@ -88,7 +88,7 @@
 
     <card class="text-center">
       <h2 class="card-title">Objective Function</h2>
-      <h5>Z = &#8721; W<sub>i</sub> * X<sub>i</sub></h5>
+      <!-- <h5>Z = &#8721; W<sub>i</sub> * X<sub>i</sub></h5> -->
       <div class="table-responsive">
         <table class="text-center table">
           <thead>

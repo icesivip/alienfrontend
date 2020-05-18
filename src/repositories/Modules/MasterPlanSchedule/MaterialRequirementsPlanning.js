@@ -7,12 +7,8 @@ class MaterialRequirementsPlanning{
         this.basePath = store.state.backend;
     }
 
-    createMRP(){
-        
-        //let headers = {'Authorization': store.state.token};
-        //return axios.post(`${this.basePath}/paypal/subscription-registered`, subInfo,{headers: headers});
-    
-        //return axios.get(`${this.basePath}/coupon/${couponName}`,{headers: headers});
+    createMRP(MrpDTO){
+        return axios.post(`${this.basePath}/mrpModule/solveMRP`, MrpDTO);
     }
 
 }

@@ -37,18 +37,18 @@
       <input class="col-sm-11 btn btn-outline-primary expand" type="button" value="Solve Max flow">
     </div>
      <div id="mynetwork"></div>
-  
-    
+
+
   </div>
 </template>
- 
+
 <script>
 
 import { DataSet, DataView, Network } from "vis";
 
 export default {
   name: "mfp",
-  
+
   data() {
     return {
       node: [
@@ -62,7 +62,7 @@ export default {
             id: 3,
         }
       ],
-      
+
       graph: [
         ['', '', '', ''],
         ['', '', '', ''],
@@ -70,7 +70,7 @@ export default {
          ['', '', '', ''],
       ],
      currentNode: 3,
-     
+
     network: {
       nodes: [
       ],
@@ -82,14 +82,14 @@ export default {
         }
       }
     }
-      
+
     };
   },
   methods: {
     addNode(){
       this.currentNode = this.currentNode+1; // id of new node
       var newNode = {
-        id: this.currentNode,   
+        id: this.currentNode,
       };
     for(let i=0; i<this.currentNode; i++){
         this.graph[i].push('');              //add the new node to all nodes
@@ -126,10 +126,10 @@ export default {
                     this.network.edges.push({id: count,from:i, to:j , arrows: 'to', width: 2, length: 400, label: cur, color: "blue"});
                     count++;
                 }
-                
-               
+
+
             }
-        } 
+        }
       var container = document.getElementById('mynetwork');
       this.network = new Network(container, this.network, this.network.options);
     },
@@ -139,4 +139,5 @@ export default {
 </script>
 
 <style>
+
 </style>

@@ -5,65 +5,65 @@
     </div>
     <LPTable v-model="lpModel" maximumVars="2" problemType="Continuous">
     </LPTable>
-    <base-button type="primary" block @click="solveSolution">
-      Solve
-    </base-button>
-  <div v-if="myChart">
-<h2  class="text-center">Solution Space Chart</h2>
-    <scatter-chart
-      style="height: 25%"
-      ref="Chart"
-      :chart-data="myChart.data"
-      :extra-options="myChart.options"
-    >
-    </scatter-chart>
-  </div>
-
-
-    <div v-if="solList">
-          <h2 class="text-center">Basic Feasible Solution</h2>
-    <table class="table">
-      <thead>
-        <tr>
-          <th
-            class="text-center"
-          >
-            <p>
+    <card class="text-center">
+      <base-button type="primary" :loading="processing" block @click="solveSolution">
+        Solve
+      </base-button>
+    </card>
+    <card class="text-center" v-if="solList">
+      <h2 class="card-title">Results</h2>
+      <div class="text-center" v-if="myChart">
+        <h3 class="text-center card-subtitle">Solution Space Chart</h3>
+        <scatter-chart
+          style="height: 25%"
+          ref="Chart"
+          :chart-data="myChart.data"
+          :extra-options="myChart.options"
+        >
+        </scatter-chart>
+      </div>
+      <hr />
+      <div v-if="solList">
+        <h3 class="text-center card-subtitle">Basic Feasible Solutions</h3>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="text-center">
+                <p>
                   X<sub>{{ 1 }}</sub>
                 </p>
-          </th>
-                    <th
-            class="text-center"
-          >
-            <p>
+              </th>
+              <th class="text-center">
+                <p>
                   X<sub>{{ 2 }}</sub>
                 </p>
-          </th>
-                    <th
-            class="text-center"
-          >
-            <p>
+              </th>
+              <th class="text-center">
+                <p>
                   Z
                 </p>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr  v-for="(item,index) in solList" :key="index">
-          <td class="text-center">
-            {{ item.variables.X1}}
-          </td>
-          <td class="text-center">
-            {{ item.variables.X2 }}
-          </td>
-          <td class="text-center">
-            {{ item.z }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in solList" :key="index">
+              <td class="text-center">
+                {{ item.variables.X1.toFixed(3) }}
+              </td>
+              <td class="text-center">
+                {{ item.variables.X2.toFixed(3) }}
+              </td>
+              <td class="text-center">
+                {{ item.z.toFixed(3) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
+      </div>
+    </card>
   </div>
 </template>
 <script>
@@ -85,7 +85,8 @@ export default {
       lpModel: {},
       solList: null,
       elements: 0,
-      height: "device-height"
+      height: "device-height",
+      processing:false
     };
   },
   components: {
@@ -143,7 +144,7 @@ export default {
     },
     solveSolution() {
       var qwery = this.buildQuery();
-
+      this.processing=true;
       axios
         .get(
           this.$store.state.backend +
@@ -151,6 +152,7 @@ export default {
             qwery
         )
         .then(response => {
+          this.processing=false;
           console.log(response);
           var constraints = response.data.constraints;
           var optimal = response.data.optimalSolution;
@@ -168,7 +170,11 @@ export default {
               }
             }
           }
-          this.solList=solList.filter(sol=>sol.feasible).sort(function(a,b){return a.z-b.z})
+          this.solList = solList
+            .filter(sol => sol.feasible)
+            .sort(function(a, b) {
+              return a.z - b.z;
+            });
           console.log(solList);
           var solX = [];
           var solY = [];
@@ -491,8 +497,10 @@ export default {
             this.myChart.data = data;
             this.$refs.Chart.updateGradients(data);
           }
+        }).catch(error=>{
+          this.processing=false;
         });
-      return null;
+
     }
   },
   created() {
