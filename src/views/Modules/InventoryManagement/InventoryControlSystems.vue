@@ -49,6 +49,21 @@
           </p>
         </div>
       </div>
+      <div class="instruction">
+        <div class="row">
+          <strong>
+            <i class="tim-icons icon-paper text-success"></i>Considerations
+          </strong>
+          <p class="description">There are two considerations within this module:</p>
+          <p class="description">
+            1. There are many ways of calculating the Security Stock. In this case, it is calculated as “P1”, which refers to the probability of
+            not having missing parts in each replenishment cycle/Lead Time.
+          </p>
+          <p
+            class="description"
+          >2. The distribution of the demand during the replenishment cycle or the forecast errors follows a normal distribution.</p>
+        </div>
+      </div>
       <div slot="footer" class="justify-content-center">
         <base-button type="primary" round @click.native="modals.notice = false">Let's start!</base-button>
       </div>
@@ -73,148 +88,525 @@
     <div class="col-lg-12" align="center">
       <card>
         <h2 class="card-title">Type of System</h2>
-
-        <el-select
-          class="select-primary"
-          id="selector"
-          placeholder="System Type"
-          v-model="selects.simple"
+        <el-tooltip
+          content="Select one of the system types to show the parameters needed"
+          effect="light"
+          :open-delay="300"
+          placement="top"
         >
-          <el-option
-            v-for="option in selects.systemType"
-            class="select-succes"
-            :value="option.value"
-            :label="option.label"
-            :key="option.label"
-          ></el-option>
-        </el-select>
+          <base-input>
+            <el-select
+              class="select-primary col-lg-6"
+              placeholder="Choose the system type"
+              v-model="selects.chooseSystem"
+            >
+              <el-option
+                v-for="option in selects.systemType"
+                class="select-primary"
+                :value="option"
+                :label="option"
+                :key="option"
+              ></el-option>
+            </el-select>
+          </base-input>
+        </el-tooltip>
       </card>
     </div>
-    <form class="form-horizontal col-lg-12" v-if="!selects.simple.startsWith('Choose')">
+    <form class="form-horizontal col-lg-12" v-if="selects.chooseSystem!=null">
       <card>
-        <h4 slot="header" class="card-title">{{selects.simple}}</h4>
+        <h4 slot="header" class="card-title">{{selects.chooseSystem}}</h4>
+        <div align="right">
+        <el-tooltip
+          content="Know when and how to use it"
+          effect="light"
+          :open-delay="300"
+          placement="top"
+        >
+          <base-button
+            v-if="selects.chooseSystem.startsWith('(s,Q)')"
+            type="primary"
+            @click.native="modals.sq = true"
+          >Read More</base-button>
+          <base-button
+            v-if="selects.chooseSystem.startsWith('(R,S)')"
+            type="primary"
+            @click.native="modals.rs = true"
+          >Read More</base-button>
+          <base-button
+            v-if="selects.chooseSystem.startsWith('(s,S)')"
+            type="primary"
+            @click.native="modals.ss = true"
+          >Read More</base-button>
+        </el-tooltip>
+        </div>
+        <br>
+        <modal :show.sync="modals.sq" footerClasses="justify-content-center" type="notice">
+          <h5 slot="header" class="title title-up">About (s,Q):</h5>
+          <p class="description">
+            In this system, when the Forecasted Inventory is smaller or equal to the reorder point “s”,
+            an order is placed for the order quantity “Q”. It is assumed that the replenishment cycle L is constant.
+          </p>
+          <div class="picture">
+            <img src="img/project/equationsSQ.jpg" alt="Thumbnail Image" class="rounded" />
+          </div>
+          <div class="instruction">
+            <strong>Equations</strong>
+            <p class="description">D: Average demand (units/year)</p>
+            <p class="description">d: Forecast demand (units/period)</p>
+            <p class="description">A: order cost ($/unit)</p>
+            <p class="description">k: security factor</p>
+            <p class="description">v: Unit value of the item ($/unit)</p>
+            <p class="description">r: annual keeping percentage (%/year)</p>
+            <p class="description">IS: Safety Stock (units)</p>
+            <p class="description">L: Lead Time (period)</p>
+            <p
+              class="description"
+            >p1: probability of not having missing parts in each replenishment cycle.</p>
+            <p
+              class="description"
+            >pz(k): probabilidad de que la normal unitaria z tome un mayor o igual que k.</p>
+            <p class="description">Q: Order quantity (units)</p>
+            <p class="description">s: Reorder point (units)</p>
+            <p class="description">xL: Forecast demand according to the Lead Time (units)</p>
+            <p class="description">L: Standard deviation of the lead time (units)</p>
+            <p
+              class="description"
+            >1:Standard deviation of the forecasting errors (it is calculated with the square root of the mean error of prediction (RMSEP) or 1,2533* Mean Absolute Deviation (MAD)).</p>
+          </div>
+
+          <div slot="footer" class="justify-content-center">
+            <base-button type="primary"  round @click.native="modals.sq = false">I got it</base-button>
+          </div>
+        </modal>
+
+        <modal :show.sync="modals.rs" footerClasses="justify-content-center" type="notice">
+          <h5 slot="header" class="title title-up">About (R,S):</h5>
+          <p class="description">
+            In this system, the inventory is reviewed every R units of time and an amount equal to the difference
+            between the maximum value of inventory S and the Forecasted Inventory value at the time of the review is ordered.
+          </p>
+          <div class="picture">
+            <img src="img/project/equationsRS.jpg" alt="Thumbnail Image" class="rounded" />
+          </div>
+          <div class="instruction">
+            <strong>Equations</strong>
+            <p class="description">D: Average demand (units/year)</p>
+            <p class="description">d: Forecast demand (units/period)</p>
+            <p class="description">EOQ: Order quantity (units)</p>
+            <p class="description">v: Unit value of the item ($/unit)</p>
+            <p class="description">r: annual keeping percentage (%/year)</p>
+            <p class="description">R: Review time</p>
+            <p class="description">A’: order cost ($/unit) plus review cost</p>
+            <p class="description">k: security factor</p>
+            <p class="description">L: Lead Time</p>
+            <p class="description">S: Maximum inventory (units)</p>
+            <p
+              class="description"
+            >p1: Probability of not having missing parts in each replenishment cycle.</p>
+            <p
+              class="description"
+            >1:Standard deviation of the forecasting errors (it is calculated with the square root of the mean error of prediction (RMSEP) or 1,2533* Mean Absolute Deviation (MAD))</p>
+            <p
+              class="description"
+            >R+L: Standard deviation of the forecasting errors according to the Lead Time + Review time</p>
+            <p class="description">xR+L: Forecast demand according to the Lead Time + Review time</p>
+          </div>
+
+          <div slot="footer" class="justify-content-center">
+            <base-button type="primary" round @click.native="modals.rs = false">I got it</base-button>
+          </div>
+        </modal>
+
+        <modal :show.sync="modals.ss" footerClasses="justify-content-center" type="notice">
+          <h5 slot="header" class="title title-up">About (s,S):</h5>
+          <p class="description">
+            In this system, each time the Forecasted Inventory is smaller or equal to the reorder point “s”, a quantity “Q”
+            that is equal to “S-s” is ordered, so the Forecasted Inventory reaches the level of the maximum inventory S.
+          </p>
+          <div class="picture">
+            <img src="img/project/equationsSS.jpg" alt="Thumbnail Image" class="rounded" />
+          </div>
+          <div class="instruction">
+            <strong>Equations</strong>
+            <p class="description">D: Average demand (units/year)</p>
+            <p class="description">d: Forecast demand (units/period)</p>
+            <p class="description">EOQ: Order quantity (units)</p>
+            <p class="description">v: Unit value of the item ($/unit)</p>
+            <p class="description">r: annual keeping percentage (%/year)</p>
+            <p class="description">R: Review time</p>
+            <p class="description">A’: order cost ($/unit) plus review cost</p>
+            <p class="description">k: security factor</p>
+            <p class="description">IS: Safety Stock (units)</p>
+            <p class="description">L: Lead Time</p>
+            <p class="description">s: Reorder point (units)</p>
+            <p class="description">S: Maximum inventory (units)</p>
+            <p class="description">xL: Forecast demand according to the Lead Time (units)</p>
+            <p
+              class="description"
+            >p1: Probability of not having missing parts in each replenishment cycle.</p>
+            <p
+              class="description"
+            >1:Standard deviation of the forecasting errors (it is calculated with the square root of the mean error of prediction (RMSEP) or 1,2533* Mean Absolute Deviation (MAD))</p>
+            <p
+              class="description"
+            >R+L: Standard deviation of the forecasting errors according to the Lead Time + Review time</p>
+            <p class="description">xR+L: Forecast demand according to the Lead Time + Review time</p>
+            <p class="description">Q (s,S): Order quantity for the s,S inventory system (units)</p>
+            <p class="description">E: Forecasted inventory</p>
+          </div>
+
+          <div slot="footer" class="justify-content-center">
+            <base-button type="primary" round @click.native="modals.ss = false">I got it</base-button>
+          </div>
+        </modal>
+
         <div>
           <div class="row">
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,Q)')">
+            <div class="col-md-6">
               <div class="row">
-                <label class="col-6 col-form-label">Annual Demand</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.annualDemand"></base-input>
+                <label class="col-4 col-form-label">Unit Time of the Average Demand</label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Select one of the unit times available"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input :error="getError('unitTAvgDemand')">
+                      <el-select
+                        class="select-primary"
+                        placeholder="Unit Time"
+                        v-model="inventorySystemDTO.unitTAvgDemand"
+                      >
+                        <el-option
+                          v-for="option in selects.unitTime"
+                          class="select-primary"
+                          :value="option"
+                          :label="option"
+                          :key="option"
+                        ></el-option>
+                      </el-select>
+                    </base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(R,S)')">
+            <div class="col-md-6">
               <div class="row">
-                <label class="col-6 col-form-label">Daily Demand</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.dailyDemand"></base-input>
+                <label class="col-4 col-form-label">Average Demand</label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Fill the average demand of the unit time specified for this"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input
+                      placeholder="Average Demand"
+                      type="number"
+                      :error="getError('averageDemand')"
+                      v-model="inventorySystemDTO.averageDemand"
+                    ></base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-            <div
-              class="col-md-6 col-lg-4"
-              v-if="selects.simple.startsWith('(s,Q)') || selects.simple.startsWith('(R,S)')"
-            >
+            <div class="col-md-6">
               <div class="row">
-                <label class="col-form-label">Standard Dev Daily Demand</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.standardDeviationDailyDemand"></base-input>
+                <label class="col-4 col-form-label">Unit Time of the Problem Variables</label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Select one of the unit times available"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input :error="getError('unitTVariables')">
+                      <el-select
+                        class="select-primary"
+                        placeholder="Unit Time"
+                        v-model="inventorySystemDTO.unitTVariables"
+                      >
+                        <el-option
+                          v-for="option in selects.unitTime"
+                          class="select-primary"
+                          :value="option"
+                          :label="option"
+                          :key="option"
+                        ></el-option>
+                      </el-select>
+                    </base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(R,S)')">
+            <div class="col-md-6">
               <div class="row">
-                <label class="col-6 col-form-label">Review Time</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.reviewTime"></base-input>
+                <label class="col-4 col-form-label">Forecast Demand</label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Fill the forecast demand taking the unit time specified in problem variables"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input
+                      placeholder="Forecast Demand"
+                      type="number"
+                      :error="getError('forecastDemand')"
+                      v-model="inventorySystemDTO.forecastDemand"
+                    ></base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(R,S)')">
+            <div class="col-md-6" v-if="!selects.chooseSystem.startsWith('(s,Q)')">
               <div class="row">
-                <label class="col-6 col-form-label">Available Inventory</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.availableInventory"></base-input>
+                <label class="col-4 col-form-label">Review Cost</label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Fill the review cost with the same currency of every money variables"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input
+                      type="number"
+                      placeholder="Review Cost"
+                      :error="getError('reviewCost')"
+                      v-model="inventorySystemDTO.reviewCost"
+                    ></base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,Q)')">
+            <div class="col-md-6" v-if="!selects.chooseSystem.startsWith('(s,Q)')">
               <div class="row">
-                <label class="col-6 col-form-label">Order Costs</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.orderCost"></base-input>
+                <label class="col-4 col-form-label">Forecasting Errors Demand Standard Dev</label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Fill the forecasting errors demand standard deviation taking the unit time specified in problem variables"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input
+                      placeholder="Forecasting Errors Demand Standard Deviation"
+                      type="number"
+                      :error="getError('standardDevFrcErrorsDemand')"
+                      v-model="inventorySystemDTO.standardDevFrcErrorsDemand"
+                    ></base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,Q)')">
+            <div class="col-md-6" v-if="selects.chooseSystem.startsWith('(s,S)')">
               <div class="row">
-                <label class="col-6 col-form-label">Keeping Costs</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.keepingCost"></base-input>
+                <label class="col-4 col-form-label">Effective Inventory</label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Fill the effective inventory, remember... on hand - outgoing + incoming."
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input
+                      type="number"
+                      placeholder="Effective Inventory"
+                      :error="getError('effectiveInventory')"
+                      v-model="inventorySystemDTO.effectiveInventory"
+                    ></base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-            <div
-              class="col-md-6 col-lg-4"
-              v-if="selects.simple.startsWith('(s,Q)') || selects.simple.startsWith('(R,S)')"
-            >
+            <div class="col-md-6">
               <div class="row">
-                <label class="col-6 col-form-label">Lead Time</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.leadTime"></base-input>
+                <label class="col-4 col-form-label">Order Cost</label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Fill the order cost with the same currency of every money variables"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input
+                      type="number"
+                      placeholder="Order Cost"
+                      :error="getError('orderCost')"
+                      v-model="inventorySystemDTO.orderCost"
+                    ></base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,Q)')">
+            <div class="col-md-6" v-if="inventorySystemDTO.unitTAvgDemand == 'Daily'">
               <div class="row">
-                <label class="col-6 col-form-label">Standard Dev Lead Time</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.standardDeviationLeadTime"></base-input>
+                <label class="col-4 col-form-label">Business Days</label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Fill the business days, this parameter is enabled when your average demand is daily"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input
+                      type="number"
+                      name="businessDays"
+                      v-validate="'required|min_value:0'"
+                      placeholder="Business Days"
+                      :error="getError('businessDays')"
+                      v-model="inventorySystemDTO.businessDays"
+                    ></base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-            <div
-              class="col-md-6 col-lg-4"
-              v-if="selects.simple.startsWith('(s,Q)') || selects.simple.startsWith('(R,S)')"
-            >
+            <div class="col-md-6">
               <div class="row">
-                <label class="col-6 col-form-label">Service Level</label>
-                <div class="col-7 text-center">
-                  <label>{{invParams.serviceLevel}}%</label>
-                  <slider v-model="invParams.serviceLevel" type="primary" :options="{step: 0.5}"></slider>
+                <label class="col-4 col-form-label">Lead Time</label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Fill the lead time taking the unit time specified in problem variables"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input
+                      type="number"
+                      placeholder="Lead Time"
+                      :error="getError('leadTime')"
+                      v-model="inventorySystemDTO.leadTime"
+                    ></base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,Q)')">
+            <div class="col-md-6" v-if="!selects.chooseSystem.startsWith('(R,S)')">
               <div class="row">
-                <label class="col-6 col-form-label">Business Days</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.businessDays"></base-input>
+                <label class="col-4 col-form-label">
+                  Lead Time Standard Dev:
+                  <div class="row">
+                    <div class="col-6">
+                      <el-tooltip
+                        content="Active this option if you calculate the lead time SD with the forecasting errors demand SD"
+                        effect="light"
+                        :open-delay="300"
+                        placement="top"
+                      >
+                        <base-radio name="sdf" class="mb-3" v-model="radio.sDLT">Calculated</base-radio>
+                      </el-tooltip>
+                    </div>
+                    <div class="col-6">
+                      <div>
+                        <base-radio name="sdl" class="mb-3" v-model="radio.sDLT">Known</base-radio>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+                <div class="col-8">
+                  <el-tooltip
+                    content="Fill the lead time standard deviation taking the unit time specified in problem variables"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input
+                      v-if="radio.sDLT=='sdl'"
+                      placeholder="Lead Time Standard Deviation"
+                      type="number"
+                      v-model="inventorySystemDTO.standardDevLeadTime"
+                    ></base-input>
+                  </el-tooltip>
+                  <el-tooltip
+                    content="Fill the forecasting errors demand standard deviation taking the unit time specified in problem variables"
+                    effect="light"
+                    :open-delay="300"
+                    placement="top"
+                  >
+                    <base-input
+                      v-if="radio.sDLT=='sdf'"
+                      placeholder="Forecasting Errors Demand Standard Dev"
+                      type="number"
+                      v-model="inventorySystemDTO.standardDevFrcErrorsDemand"
+                    ></base-input>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,S)')">
+            <div class="col-md-6">
               <div class="row">
-                <label class="col-6 col-form-label">Max Level Inventory</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.maxLevelInventory"></base-input>
+                <label class="col-4 col-form-label">Service Level</label>
+                <div class="col-8 text-center">
+                  <label>{{inventorySystemDTO.serviceLevel}}%</label>
+                  <slider
+                    :error="getError('serviceLevel')"
+                    v-model="inventorySystemDTO.serviceLevel"
+                    type="primary"
+                    :options="{step: 0.5}"
+                  ></slider>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-lg-4" v-if="selects.simple.startsWith('(s,S)')">
+            <div class="col-md-6">
               <div class="row">
-                <label class="col-6 col-form-label">Min Level Inventory</label>
-                <div class="col-7">
-                  <base-input type="number" v-model="invParams.minLevelInventory"></base-input>
+                <label class="col-4 col-form-label">
+                  Keeping Cost:
+                  <div class="row">
+                    <div class="col-6">
+                      <el-tooltip
+                        content="Active this option if you calculate the keeping cost with the unit value and keeping percentage"
+                        effect="light"
+                        :open-delay="300"
+                        placement="top"
+                      >
+                        <base-radio name="iC" class="mb-3" v-model="radio.kC">Calculated</base-radio>
+                      </el-tooltip>
+                    </div>
+                    <div class="col-6">
+                      <div>
+                        <base-radio name="H" class="mb-3" v-model="radio.kC">Known</base-radio>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+                <div class="col-8">
+                  <base-input
+                    v-if="radio.kC=='H'"
+                    placeholder="Keeping Cost"
+                    :error="getError('keepingCost')"
+                    type="number"
+                    v-model="inventorySystemDTO.keepingCost"
+                  ></base-input>
+                  <base-input
+                    v-if="radio.kC=='iC'"
+                    placeholder="Unit Cost"
+                    type="number"
+                    v-model="unitValue"
+                  ></base-input>
+                  <div class="text-center">
+                    <label v-if="radio.kC=='iC'">Keeping Percentage: {{annualKeepingPercentage}}%</label>
+                    <label v-else>Disabled</label>
+                    <slider
+                      :disabled="radio.kC=='H'"
+                      v-model="annualKeepingPercentage"
+                      type="danger"
+                      :options="{step: 0.5}"
+                    ></slider>
+                  </div>
+                  <!-- <base-input type="number" placeholder="Keeping Percentage" :disabled="radio.kC=='H'" v-model="inventorySystemDTO.keepingPercentage"></base-input> -->
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <br />
         <div class="text-center">
-          <base-button @click="solve()" type="primary">Solve</base-button>
+          <base-button style="width: 50%" @click="solve()" type="primary">Solve</base-button>
         </div>
+      </card>
+      <card v-if="messageSolution != null">
+        <h4 slot="header" align="center" v-html="messageSolution"></h4>
       </card>
     </form>
   </div>
@@ -223,6 +615,7 @@
 import { Select, Option } from "element-ui";
 import { Modal, BaseAlert } from "src/components";
 import { Slider } from "src/components";
+import { BaseCheckbox, BaseRadio } from "src/components/index";
 import axios from "axios";
 export default {
   components: {
@@ -230,64 +623,64 @@ export default {
     [Option.name]: Option,
     Modal,
     BaseAlert,
-    Slider
+    Slider,
+    BaseCheckbox,
+    BaseRadio
   },
   data() {
     return {
       title: "",
-      invParams: {
-        annualDemand: null,
-        dailyDemand: null,
-        orderCost: null,
-        keepingCost: null,
-        serviceLevel: 98,
-        standardDeviationDailyDemand: null,
-        standardDeviationLeadTime: null,
-        businessDays: null,
-        leadTime: null,
-        maxLevelInventory: null,
-        minLevelInventory: null,
-        reviewTime: null,
-        availableInventory: null
+      radio: {
+        kC: "H",
+        sDLT: "sdl"
       },
-      invSolution: {
-        quantity: -1,
-        safetyStock: -1,
-        reorderPoint: -1
+      inventorySystemDTO: {
+        unitTAvgDemand: null,
+        serviceLevel: 98
       },
+      messageSolution: null,
+      unitValue: null,
+      annualKeepingPercentage: 30,
+      standardDevFrcErrorsDemand: null,
       modals: {
-        notice: false
+        notice: false,
+        sq: false,
+        ss: false,
+        rs: false
       },
       model: {
         required: "",
         number: ""
       },
       selects: {
-        simple: "Choose the system type",
+        chooseSystem: null,
         systemType: [
-          {
-            value: "(s,Q) Continuous review fixed-order-quantity system",
-            label: "(s,Q) Continuous review fixed-order-quantity system"
-          },
-          {
-            value: "(s,S) Continuous review order-up-to system",
-            label: "(s,S) Continuous review order-up-to system"
-          },
-          {
-            value: "(R,S) Periodic review fixed-order interval system",
-            label: "(R,S) Periodic review fixed-order interval system"
-          },
-          {
-            value: "(R,s,S) Periodic review optional replenishment system",
-            label: "(R,s,S) Periodic review optional replenishment system"
-          }
-        ]
+          "(s,Q) Continuous review fixed-order-quantity system",
+          "(s,S) Continuous review order-up-to system",
+          "(R,S) Periodic review fixed-order interval system"
+        ],
+        unitTime: ["Annual", "Daily"]
       }
     };
   },
-
   name: "inventory",
+  created() {
+    axios
+      .get(this.$store.state.backend + "/inventoryManagementModule/toFill")
+      .then(response => {
+        console.log(response.data);
+        this.selects.unitTime = response.data;
+      });
+  },
   methods: {
+    getError(fieldName) {
+      return this.errors.first(fieldName);
+    },
+    validate() {
+      this.$validator.validateAll().then(isValid => {
+        this.$emit("on-submit", this.registerForm, isValid);
+      });
+    },
     nextPage() {
       this.$router.push("dashboard");
     },
@@ -296,88 +689,49 @@ export default {
       this.callServer(query);
     },
     buildQuery() {
-      var problem = this.selects.simple.split(" ");
-      var query = problem[0] + "/?system=" + problem[0];
-      if (
-        this.invParams.annualDemand != null &&
-        this.invParams.annualDemand != ""
-      )
-        query += "&annualDemand=" + this.invParams.annualDemand;
-      if (
-        this.invParams.dailyDemand != null &&
-        this.invParams.dailyDemand != ""
-      )
-        query += "&dailyDemand=" + this.invParams.dailyDemand;
-      if (this.invParams.orderCost != null && this.invParams.orderCost != "")
-        query += "&orderCost=" + this.invParams.orderCost;
-      if (
-        this.invParams.keepingCost != null &&
-        this.invParams.keepingCost != ""
-      )
-        query += "&keepingCost=" + this.invParams.keepingCost;
-      if (
-        this.invParams.serviceLevel != null &&
-        this.invParams.serviceLevel != ""
-      )
-        query += "&serviceLevel=" + this.invParams.serviceLevel / 100;
-      if (
-        this.invParams.standardDeviationDailyDemand != null &&
-        this.invParams.standardDeviationDailyDemand != ""
-      )
-        query +=
-          "&standardDeviationDailyDemand=" +
-          this.invParams.standardDeviationDailyDemand;
-      if (
-        this.invParams.standardDeviationLeadTime != null &&
-        this.invParams.standardDeviationLeadTime != ""
-      )
-        query +=
-          "&standardDeviationLeadTime=" +
-          this.invParams.standardDeviationLeadTime;
-      if (
-        this.invParams.businessDays != null &&
-        this.invParams.businessDays != ""
-      )
-        query += "&businessDays=" + this.invParams.businessDays;
-      if (this.invParams.leadTime != null && this.invParams.leadTime != "")
-        query += "&leadTime=" + this.invParams.leadTime;
-      if (
-        this.invParams.maxLevelInventory != null &&
-        this.invParams.maxLevelInventory != ""
-      )
-        query += "&maxLevelInventory=" + this.invParams.maxLevelInventory;
-      if (
-        this.invParams.minLevelInventory != null &&
-        this.invParams.minLevelInventory != ""
-      )
-        query += "&minLevelInventory=" + this.invParams.minLevelInventory;
-      if (this.invParams.reviewTime != null && this.invParams.reviewTime != "")
-        query += "&reviewTime=" + this.invParams.reviewTime;
-      if (
-        this.invParams.availableInventory != null &&
-        this.invParams.availableInventory != ""
-      )
-        query += "&availableInventory=" + this.invParams.availableInventory;
+      var problem = this.selects.chooseSystem.split(" ");
+      var query = problem[0];
       return query;
     },
     callServer(route) {
+      this.errors.clear();
+      if (this.radio.kC == "iC")
+        this.inventorySystemDTO.keepingCost =
+          (this.unitValue * this.annualKeepingPercentage) / 100;
+      if (this.radio.sDLT == "sdf")
+        this.inventorySystemDTO.standardDevLeadTime =
+          this.inventorySystemDTO.standardDevFrcErrorsDemand *
+          Math.sqrt(this.inventorySystemDTO.leadTime);
+      //console.log(this.inventorySystemDTO);
       axios
-        .get(
-          this.$store.state.backend + "/inventoryManagementModule/solve" + route
+        .post(
+          this.$store.state.backend +
+            "/inventoryManagementModule/solve" +
+            route,
+          this.inventorySystemDTO
         )
         .then(response => {
-            console.log(response.data);
+          console.log(response.data);
+          this.messageSolution = response.data.messageSolution;
         })
         .catch(error => {
-          console.log(error.response);
-          if(typeof error.response.data == 'string')
-          this.notifyError("bottom", "left", error.response.data);
-          else
-          this.notifyError("bottom", "left", error.response.data.message);
+          if (!error.response) {
+            this.notifyError("bottom", "left", 'Network Error');
+        }
+          else if (typeof error.response.data == "string")
+            this.notifyError("bottom", "left", error.response.data);
+          else {
+            var list = error.response.data;
+            for (let index = 0; index < list.length; index++) {
+              this.errors.add({
+                field: list[index].field,
+                msg: list[index].defaultMessage
+              });
+            }
+          }
         });
     },
     notifyError(verticalAlign, horizontalAlign, message) {
-      let color = "success";
       this.$notify({
         message: "<b>" + message + "</b>",
         timeout: 3000,
@@ -392,6 +746,7 @@ export default {
 </script>
 <style>
 #selector {
-  width: 500px;
+  min-width: 300px;
+  width: 50%;
 }
 </style>
