@@ -93,7 +93,7 @@
         :open-delay="300"
         placement="top"
       >
-        <base-button style="width: 50%" round :loading="loading.solve" type="primary" @click="solve">Start solving</base-button>
+        <base-button style="width: 50%" :loading="loading.solve" type="primary" @click="solve">Start solving</base-button>
       </el-tooltip>
     </div>
     <br />
@@ -164,13 +164,12 @@
         </div>
         <div class="col-md-6 ml-auto" align="center">
           <el-tooltip
-            content="Get the solution of the problem in one jump"
+            content="Get the solution of the problem in one click"
             effect="light"
             :open-delay="300"
             placement="top"
           >
             <base-button
-              round
               native-type="submit"
               :loading="loading.final"
               v-on:click="finalSol()"
@@ -454,6 +453,16 @@ export default {
           this.loading.next = false;
           this.loading.final = false;
           console.log(response.data);
+        }).catch(error => {
+           if (!error.response) {
+            this.notifyError("bottom", "left", 'Network Error');
+        } else {
+             this.notifyError("bottom", "left", error.response.data);
+        }
+          this.loading.solve = false;
+          this.loading.back = false;
+          this.loading.next = false;
+          this.loading.final = false;
         });
     },
     convertSubIndex() {
@@ -476,6 +485,15 @@ export default {
         horizontalAlign: horizontalAlign,
         verticalAlign: verticalAlign,
         type: this.type[color]
+      });
+    }, notifyError(verticalAlign, horizontalAlign, message) {
+      this.$notify({
+        message: "<b>" + message + "</b>",
+        timeout: 3000,
+        icon: "tim-icons icon-simple-remove",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: "danger"
       });
     }
   }

@@ -36,7 +36,7 @@
     "vee-validate": "^2.0.5",
     "vis": "^4.21.0-EOL",
     "vis-data": "^6.5.1",
-    "vis-network": "^7.6.2",
+    "vis-network": "^7.6.6",
     "vis-util": "^4.0.0",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
