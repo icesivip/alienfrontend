@@ -145,10 +145,11 @@ export default {
           this.processing = false;
         })
         .catch(error => {
+        console.log(error.message)
           swal({
             type: "error",
             title: "An error ocurred!",
-            text: error.response.data.errors[0].defaultMessage
+            text: error.message
           });
           this.processing = false;
         });
