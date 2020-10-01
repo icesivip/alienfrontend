@@ -5,16 +5,142 @@
     <side-bar
       :background-color="sidebarBackground"
       short-title="CT"
-      title="Creative Tim"
+      title="VIP - Alien"
     >
       <template slot-scope="props" slot="links">
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: $t('sidebar.dashboard'),
             icon: 'tim-icons icon-chart-pie-36',
             path: '/dashboard'
           }"
         >
+        </sidebar-item>-->
+        <sidebar-item
+          :link="{
+            name: $t('Linear Programming'),
+            icon: 'tim-icons icon-molecule-40'
+          }"
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Graphical Method'),
+              path: '/graphical'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Simplex Method'),
+              path: '/simplex'
+            }"
+          >
+          </sidebar-item>
+
+          <sidebar-item
+            :link="{
+              name: $t('Interior Point Method'),
+              path: '/interior'
+            }"
+          >
+          </sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Branch & Bound'),
+              path: '/branch'
+            }"
+          >
+          </sidebar-item>
+
+          <sidebar-item
+            :link="{
+              name: $t('AMPL'),
+              path: '/ampl'
+            }"
+          >
+          </sidebar-item>
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Inventory Management'),
+            icon: 'tim-icons icon-notes'
+          }"
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Inventory Control Systems'),
+              path: '/inventory'
+            }"
+          ></sidebar-item>
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Facility Planning'),
+            icon: 'tim-icons icon-components'
+          }"
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Craft Algorithm'),
+              path: '/craft'
+            }"
+          >
+          </sidebar-item>
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Master Plan Schedule'),
+            icon: 'tim-icons icon-calendar-60'
+          }"
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Master Production Schedule'),
+              path: '/master-production-schedule'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Material Requirements Planning'),
+              path: '/material-requirements-planning'
+            }"
+          ></sidebar-item>
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Networks'),
+            icon: 'tim-icons icon-atom'
+          }"
+        >
+          <sidebar-item
+            :link="{
+              name: $t('Shortest Path'),
+              path: '/shortest-path'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Minimum Spanning Tree'),
+              path: '/minimum-spanning-tree'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Maximum Flow Problem'),
+              path: '/maximum-flow-problem'
+            }"
+          ></sidebar-item>
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Forecasts'),
+            icon: 'tim-icons icon-sound-wave'
+          }"
+          ><sidebar-item
+            :link="{
+              name: $t('Forecasts'),
+              path: '/forecasts'
+            }"
+          ></sidebar-item>
         </sidebar-item>
       </template>
     </side-bar>
@@ -37,8 +163,8 @@
 </template>
 <script>
 /* eslint-disable no-new */
-import PerfectScrollbar from 'perfect-scrollbar';
-import 'perfect-scrollbar/css/perfect-scrollbar.css';
+import PerfectScrollbar from "perfect-scrollbar";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -55,11 +181,11 @@ function initScrollbar(className) {
   }
 }
 
-import DashboardNavbar from './SampleNavbar.vue';
-import ContentFooter from './SampleFooter.vue';
-import DashboardContent from '../Layout/Content.vue';
-import SidebarFixedToggleButton from '../Layout/SidebarFixedToggleButton.vue';
-import { SlideYDownTransition, ZoomCenterTransition } from 'vue2-transitions';
+import DashboardNavbar from "./SampleNavbar.vue";
+import ContentFooter from "./SampleFooter.vue";
+import DashboardContent from "../Layout/Content.vue";
+import SidebarFixedToggleButton from "../Layout/SidebarFixedToggleButton.vue";
+import { SlideYDownTransition, ZoomCenterTransition } from "vue2-transitions";
 
 export default {
   components: {
@@ -72,7 +198,7 @@ export default {
   },
   data() {
     return {
-      sidebarBackground: 'vue' //vue|blue|orange|green|red|primary
+      sidebarBackground: "primary" //vue|blue|orange|green|red|primary
     };
   },
   methods: {
@@ -83,16 +209,16 @@ export default {
     },
     initScrollbar() {
       let docClasses = document.body.classList;
-      let isWindows = navigator.platform.startsWith('Win');
+      let isWindows = navigator.platform.startsWith("Win");
       if (isWindows) {
         // if we are on windows OS we activate the perfectScrollbar function
-        initScrollbar('sidebar');
-        initScrollbar('main-panel');
-        initScrollbar('sidebar-wrapper');
+        initScrollbar("sidebar");
+        initScrollbar("main-panel");
+        initScrollbar("sidebar-wrapper");
 
-        docClasses.add('perfect-scrollbar-on');
+        docClasses.add("perfect-scrollbar-on");
       } else {
-        docClasses.add('perfect-scrollbar-off');
+        docClasses.add("perfect-scrollbar-off");
       }
     }
   },

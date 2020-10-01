@@ -17,6 +17,7 @@ $enable-print-styles:       true !default;
 $white:    #ffffff !default;
 $gray-100: #f6f9fc !default;
 $gray-200: #e9ecef !default;
+//$gray-300: #e3e3e3 !default;
 $gray-300: #e3e3e3 !default;
 $gray-400: #ced4da !default;
 $gray-500: #adb5bd !default;
@@ -99,7 +100,8 @@ $default-color-opacity:      rgba(182, 182, 182, .6) !default;
 $orange-color:               #f96332 !default;
 
 $default:       #344675 !default;
-$primary:       #e14eca !default;
+//$primary:       #e14eca !default;
+$primary:       #0071ce !default;
 $secondary:     #f4f5f7 !default;
 $success:       #00f2c3 !default;
 $info:          #1d8cf8 !default;
@@ -110,7 +112,8 @@ $vue:           #42b883 !default;
 
 // gradient
 $default-states:       #263148 !default;
-$primary-states:       #ba54f5 !default;
+//$primary-states:       #ba54f5 !default;
+$primary-states:       #063377 !default;
 $success-states:       #0098f0 !default;
 $info-states:          #3358f4 !default;
 $warning-states:       #ff6491 !default;
