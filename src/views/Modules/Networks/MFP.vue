@@ -1,5 +1,5 @@
 <style type="text/css">
-        #mynetwork {
+        #mygraph {
           width: 300;
           height: 400px;
           border: 1px solid lightgray;
@@ -34,10 +34,18 @@
       <input class="col-sm-11 btn btn-outline-success expand" type="submit" v-on:click="generateGraph" value="Generate Graph">
     </div>
     <div class="input-group-append mb-2 flex-nowrap justify-content-center">
-      <input class="col-sm-11 btn btn-outline-primary expand" type="button" value="Solve Max flow">
+      <div class="col text-center"> Source<input type="number" min="0" style="width: 100%" v-model="source"></div>
+      <div class="col text-center"> Sink <input type="number" min="0" style="width: 100%" v-model="sink"></div>
     </div>
-     <div id="mynetwork"></div>
 
+    <div class="input-group-append mb-2 flex-nowrap justify-content-center">
+      <input class="col-sm-11 btn btn-outline-primary expand" type="button" v-on:click="solveFlow" value="Solve Max flow">
+    </div>
+     <div id="mygraph"></div>
+     <input class="col-sm-12 btn btn-outline-danger expand" type="button" v-on:click="nextStep" value="Next">
+  <div id="separator"><h2 class="text-center">Total flow:</h2> <h2 class="text-center" id="totalFlow"></h2></div>
+  
+     <div id="mynetwork"></div>
 
   </div>
 </template>
@@ -45,6 +53,7 @@
 <script>
 
 import { DataSet, DataView, Network } from "vis";
+import SPRepository from './../../../repositories/Modules/Networks/SHPath';
 
 export default {
   name: "mfp",
@@ -70,6 +79,32 @@ export default {
          ['', '', '', ''],
       ],
      currentNode: 3,
+     source: "",
+     sink: "",
+     path: "",
+     pos:0,
+     step:0,
+   network: {
+      nodes: new DataSet(),
+      edges: new DataSet(),
+    },
+    options : {
+          edges: {
+            smooth: {
+              type: "curvedCW",
+              roundness: 0.2
+            }
+          },
+          physics: true
+      },
+    graphBack: {
+      graph: [['']],
+      source: "",
+      path: "",
+      sink: ""
+    },
+      
+
 
     network: {
       nodes: [
@@ -82,7 +117,6 @@ export default {
         }
       }
     }
-
     };
   },
   methods: {
@@ -107,32 +141,94 @@ export default {
       this.node.pop();
     },
     generateGraph(){
-       this.network.nodes = [];
-       this.network.edges = [];
+      this.pos=0;
+      this.network.nodes = new DataSet();
+        this.network.edges = new DataSet();
+        for(let i=0; i<this.graph.length; i++){
+              this.network.nodes.add({id: i, label: 'Node '+i, color: 'white',font: {size: 12, strokeWidth: 2, strokeColor: 'silver'}});
+        }
         var count = 0;
-        const nodesToAdd = new Set();     // it is used to know the nodes to add to network
         for(let i=0; i<this.graph.length;i++){
-
             for(let j=0; j<this.graph[i].length;j++){
                 var cur = this.graph[i][j];
-              if(cur!=''){
-                    if(!nodesToAdd.has(i)){
-                        nodesToAdd.add(i);
-                         this.network.nodes.push({id: i, label: 'Node '+i});
-                    }if(!nodesToAdd.has(j)){
-                        nodesToAdd.add(j);
-                         this.network.nodes.push({id: j, label: 'Node '+j});
-                    }
-                    this.network.edges.push({id: count,from:i, to:j , arrows: 'to', width: 2, length: 400, label: cur, color: "blue"});
+                if(cur!=''){
+                    this.network.edges.add({id: count,from:i, to:j , arrows: 'to', width: 2, length: 400, label: cur,  color:{color:'blue'}});
+                    count++;
+                    this.network.edges.add({id: count,from:j, to:i , arrows: 'to', width: 2, length: 400, label: "0",  color:{color:'red'}});
                     count++;
                 }
 
-
             }
         }
+        var container = document.getElementById("mygraph");
+         this.globalGraph = new Network(container,this.network, this.options);
+    },
+    nextStep(){
+        var actual = this.path[this.pos];
+        var arr = actual.split("-");
+        var cnt = parseInt(actual[actual.length-1],10);
+        if(this.step==0){
+          
+          for(let i=0; i<arr.length-1; i++){
+                var actual = arr[i].split(',');
+                var a = actual[0];
+                var edgeID = actual[1];
+                var b = actual[2]; 
+                console.log(a+" "+edgeID+" "+b );
+              try{
+                var edge = this.network.edges.get(parseInt(edgeID,10));
+                edge.color = {color:'#645E4F'};
+                this.network.edges.update(edge);
+                
+                var nodeA = this.network.nodes.get(parseInt(a, 10));
+                nodeA.color ='#FCCE78';
+                this.network.nodes.update(nodeA);
+                var nodeB = this.network.nodes.get(parseInt(b, 10));
+                nodeB.color ='#FCCE78';
+                this.network.nodes.update(nodeB);
+              }catch(err){
+                alert(err);
+              }
+            }this.step++;
+        }else{
+            for(let i=0; i<arr.length-1; i++){
+              var actual = arr[i].split(',');
+              var edgeID = actual[1];
+              console.log(edgeID);
+              var id = parseInt(edgeID,10);
+              var edg = this.network.edges.get(id); //arista normal
+              edg.label = ""+(parseInt(edg.label,10)-cnt);
+              var edg2 =null;
+              if(id%2==0){
+                 edg2 = this.network.edges.get(id+1); // arista al reves
+              }else{
+                edg2 = this.network.edges.get(id-1); 
+              }
+              edg2.label = ""+(parseInt(edg2.label,10)+cnt);
+              this.network.edges.update(edg);
+              this.network.edges.update(edg2);
+            }
+            this.step=0;
+           this.pos++;
+        }document.getElementById("totalFlow").innerHTML = cnt;
+
       var container = document.getElementById('mynetwork');
       this.network = new Network(container, this.network, this.network.options);
     },
+    solveFlow(){
+      this.pos=0;
+      this.graphBack.source = this.source;
+      this.graphBack.graph = this.graph;
+      this.graphBack.sink = this.sink;
+      var gr = this.graphBack;
+      SPRepository.solveFlow(gr).then((response) => {
+          if(response.status < 400){
+           this.path = response.data.split("\n");
+           console.log(this.path);
+          }
+        }
+      );
+    }
   }
 }
 
