@@ -106,17 +106,15 @@ export default {
       
 
 
-    network: {
-      nodes: [
-      ],
-     edges: [
-      ],
-      options: {
-        nodes: {
-          shape: "circle"
-        }
+    options : {
+          edges: {
+            smooth: {
+              type: "curvedCW",
+              roundness: 0.6
+            }
+          },
+          physics: true
       }
-    }
     };
   },
   methods: {
@@ -160,24 +158,28 @@ export default {
 
             }
         }
+        this.step=0;
         var container = document.getElementById("mygraph");
-         this.globalGraph = new Network(container,this.network, this.options);
+         var net = new Network(container,this.network, this.options);
     },
     nextStep(){
         var actual = this.path[this.pos];
         var arr = actual.split("-");
         var cnt = parseInt(actual[actual.length-1],10);
+        if(this.pos<this.path.length-1){
+          console.log("path lenghth  " + this.path.length + "pos   " + this.pos )
         if(this.step==0){
           
           for(let i=0; i<arr.length-1; i++){
-                var actual = arr[i].split(',');
-                var a = actual[0];
-                var edgeID = actual[1];
-                var b = actual[2]; 
+                var actual2 = arr[i].split(',');
+                var a = actual2[0];
+                var edgeID = actual2[1];
+                var b = actual2[2]; 
                 console.log(a+" "+edgeID+" "+b );
               try{
                 var edge = this.network.edges.get(parseInt(edgeID,10));
                 edge.color = {color:'#645E4F'};
+                edge.id = edgeID;
                 this.network.edges.update(edge);
                 
                 var nodeA = this.network.nodes.get(parseInt(a, 10));
@@ -192,17 +194,16 @@ export default {
             }this.step++;
         }else{
             for(let i=0; i<arr.length-1; i++){
-              var actual = arr[i].split(',');
-              var edgeID = actual[1];
+              var actual2 = arr[i].split(',');
+              var edgeID = actual2[1];
               console.log(edgeID);
-              var id = parseInt(edgeID,10);
-              var edg = this.network.edges.get(id); //arista normal
+              var edg = this.network.edges.get(parseInt(edgeID,10)); //arista normal
               edg.label = ""+(parseInt(edg.label,10)-cnt);
               var edg2 =null;
-              if(id%2==0){
-                 edg2 = this.network.edges.get(id+1); // arista al reves
+              if(parseInt(edgeID,10)%2==0){
+                 edg2 = this.network.edges.get(parseInt(edgeID,10)+1); // arista al reves
               }else{
-                edg2 = this.network.edges.get(id-1); 
+                edg2 = this.network.edges.get(parseInt(edgeID,10)-1); 
               }
               edg2.label = ""+(parseInt(edg2.label,10)+cnt);
               this.network.edges.update(edg);
@@ -211,12 +212,11 @@ export default {
             this.step=0;
            this.pos++;
         }document.getElementById("totalFlow").innerHTML = cnt;
-
-      var container = document.getElementById('mynetwork');
-      this.network = new Network(container, this.network, this.network.options);
+        }
     },
     solveFlow(){
       this.pos=0;
+      this.step=0;
       this.graphBack.source = this.source;
       this.graphBack.graph = this.graph;
       this.graphBack.sink = this.sink;
