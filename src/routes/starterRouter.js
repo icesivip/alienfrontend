@@ -24,7 +24,7 @@ import MFP from 'src/views/Modules/Networks/MFP';
 import NEOSServer from 'src/views/Modules/LinearProgramming/NEOSServer';
 import InteriorPoint from 'src/views/Modules/LinearProgramming/InteriorPoint';
 
-
+import NearestNeighbour from 'src/views/Modules/Routing/NearestNeighbor';
 
 Vue.use(Router);
 
@@ -122,6 +122,16 @@ export default new Router({
           path: 'maximum-flow-problem',
           name: 'mfp',
           components: { default: MFP }
+        },
+        {
+          path: 'maximum-flow-problem',
+          name: 'mfp',
+          components: { default: MFP }
+        },
+        {
+          path: 'nearest-neighbor',
+          name: 'nn',
+          components: { default: NearestNeighbour }
         },
       ]
     }
