@@ -1,5 +1,5 @@
 <style type="text/css">
-        #mynetwork {
+        #mygraph {
           width: 300;
           height: 400px;
           border: 1px solid lightgray;
@@ -38,17 +38,17 @@
     </div>
     <div class="input-group-append mb-2 flex-nowrap justify-content-center">
       <div class="col text-center"> Source<input type="number" min="0" style="width: 100%" v-model="from"></div>
-      <input class="col-sm-5 btn btn-outline-primary expand" type="button" value="Solve Dikjstra">
+      <input class="col-sm-5 btn btn-outline-primary expand" type="button" v-on:click="solveModelDijkstra" value="Solve Dikjstra">
     </div>
     <h2 class="text-center">Results</h2>
-     <div id="mynetwork"></div>
-      <input class="col-sm-12 btn btn-outline-danger expand" type="button" value="Next">
+     <div id="mygraph"></div>
+      <input class="col-sm-12 btn btn-outline-danger expand" type="button" v-on:click="nextStep" value="Next">
 
   <div id="separator"></div>
 
        <div class="input-group-append mb-2 flex-nowrap justify-content-center">
-          <div class="col text-center"> Destiny<input type="number" min="0" style="width: 100%" v-model="destinity"></div>
-          <input class="col-sm-5 btn btn-outline-primary expand" type="button"  value="Show Path">
+          <div class="col text-center"> Destination<input type="number" min="0" style="width: 100%" v-model="sink"></div>
+          <input class="col-sm-5 btn btn-outline-primary expand" type="button" v-on:click="getPath"  value="Show Path">
         </div>
        <div id="separator"><h2 class="text-center">Distance:</h2> <h2 class="text-center" id="distance"></h2></div>
     
@@ -58,7 +58,7 @@
 <script>
 
 import { DataSet, DataView, Network } from "vis";
-
+import SPRepository from './../../../repositories/Modules/Networks/SHPath';
 export default {
   name: "shPath",
   
@@ -84,22 +84,33 @@ export default {
       ],
      currentNode: 3,
      from : "",
-     destinity: "",
+     sink: "",
     network: {
-      nodes: [
-      ],
-     edges: [
-      ],
-      options: {
-        nodes: {
-          shape: "circle"
-        }
-      }
-    }
-      
-    };
+      nodes: new DataSet(),
+      edges: new DataSet(),
+     
+    },options : {
+          edges: {
+            smooth: {
+              type: "curvedCW",
+              roundness: 0.6
+            }
+          },
+          physics: true
+      },
+    path : [''],
+    pos: 0,
+    graphBack: {
+      graph: [['']],
+      source: '',
+      path: "",
+      sink: ""
+    },
+     globalGraph: null
+    } 
   },
   methods: {
+
     addNode(){
         this.currentNode = this.currentNode+1; // id of new node
         var newNode = {
@@ -121,32 +132,130 @@ export default {
       this.node.pop();
     },
     generateGraph(){
-       this.network.nodes = [];
-       this.network.edges = [];
+      this.pos=0;
+      this.network.nodes = new DataSet();
+        this.network.edges = new DataSet();
+        for(let i=0; i<this.graph.length; i++){
+              this.network.nodes.add({id: i, label: 'Node '+i, color: 'white',font: {size: 12, strokeWidth: 2, strokeColor: 'silver'}});
+        }
         var count = 0;
-        const nodesToAdd = new Set();     // it is used to know the nodes to add to network
         for(let i=0; i<this.graph.length;i++){
-
             for(let j=0; j<this.graph[i].length;j++){
                 var cur = this.graph[i][j];
-              if(cur!=''){
-                    if(!nodesToAdd.has(i)){
-                        nodesToAdd.add(i);
-                         this.network.nodes.push({id: i, label: 'Node '+i});
-                    }if(!nodesToAdd.has(j)){
-                        nodesToAdd.add(j);
-                         this.network.nodes.push({id: j, label: 'Node '+j});
-                    }
-                    this.network.edges.push({id: count,from:i, to:j , arrows: 'to', width: 2, length: 400, label: cur, color: "blue"});
+                if(cur!=''){
+                    this.network.edges.add({id: count,from:i, to:j , arrows: 'to', width: 2, length: 400, label: cur,  color:{color:'blue'}});
                     count++;
                 }
-                
-               
             }
-        } 
-      var container = document.getElementById('mynetwork');
-      this.network = new Network(container, this.network, this.network.options);
+        }
+        var container = document.getElementById("mygraph");
+         var net = new Network(container,this.network, this.options);
     },
+     nextStep(){
+       var actual;
+       for(let i=this.pos; i<this.path.length;i++){
+          actual = this.path[this.pos].split(',');
+         if(actual.length<4){
+           this.pos++;
+         }else{
+           break;
+         }
+       }
+        if(actual.length==4){
+            var a = actual[0];
+            var edgeID = actual[1];
+            var b = actual[2];
+            var valid = actual[3];
+           console.log("a: "+ a+" edgeID: "+ edgeID+ " b: "+ b+" valid: "+ valid);
+            try {
+              
+                var edge = this.network.edges.get(parseInt(edgeID, 10));
+                edge.color = {color:'red'};
+                this.network.edges.update(edge);
+                
+                var nodeA = this.network.nodes.get(parseInt(a, 10));
+                nodeA.color = 'blue';
+                this.network.nodes.update(nodeA);
+                var nodeB = this.network.nodes.get(parseInt(b, 10));
+                nodeB.color ='gray';
+                this.network.nodes.update(nodeB);
+
+                console.log("edge found: " + edge.id+ " nodeA: " + nodeA.id+ " nodeB: "+ nodeB.id);
+            }
+            catch (err) {
+                alert(err);
+            }
+        }this.pos++;
+    },
+     showPath(data){
+      // this.resetGraph();
+            var arr = data.split('-');
+            for(let i=0; i<arr.length-1; i++){
+                var actual = arr[i].split(',');
+                var a = actual[0];
+                var edgeID = actual[1];
+                var b = actual[2]; 
+                try {
+              
+                var edge = this.network.edges.get(parseInt(edgeID, 10));
+                edge.color = {color:'#645E4F'};
+                this.network.edges.update(edge);
+                
+                var nodeA = this.network.nodes.get(parseInt(a, 10));
+                nodeA.color = '#FCCE78';
+                this.network.nodes.update(nodeA);
+                var nodeB = this.network.nodes.get(parseInt(b, 10));
+                nodeB.color ='#FCCE78';
+                this.network.nodes.update(nodeB);
+
+                console.log("edge found: " + edge.id+ " nodeA: " + nodeA.id+ " nodeB: "+ nodeB.id);
+            }
+            catch (err) {
+                alert(err);
+            }
+            
+            document.getElementById("distance").innerHTML = arr[arr.length-1];
+            }
+        },
+        resetGraph(){
+          for(var i=0;this.network.nodes.length;i++){
+            try {
+                var nodeA = this.network.nodes.get(parseInt(i,10));
+
+                nodeA.color = '#FCCE78';
+                this.network.nodes.update(nodeA);
+            }
+            catch (err) {
+                alert(err);
+            }
+          }
+        },
+    solveModelDijkstra(){
+      this.pos=0;
+      this.graphBack.source = this.from;
+      this.graphBack.graph = this.graph;
+      var gr = this.graphBack;
+      SPRepository.solveDijkstra(gr).then((response) => {
+          if(response.status < 400){
+            this.path = response.data.split("-");
+            console.log(this.path);
+          }
+        }
+      );
+    }, getPath(){
+      this.pos=0;
+      this.graphBack.source = this.from;
+      this.graphBack.graph = this.graph;
+      this.graphBack.sink = this.sink;
+      var gr = this.graphBack;
+      SPRepository.getPath(gr).then((response) => {
+          if(response.status < 400){
+            this.showPath(response.data);
+            console.log(response.data);
+          }
+        }
+      );
+    }
   }
 }
 

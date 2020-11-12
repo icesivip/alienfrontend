@@ -338,7 +338,7 @@ export default {
     },
     log() {
       axios
-        .post("http://proyectovip.icesi.edu.co/craft", this.requestBody)
+        .post("http://proyectovip.icesi.edu.co/craftMethodModule/craft", this.requestBody)
         .then(response => {
           // console.log(response);
           this.succesMessage();

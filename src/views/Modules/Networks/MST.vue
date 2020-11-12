@@ -1,5 +1,5 @@
 <style type="text/css">
-        #mynetwork {
+        #mygraph {
           width: 300;
           height: 400px;
           border: 1px solid lightgray;
@@ -34,18 +34,18 @@
       <input class="col-sm-11 btn btn-outline-success expand" type="submit" v-on:click="generateGraph" value="Generate Graph">
     </div>
     <div class="input-group-append mb-2 flex-nowrap justify-content-center">
-      <input class="col-sm-11 btn btn-outline-primary expand" type="button" value="Solve Prim's Algorithm">
+      <input class="col-sm-11 btn btn-outline-primary expand" type="button" v-on:click="solveMST" value="Solve">
     </div>
-     <div id="mynetwork"></div>
-  
-   
+     <div id="mygraph"></div>
+    <input class="col-sm-12 btn btn-outline-danger expand" type="button" v-on:click="nextStep" value="Next">
+
   </div>
 </template>
  
 <script>
 
 import { DataSet, DataView, Network } from "vis";
-
+import SPRepository from './../../../repositories/Modules/Networks/SHPath';
 export default {
   name: "mst",
   
@@ -72,17 +72,26 @@ export default {
      currentNode: 3,
      
     network: {
-      nodes: [
-      ],
-     edges: [
-      ],
-      options: {
-        nodes: {
-          shape: "circle"
-        }
-      }
-    }
-      
+      nodes: new DataSet(),
+     edges: new DataSet(),
+    },
+    options : {
+          edges: {
+            smooth: {
+              type: "curvedCW",
+              roundness: 0.5
+            }
+          },
+          physics: true
+      },
+    graphBack: {
+      graph: [['']],
+      source: '',
+      path: "",
+      sink: ""
+    },
+    path: "",
+    pos: 0
     };
   },
   methods: {
@@ -107,31 +116,77 @@ export default {
       this.node.pop();
     },
     generateGraph(){
-       this.network.nodes = [];
-       this.network.edges = [];
+       this.pos=0;
+      this.network.nodes = new DataSet();
+        this.network.edges = new DataSet();
+        for(let i=0; i<this.graph.length; i++){
+              this.network.nodes.add({id: i, label: 'Node '+i, color: 'white',font: {size: 12, strokeWidth: 2, strokeColor: 'silver'}});
+        }
         var count = 0;
-        const nodesToAdd = new Set();     // it is used to know the nodes to add to network
         for(let i=0; i<this.graph.length;i++){
-
             for(let j=0; j<this.graph[i].length;j++){
                 var cur = this.graph[i][j];
-              if(cur!=''){
-                    if(!nodesToAdd.has(i)){
-                        nodesToAdd.add(i);
-                         this.network.nodes.push({id: i, label: 'Node '+i});
-                    }if(!nodesToAdd.has(j)){
-                        nodesToAdd.add(j);
-                         this.network.nodes.push({id: j, label: 'Node '+j});
-                    }
-                    this.network.edges.push({id: count,from:i, to:j , arrows: 'to', width: 2, length: 400, label: cur, color: "blue"});
+                if(cur!=''){
+                    this.network.edges.add({id: count,from:i, to:j , arrows: 'to', width: 2, length: 400, label: cur,  color:{color:'blue'}});
                     count++;
                 }
-                
-               
             }
-        } 
-      var container = document.getElementById('mynetwork');
-      this.network = new Network(container, this.network, this.network.options);
+        }
+        var container = document.getElementById("mygraph");
+         this.globalGraph = new Network(container,this.network, this.options);
+        
+    },
+    nextStep(){
+      if(this.pos<this.path.length){
+            var actual = this.path[this.pos].split(',');
+            var a; 
+            var edgeID; 
+            var b;
+            console.log(actual);
+            if(actual.length==1){
+                var act2 = this.path[this.pos-1].split(',');
+                a = act2[0];
+                edgeID = act2[1];
+                b = act2[2];
+                if(actual[0]=="1"){
+                    var edge = this.network.edges.get(parseInt(edgeID, 10));
+                    edge.color = {color:'red'};
+                    this.network.edges.update(edge);
+                }
+            }else{
+                a = actual[0];
+                edgeID = actual[1];
+                b = actual[2];
+                try {
+                    var edge = this.network.edges.get(parseInt(edgeID, 10));
+                    edge.color = {color:'black'};
+                    this.network.edges.update(edge);
+
+                }
+                catch (err) {
+                   alert(err);
+                }
+            }
+            this.pos++;
+            if(this.pos<this.path.length){
+              actual = this.path[this.pos].split(",");
+              if(actual.length==1 && actual[0]=="0"){
+                this.pos++;
+              }
+            }
+      }
+    },
+    solveMST(){
+      this.pos=0;
+      this.graphBack.graph = this.graph;
+      var gr = this.graphBack;
+      SPRepository.solveMST(gr).then((response) => {
+          if(response.status < 400){
+            this.path = response.data.split("-");
+            console.log(this.path);
+          }
+        }
+      );
     },
   }
 }
