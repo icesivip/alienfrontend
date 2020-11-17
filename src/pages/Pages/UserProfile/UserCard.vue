@@ -7,32 +7,28 @@
       <div class="block block-three"></div>
       <div class="block block-four"></div>
       <a href="javascript:void(0)">
-        <img class="avatar" src="img/emilyz.jpg" alt="..." />
-        <h5 class="title">Mike Andrew</h5>
+        <img class="avatar" src="https://cdn.icon-icons.com/icons2/1369/PNG/512/-person_90382.png" alt="..." />
+          <h5 class="title">{{name}}</h5>
       </a>
-      <p class="description">Ceo/Co-Founder</p>
+      <p class="description">{{carrer}}</p>
     </div>
-    <p></p>
-    <div class="card-description">
-      Do not be scared of the truth because we need to restart the human
-      foundation in truth And I love you like Kanye loves Kanye I love Rick
-      Owens’ bed design but the back is...
-    </div>
-
-    <div slot="footer" class="button-container">
-      <base-button class="btn-facebook" icon round>
-        <i class="fab fa-facebook"></i>
+    <!--<div slot="footer" class="button-container">
+      <base-button class="btn-linkedin" icon round>
+        <i class="fab fa-linkedin" ><a  href="https://www.linkedin.com/feed/"></a></i>
       </base-button>
-      <base-button class="btn-twitter" icon round>
-        <i class="fab fa-twitter"></i>
-      </base-button>
-      <base-button class="btn-google" icon round>
-        <i class="fab fa-google-plus"></i>
-      </base-button>
-    </div>
+    </div>-->
   </card>
 </template>
 <script>
-export default {};
+
+export default {
+  props: {
+    name: String,
+    carrer: String,
+    img: String,
+    link: String
+  },
+  
+};
 </script>
 <style></style>
