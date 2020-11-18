@@ -29,7 +29,7 @@ body {
 
             <tab-pane>
               <span slot="label">
-                <i class="tim-icons icon-planet"></i>¿WHAT IS V.I.P?</span>
+                <i class="tim-icons icon-planet"></i>WHAT IS V.I.P?</span>
               <h4>The Vertically Integrated Projects (VIP) Program unites undergraduate education and faculty research in a team-based context. Undergraduate VIP students earn academic credits, while faculty and graduate students benefit from the design/discovery efforts of their teams.</h4>
               <h4>This program allows to:</h4>
               <ul>
@@ -336,7 +336,7 @@ export default {
       c42: "Ingeniería Industrial",
 
       n43: "JUAN SEBASTIAN MORALES VILLA ",
-      c43: "Ingeniería Industrial",
+      c43: "Ingeniería de Sistemas",
 
       n44: "JESSICA DANIELA OTERO FERNANDEZ ",
       c44: "Ingeniería de Sistemas",
