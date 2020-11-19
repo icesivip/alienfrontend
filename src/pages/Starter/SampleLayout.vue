@@ -153,6 +153,24 @@
               path: '/nearest-neighbor'
             }"
           ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Clark and Wright'),
+              path: '/clark-and-wright'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Opt3Move'),
+              path: '/opt-3-move'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Sweep'),
+              path: '/sweep'
+            }"
+          ></sidebar-item>
         </sidebar-item>
       </template>
     </side-bar>

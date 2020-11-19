@@ -1,7 +1,6 @@
 <template>
-  <div id="nn">
-    
-    <h1>NEAREST NEIGHBOR ALGORITHM</h1>
+  <div>
+    <h1>CLARK AND WRIGHT ALGORITHM</h1>
     <card>
         <nodes-table :nodes="nodes" @solve="solve"> </nodes-table>
     </card>
@@ -9,23 +8,17 @@
     <card v-show="solveStatus">
       <routing-solution :route="route" :routeCost="routeCost"></routing-solution>
     </card>
-    
-  <!-- <pre>
-      {{$data}}
-  </pre> -->
-
   </div>
 </template>
- 
-<script>
 
+<script>
 import RRepository from './../../../repositories/Modules/Routing/Routing';
 import NodesTable from './NodesTable.vue';
 import RoutingSolution from './RoutingSolution.vue';
 
 export default {
   
-  name: "nn",
+  name: "ck",
   
   data() {
     return {
@@ -52,7 +45,7 @@ export default {
 
       var no = {nodes: nodes};
       
-      RRepository.solveNearestNeighbours(no).then((response) => {
+      RRepository.solveClarkAndWright(no).then((response) => {
           if(response.status < 400){
             let r = response.data
             this.routeCost = r[0];
@@ -71,4 +64,5 @@ export default {
 </script>
 
 <style>
+
 </style>

@@ -10,6 +10,10 @@ class Routing{
     solveNearestNeighbours(NodesDTO){
         return axios.post(`${this.basePath}/routingModule/solveNearestNeighbours`,NodesDTO);
     }
+
+    solveClarkAndWright(NodesDTO){
+        return axios.post(`${this.basePath}/routingModule/solveClarkAndWright`,NodesDTO);
+    }
 }
 
 export default new Routing();

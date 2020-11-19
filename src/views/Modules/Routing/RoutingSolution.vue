@@ -2,6 +2,8 @@
 
     <div>
         <h2 class="text-center" >Results</h2>
+        
+        <div>Route Cost: {{routeCost.cost}}</div>
 
         <table class="table">
             <thead align="center">
@@ -15,11 +17,16 @@
                 </tr>
             </tbody>
         </table>
-
-        <card style="width:65%">
-            <canvas id="myChart"></canvas>
-        </card>
         
+
+        <!-- <div class="ml-auto mr-auto" style="width: 100%">
+            <canvas id="myChart"></canvas>
+        </div> -->
+        
+        <div class="ml-auto mr-auto" style="width: 80%">
+            <canvas id="myChart"></canvas>
+        </div>
+
     </div>
 
 </template>
@@ -31,6 +38,10 @@ export default {
     props:{
         route: {
         required: true
+        },
+        routeCost: {
+            required: true,
+            default: 0
         }
     },
     methods:{
