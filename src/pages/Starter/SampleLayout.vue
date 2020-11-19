@@ -142,6 +142,36 @@
             }"
           ></sidebar-item>
         </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Routing'),
+            icon: 'tim-icons icon-delivery-fast'
+          }"
+          ><sidebar-item
+            :link="{
+              name: $t('Nearest Neighbour'),
+              path: '/nearest-neighbor'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Clark and Wright'),
+              path: '/clark-and-wright'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Opt3Move'),
+              path: '/opt-3-move'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Sweep'),
+              path: '/sweep'
+            }"
+          ></sidebar-item>
+        </sidebar-item>
       </template>
     </side-bar>
     <div class="main-panel" :data="sidebarBackground">
