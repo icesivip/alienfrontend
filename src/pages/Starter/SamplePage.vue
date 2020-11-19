@@ -291,7 +291,7 @@ export default {
       c27: "Ingeniería Industrial",
 
       n28: "JUAN FERNANDO MARTINEZ DOMINGUEZ  ",
-      c28: "Ingeniería Industrial",
+      c28: "Ingeniería de Sistemas",
 
       n29: "VALENTINA OSORIO GIRALDO ",
       c29: "Ingeniería Industrial",
@@ -300,10 +300,10 @@ export default {
       c30: "Ingeniería Industrial",
 
       n31: "CHRISTIAN GALLO PELAEZ  ",
-      c31: "Ingeniería Industrial e Ingeniería de Sistemas",
+      c31: "Ingeniería de Sistemas e Ingeniería Industrial",
 
       n32: "JUAN JOSE BOHORQUEZ JARAMILLO ",
-      c32: "Ingeniería Industrial",
+      c32: "Ingeniería de Sistemas",
 
       n33: "CAMILO CAMPAZ JIMENEZ  ",
       c33: "Ingeniería de Sistemas",

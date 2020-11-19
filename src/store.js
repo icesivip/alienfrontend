@@ -9,5 +9,9 @@ export default new Vuex.Store({
         //backend: 'https://icesi-vip-alien-backend.herokuapp.com/api', //Production backend
         //token: '',
         backend: process.env.NODE_ENV=='production' ? 'https://icesi-vip-alien-backend.herokuapp.com/api' : 'http://localhost:8080/api'
+        /* backend: 'http://localhost:8080/api',
+        token: '', */
     }
 })
+
+
