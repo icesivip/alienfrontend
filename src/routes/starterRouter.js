@@ -24,7 +24,10 @@ import MFP from 'src/views/Modules/Networks/MFP';
 import NEOSServer from 'src/views/Modules/LinearProgramming/NEOSServer';
 import InteriorPoint from 'src/views/Modules/LinearProgramming/InteriorPoint';
 
-
+import NearestNeighbour from 'src/views/Modules/Routing/NearestNeighbor';
+import ClarkeAndWright from 'src/views/Modules/Routing/ClarkeAndWright';
+import Opt3Move from 'src/views/Modules/Routing/Opt3Move';
+import Sweep from 'src/views/Modules/Routing/Sweep';
 
 Vue.use(Router);
 
@@ -122,6 +125,31 @@ export default new Router({
           path: 'maximum-flow-problem',
           name: 'mfp',
           components: { default: MFP }
+        },
+        {
+          path: 'maximum-flow-problem',
+          name: 'mfp',
+          components: { default: MFP }
+        },
+        {
+          path: 'nearest-neighbor',
+          name: 'nn',
+          components: { default: NearestNeighbour }
+        },
+        {
+          path: 'clark-and-wright',
+          name: 'ck',
+          components: { default: ClarkeAndWright }
+        },
+        {
+          path: 'opt-3-move',
+          name: 'o3p',
+          components: { default: Opt3Move }
+        },
+        {
+          path: 'sweep',
+          name: 'sp',
+          components: { default: Sweep }
         },
       ]
     }
