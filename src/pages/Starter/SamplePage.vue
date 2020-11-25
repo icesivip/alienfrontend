@@ -1,20 +1,21 @@
-<!--<style type="text/css">
-body {
+<style type="text/css">
+/*body {
   color: #d3d3d3;
   font: 12pt arial;
   background-color: #222222;
-}
-#mynetwork {
-          width: 300;
-          height: 400px;
-          border: 1px solid lightgray;
-          background:#d1d1d1;
-        }
-#separator{
+}*/
+/*#separator{
   height: 60px;
+}*/
+
+#mynetwork {
+  width: 300;
+  height: 600px;
+  border: 10px solid #444444;
+  background-color: #222222;
 }
 </style>
-<script type="text/javascript" src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
+<!--<script type="text/javascript" src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
 -->
 <template>
   <div>
@@ -179,8 +180,8 @@ body {
         <div slot="header" class="card-header-success">
           <h1 class="text-center">OUR MODULES</h1>
         </div>
-        <img slot="image-bottom" class="card-img-bottom" src="img\Modules.PNG" alt="Card image cap">
-       <!--<div id="mynetwork"></div>-->
+        <!--<img slot="image-bottom" class="card-img-bottom" src="img\Modules.PNG" alt="Card image cap">-->
+       <div id="mynetwork"></div>
       </card>
       <card class="text-center">
         <div><wizard> </wizard></div>
@@ -207,6 +208,26 @@ export default {
   },
   data() {
     return {
+      network: {
+        nodes: new DataSet(),
+        edges: new DataSet(),
+      },
+      options : {
+        nodes: {
+          shape: "dot",
+          size: 25,
+          font: {
+            size: 25,
+            color: "#ffffff",
+          },
+          borderWidth: 2,
+       },
+        edges: {
+          width: 5,
+          length : 200
+        },
+      },
+
       activeName: 'first',
       n1: "CLAUDIA JOHANA AGUDELO ARANGO",
       c1: "Ingeniería Industrial",
@@ -349,56 +370,69 @@ export default {
 
       n47: "ESTEBAN YUSUNGUAIRA LOPEZ  ",
       c47: "Ingeniería de Sistemas e Ingeniería Telemática",
-
-
-      /*
-      node: [
-        { id: 0, label: "0", group: 0 },
-        { id: 1, label: "1", group: 0 },
-        { id: 2, label: "2", group: 0 },
-        { id: 3, label: "3", group: 1 },
-        { id: 4, label: "4", group: 1 },
-        { id: 5, label: "5", group: 1 },
-        { id: 6, label: "6", group: 2 },
-        { id: 7, label: "7", group: 2 },
-        { id: 8, label: "8", group: 2 },
-        { id: 9, label: "9", group: 3 },
-        { id: 10, label: "10", group: 3 }
-      ],
-      edges:[
-        { from: 1, to: 0 },
-        { from: 2, to: 0 },
-        { from: 4, to: 3 },
-        { from: 5, to: 4 },
-        { from: 4, to: 0 },
-        { from: 7, to: 6 },
-        { from: 8, to: 7 },
-        { from: 7, to: 0 },
-        { from: 10, to: 9 }
-      ],
-
-      options: {
-        nodes: {
-        shape: "dot",
-        size: 30,
-        font: {
-          size: 32,
-          color: "#ffffff",
-        },
-        borderWidth: 2,
-      },
-      edges: {
-        width: 2,
-      },
-    },
-   methods: {
-     solve() {
-      network = new Network(document.getElementById('mynetwork'), this.network, this.network.options);
-     }
-   }
-   */
-
   }
+  },
+  methods: {
+    generate_graph: function(){
+      this.network.nodes = new DataSet();
+      this.network.edges = new DataSet();
+      this.network.nodes.add({ id: 0, label: "V.I.P.", group: 0 });
+      this.network.nodes.add({ id: 1, label: "LP", color: "blue" });
+      this.network.nodes.add({ id: 2, label: "IM", color: '#134D70 ' });
+      this.network.nodes.add({ id: 3, label: "FP", color: '#55ECEE' });
+      this.network.nodes.add({ id: 4, label: "CRAFT", color: '#55ECEE' });
+      this.network.nodes.add({ id: 5, label: "Master production schedule", color: '#5563EE '});
+      this.network.nodes.add({ id: 6, label: "Material requirements planning", color: '#5563EE ' });
+      this.network.nodes.add({ id: 7, label: "MPS", color: '#5563EE ' });
+      this.network.nodes.add({ id: 8, label: "NETWORK", color: "gray" });
+      this.network.nodes.add({ id: 9, label: "SHORTEST PATH", color: "gray" });
+      this.network.nodes.add({ id: 10, label: "MST", color: "gray"});
+      this.network.nodes.add({ id: 11, label: "MFP", color: "gray"});
+      this.network.nodes.add({ id: 12, label: "Nearest Neighbours", color: "white" });
+      this.network.nodes.add({ id: 13, label: "ROUTE", color: "white"});
+      this.network.nodes.add({ id: 14, label: "Clarke And Wright", color: "white" });
+      this.network.nodes.add({ id: 15, label: "3-opt-move", color: "white" });
+      this.network.nodes.add({ id: 16, label: "Sweep", color: "white"});
+      this.network.nodes.add({ id: 20, label: "Simplex Method", color: "blue" });
+      this.network.nodes.add({ id: 21, label: "Interior Point Solver", color: "blue" });
+      this.network.nodes.add({ id: 22, label: "Branch & Bound Solver", color: "blue" });
+      this.network.nodes.add({ id: 23, label: "AMPL", color: "blue" });
+      this.network.nodes.add({ id: 24, label: "Graphical Method", color: "blue" });
+      this.network.nodes.add({ id: 26, label: "Inventory Control Systems", color: '#134D70 '});
+      this.network.nodes.add({ id: 27, label: "FORECAST", color: '#0A938F '});
+      this.network.nodes.add({ id: 28, label: "ForeCast", color: '#0A938F  '});
+
+      this.network.edges.add({ from: 1, to: 0 });
+      this.network.edges.add({ from: 2, to: 0 });
+      this.network.edges.add({ from: 3, to: 0 });
+      this.network.edges.add({ from: 5, to: 7 });
+      this.network.edges.add({ from: 4, to: 3 });
+      this.network.edges.add({ from: 6, to: 7});
+      this.network.edges.add({ from: 8, to: 0 });
+      this.network.edges.add({ from: 7, to: 0 });
+      this.network.edges.add({ from: 9, to: 8, lenght : 200 });
+      this.network.edges.add({ from: 11, to: 8,lenght : 200 });
+      this.network.edges.add({ from: 10, to: 8,lenght : 200 });
+      this.network.edges.add({ from: 13, to: 12 });
+      this.network.edges.add({ from: 14, to: 13 });
+      this.network.edges.add({ from: 13, to: 0 });
+      this.network.edges.add({ from: 16, to: 13 });
+      this.network.edges.add({ from: 15, to: 13 });
+      this.network.edges.add({ from: 20, to: 1, length : 200 });
+      this.network.edges.add({ from: 21, to: 1, length : 200 });
+      this.network.edges.add({ from: 23, to: 1, length : 200});
+      this.network.edges.add({ from: 22, to: 1, length : 200 });
+      this.network.edges.add({ from: 26, to: 2 , lenght : 200});
+      this.network.edges.add({ from: 24, to: 1, length : 200 });
+      this.network.edges.add({ from: 27, to: 0 });
+      this.network.edges.add({ from: 27, to: 28, lenght : 200 });
+
+      var container = document.getElementById("mynetwork");
+      var net = new Network(container,this.network, this.options);
+    }
+  },
+  mounted(){
+    this.generate_graph();
   }
 };
 </script>
