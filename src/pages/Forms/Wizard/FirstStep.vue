@@ -52,15 +52,25 @@
       </div>
       <div class="col-sm-10">
         <base-input
-          name="address"
-          placeholder="Address"
-          v-model="model.address"
-          v-validate="modelValidations.address"
-          :error="getError('address')"
+          name="university"
+          placeholder="University"
+          v-model="model.university"
+          v-validate="modelValidations.university"
+          :error="getError('university')"
           addon-left-icon="tim-icons icon-square-pin"
         >
         </base-input>
       </div>
+      <div class="col-sm-7">
+      <base-input
+        label="Comments"
+        name="comments"
+        v-model="model.comments"
+        :error="getError('comments')"
+        v-validate="modelValidations.comments"
+      >
+      </base-input>
+    </div>
     </div>
   </div>
 </template>
@@ -73,7 +83,8 @@ export default {
         lastName: '',
         email: '',
         phone: '',
-        address: ''
+        university: '',
+        comments: ''
       },
       modelValidations: {
         firstName: {
@@ -91,7 +102,10 @@ export default {
         phone: {
           required: true,
           numeric: true
-        }
+        },
+        comments: {
+          required: true
+        },
       }
     };
   },
