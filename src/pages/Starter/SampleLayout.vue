@@ -172,6 +172,19 @@
             }"
           ></sidebar-item>
         </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Clustering'),
+            icon: 'tim-icons icon-controller'
+          }"
+          >
+          <sidebar-item
+            :link="{
+              name: $t('K-Means'),
+              path: '/K-Means'
+            }"
+          ></sidebar-item>
+          </sidebar-item>
       </template>
     </side-bar>
     <div class="main-panel" :data="sidebarBackground">

@@ -2,7 +2,7 @@
     <div id="sp">
         <h1>SWEEP ALGORITHM</h1>
         <card>
-            <nodes-table :nodes="nodes" @solve="solve"> </nodes-table>
+            <nodes-table :nodes="nodes" v-on:solve="solve"> </nodes-table>
         </card>
         
         <card v-show="solveStatus">
@@ -43,7 +43,7 @@ export default {
 
         var no = {nodes: nodes};
         
-        RRepository.solveClarkAndWright(no).then((response) => {
+        RRepository.solveSweep(no).then((response) => {
             if(response.status < 400){
                 let r = response.data
                 this.routeCost = r[0];

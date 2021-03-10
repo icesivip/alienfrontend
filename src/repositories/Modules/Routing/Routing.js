@@ -14,6 +14,10 @@ class Routing{
     solveClarkAndWright(NodesDTO){
         return axios.post(`${this.basePath}/routingModule/solveClarkAndWright`,NodesDTO);
     }
+
+    solveSweep(NodesDTO){
+        return axios.post(`${this.basePath}/routingModule/solveSweep`,NodesDTO);
+    }
 }
 
 export default new Routing();
