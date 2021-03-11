@@ -2,14 +2,14 @@
   <div>
     
     <TSPMainPage></TSPMainPage>
-    <h1>CLARK AND WRIGHT ALGORITHM</h1>
+    <!-- <h1>CLARK AND WRIGHT ALGORITHM</h1>
     <card>
         <nodes-table :nodes="nodes" @solve="solve"> </nodes-table>
     </card>
     
     <card v-show="solveStatus">
       <routing-solution :route="route" :routeCost="routeCost"></routing-solution>
-    </card>
+    </card> -->
   </div>
 </template>
 
