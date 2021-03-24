@@ -28,6 +28,7 @@ import NearestNeighbour from 'src/views/Modules/Routing/NearestNeighbor';
 import ClarkeAndWright from 'src/views/Modules/Routing/ClarkeAndWright';
 import Opt3Move from 'src/views/Modules/Routing/Opt3Move';
 import Sweep from 'src/views/Modules/Routing/Sweep';
+import TSP from 'src/views/Modules/Routing/TSPMainPage';
 
 import KMeans from 'src/views/Modules/Clustering/KMeans';
 
@@ -157,6 +158,11 @@ export default new Router({
           path: 'K-Means',
           name: 'km',
           components: {default: KMeans}
+        },
+        {
+          path: 'TSP',
+          name: 'tsp',
+          components: {default: TSP}
         }
       ]
     }

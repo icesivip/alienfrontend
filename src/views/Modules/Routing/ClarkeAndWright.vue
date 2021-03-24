@@ -1,15 +1,13 @@
 <template>
   <div>
-    
-    <TSPMainPage></TSPMainPage>
-    <!-- <h1>CLARK AND WRIGHT ALGORITHM</h1>
+    <h1>CLARK AND WRIGHT ALGORITHM</h1>
     <card>
         <nodes-table :nodes="nodes" @solve="solve"> </nodes-table>
     </card>
     
     <card v-show="solveStatus">
       <routing-solution :route="route" :routeCost="routeCost"></routing-solution>
-    </card> -->
+    </card>
   </div>
 </template>
 
@@ -17,7 +15,6 @@
 import RRepository from './../../../repositories/Modules/Routing/Routing';
 import NodesTable from './NodesTable.vue';
 import RoutingSolution from './RoutingSolution.vue';
-import TSPMainPage from './TSPMainPage.vue';
 
 export default {
   
@@ -62,7 +59,6 @@ export default {
   components: {
     'nodes-table': NodesTable,
     'routing-solution': RoutingSolution,
-    TSPMainPage
   }
 }
 </script>

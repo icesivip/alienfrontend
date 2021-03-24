@@ -3,50 +3,101 @@
        <div class="row">
             <div class="col-md-8 ml-auto mr-auto">
                 <card class="card-subcategories card-plain">
+                    
+                    
                     <tabs type="primary" tabContentClasses="tab-subcategories" square centered class="row">
+                        
                         <tab-pane>
-                            <span slot="label">
-                                <i class="tim-icons icon-planet"></i>WHAT IS V.I.P?</span>
-                            <h4>The Vertically Integrated Projects (VIP) Program unites undergraduate education and faculty research in a team-based context. Undergraduate VIP students earn academic credits, while faculty and graduate students benefit from the design/discovery efforts of their teams.</h4>
-                            <h4>This program allows to:</h4>
-                            <ul>
-                                <li type="circle"> Create long-term research & development experiences.</li>
-                                <li type="circle"> Cultivates leadership & mentoring.</li>
-                                <li type="circle"> Benefits faculty research programs.</li>
-                                </ul>
-                            <!--<div>
-                                <img slot="image-bottom" class="card-img-bottom" src="img\logoVIP.png" alt="Card image cap">
-                            </div>-->
+                            <span slot="label" @click="showClarkAndWright">
+                                <i class="tim-icons icon-planet"></i>Clark and Wright
+                            </span>
+                            <!-- //TODO -->
                         </tab-pane>
+
                         <tab-pane>
-                            <span slot="label">
-                                <i class="tim-icons icon-planet"></i>WHAT IS V.I.P?</span>
-                            <h4>The Vertically Integrated Projects (VIP) Program unites undergraduate education and faculty research in a team-based context. Undergraduate VIP students earn academic credits, while faculty and graduate students benefit from the design/discovery efforts of their teams.</h4>
-                            <h4>This program allows to:</h4>
-                            <ul>
-                                <li type="circle"> Create long-term research & development experiences.</li>
-                                <li type="circle"> Cultivates leadership & mentoring.</li>
-                                <li type="circle"> Benefits faculty research programs.</li>
-                                </ul>
-                            <!--<div>
-                                <img slot="image-bottom" class="card-img-bottom" src="img\logoVIP.png" alt="Card image cap">
-                            </div>-->
+                            <span slot="label" @click="showNearestNeighbour">
+                                <i class="tim-icons icon-planet"></i>Nearest Neighbour
+                            </span>
+                            <!-- //TODO -->
+                        </tab-pane>
+
+                        <tab-pane>
+                            <span slot="label" @click="showSweep">
+                                <i class="tim-icons icon-planet"></i>Sweep
+                            </span>
+                            <!-- //TODO -->
+                        </tab-pane>
+
+                        <tab-pane>
+                            <span slot="label" @click="showOpt3Move">
+                                <i class="tim-icons icon-planet"></i>Opt-3-Move
+                            </span>
+                                <!-- //TODO -->
                         </tab-pane>
                     </tabs>
                 </card>   
             </div>
         </div>
+
+        <ClarkeAndWright v-show="CKStatus"></ClarkeAndWright>
+        <Sweep v-show="SStatus"></Sweep>
+        <NearestNeighbour v-show="NNStatus"></NearestNeighbour>
+        <Opt3Move v-show="O3MStatus"></Opt3Move>
+        
     </div>    
 </template>
 
 <script>
 import { TabPane, Tabs } from 'src/components';
+import ClarkeAndWright from './ClarkeAndWright';
+import Sweep from './Sweep';
+import NearestNeighbour from './NearestNeighbor';
+import Opt3Move from './Opt3Move';
 
 export default {
+    data() {
+        return {
+            CKStatus: true,
+            NNStatus: false,
+            SStatus: false,
+            O3MStatus: false,
+        }
+    },
     components: {
         TabPane,
         Tabs,
-  },
+        ClarkeAndWright,
+        NearestNeighbour,
+        Sweep,
+        Opt3Move
+    },
+    methods: {
+        showClarkAndWright(){
+            this.CKStatus = true;
+            this.NNStatus = false;
+            this.SStatus = false;
+            this.O3MStatus = false;
+        },
+        showNearestNeighbour(){
+            this.CKStatus = false;
+            this.NNStatus = true;
+            this.SStatus = false;
+            this.O3MStatus = false;
+        },
+        showSweep(){
+            this.CKStatus = false;
+            this.NNStatus = false;
+            this.SStatus = true;
+            this.O3MStatus = false;
+        },
+        showOpt3Move(){
+            this.CKStatus = false;
+            this.NNStatus = false;
+            this.SStatus = false;
+            this.O3MStatus = true;
+        }
+    }
+    
 }
 </script>
 
