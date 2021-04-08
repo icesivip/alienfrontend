@@ -172,6 +172,24 @@
             }"
           ></sidebar-item>
         </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('Clustering'),
+            icon: 'tim-icons icon-vector'
+          }"
+          ><sidebar-item
+            :link="{
+              name: $t('K-Means'),
+              path: '/k-means'
+            }"
+          ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('K-Prototypes'),
+              path: '/k-prototypes'
+            }"
+          ></sidebar-item>
+        ></sidebar-item>
       </template>
     </side-bar>
     <div class="main-panel" :data="sidebarBackground">
@@ -216,6 +234,7 @@ import ContentFooter from "./SampleFooter.vue";
 import DashboardContent from "../Layout/Content.vue";
 import SidebarFixedToggleButton from "../Layout/SidebarFixedToggleButton.vue";
 import { SlideYDownTransition, ZoomCenterTransition } from "vue2-transitions";
+import SideBar from '../../components/SidebarPlugin/SideBar.vue';
 
 export default {
   components: {
@@ -224,7 +243,8 @@ export default {
     SidebarFixedToggleButton,
     DashboardContent,
     SlideYDownTransition,
-    ZoomCenterTransition
+    ZoomCenterTransition,
+    SideBar
   },
   data() {
     return {

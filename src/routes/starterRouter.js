@@ -29,6 +29,8 @@ import ClarkeAndWright from 'src/views/Modules/Routing/ClarkeAndWright';
 import Opt3Move from 'src/views/Modules/Routing/Opt3Move';
 import Sweep from 'src/views/Modules/Routing/Sweep';
 
+import KMeans from 'src/views/Modules/Clustering/KMeans';
+
 Vue.use(Router);
 
 export default new Router({
@@ -151,6 +153,11 @@ export default new Router({
           name: 'sp',
           components: { default: Sweep }
         },
+        {
+          path: 'K-Means',
+          name: 'KM',
+          components: { default: KMeans }
+        }
       ]
     }
   ],
