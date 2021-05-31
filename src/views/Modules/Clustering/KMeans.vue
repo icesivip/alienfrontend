@@ -17,10 +17,7 @@
 
 
 
-            <div id="plotlyExample" style="grid-template-columns: 50% 50%; display: grid; grid-template-rows: 400px 100px">
-                <plotly-graph @hover="hover" v-bind:data="scatterPlotData" div-id="plot2" v-bind:height="90" :column-number="2"></plotly-graph>
-                <input type="range" min="-10" max="10" v-model="currentVal" @change="sliderUpdate" style="grid-column-start: 1; grid-column-end: 3; width: 50%; margin-left: auto; margin-right: auto" />
-            </div>
+            
         </card>
     </div>
 </template>
