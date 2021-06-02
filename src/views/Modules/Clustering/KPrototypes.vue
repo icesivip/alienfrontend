@@ -13,8 +13,6 @@
                 </div>
             </div>
 
-            <button v-on:click="get_test()">TEST</button>
-
             <div class="scat" style="width: 80%">
                 <canvas id="myChart"></canvas>
             </div>
@@ -30,7 +28,7 @@ import axios from 'axios';
 
 export default {
 
-    name: "Km",
+    name: "Kp",
 
     data(){
 
@@ -52,7 +50,7 @@ export default {
 
             formData.append('file', this.file);
 
-            axios.post( 'http://localhost:5000/upl',
+            axios.post( 'http://localhost:5000/uplkp',
                 formData,
                 {
                     headers: {
@@ -66,8 +64,6 @@ export default {
 
                 this.scatter = response.data;
 
-                console.log(Object.keys(this.scatter).length);
-
                 this.graphRoute();
 
             })
@@ -78,17 +74,6 @@ export default {
 
         handleFileUpload(){
             this.file = this.$refs.file.files[0];
-        },
-
-        get_test(){
-            axios.get('http://localhost:5000/testt')
-            .then(response => {
-                console.log(response.data);
-                this.xd = 'testeado';})
-            
-            .catch(e => {
-                console.log(e);
-            })
         },
 
         graphRoute(){
@@ -115,33 +100,6 @@ export default {
         },
 
         formatData(){
-            
-
-            let data = [];
-
-
-            for(let i=0; i < Object.keys(this.scatter).length; i++){
-
-                let dic = []; 
-
-                for(let j=0; j < this.scatter[i].length; j++){
-                    
-                    let tempDic = {};
-
-                    tempDic['x'] = this.scatter[i][j][0];
-                    tempDic['y'] = this.scatter[i][j][1];
-
-                    dic.push(tempDic);
-                }
-
-                data.push(dic);
-            }
-
-           
-
-            this.scatter = data;
-
-
 
             let datasets = [];
 
@@ -151,7 +109,7 @@ export default {
             }
             
 
-            for(let i = 0; i < data.length; i++){
+            for(let i = 0; i < this.scatter.length; i++){
                 
                 let dic = {};
 

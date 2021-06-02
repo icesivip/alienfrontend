@@ -30,6 +30,7 @@ import Opt3Move from 'src/views/Modules/Routing/Opt3Move';
 import Sweep from 'src/views/Modules/Routing/Sweep';
 
 import KMeans from 'src/views/Modules/Clustering/KMeans';
+import KPrototypes from 'src/views/Modules/Clustering/KPrototypes';
 
 Vue.use(Router);
 
@@ -157,6 +158,11 @@ export default new Router({
           path: 'K-Means',
           name: 'KM',
           components: { default: KMeans }
+        },
+        {
+          path: 'K-Prototypes',
+          name: 'KP',
+          components: { default: KPrototypes }
         }
       ]
     }
