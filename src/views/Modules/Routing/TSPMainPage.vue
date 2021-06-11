@@ -5,7 +5,7 @@
                 <card class="card-subcategories card-plain">
                     
                     
-                    <tabs type="primary" tabContentClasses="tab-subcategories" square centered class="row">
+                    <tabs type="primary" tabContentClasses="tab-subcategories" square centered class="row d-flex">
                         
                         <tab-pane>
                             <span slot="label" @click="showClarkAndWright">

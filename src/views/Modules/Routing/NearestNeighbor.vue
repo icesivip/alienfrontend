@@ -34,11 +34,18 @@ export default {
           id: 0,
           x: 1,
           y: 2,
+          c: 
         },
         {
           id: 1,
           x: 3,
           y: 4,
+        }
+      ],
+      vehicles: [
+        {
+          id:1,
+          c: 10
         }
       ],
       route: '',

@@ -61,24 +61,28 @@
     </div>
 
     <card class="bg-secondary" v-show="fileStatus">
-      <div id="DropArea">
+      <div id="DropArea" v-cloak @drop.prevent @dragover.prevent @drop="handleFileDrop">
         <h2>Load File</h2>
         <p>Drag and Drop here</p>
-        <input
+        <!-- <input
           type="file"
           name="Nodes File"
           value=""
           id="file"
           accept=".txt, .csv"
           hidden="true"
-        />
-        <Button
+          @change="handleFileInput"
+        /> -->
+         <input type="file" multiple="false" @change="handleFileInput">
+
+        <!-- <Button
           class="col-sm-2 btn btn-outline-primary expand"
           type="button"
           id="customBTN"
+          @click="document.getElementById('fileInput').click()"
         >
           Load File
-        </Button>
+        </Button> -->
         <div>
           <span id="customTXT">Nothing loaded yet</span>
           {{ loaded }}
@@ -115,7 +119,9 @@ export default {
       currentNode: 1,
       solveStatus: false,
       fileStatus: false,
-      loaded: "NOPE"
+      loaded: "",
+      //
+      files: [],
     };
   },
   methods: {
@@ -143,82 +149,45 @@ export default {
     },
     readDataFile: function(file){
       console.log(file);
-    }
-  },
-  mounted: function () {
-    var f = document.getElementById("file");
-    var fileList;
-    //var fs = document.getElementById("fs");
-    var customButton = document.getElementById("customBTN");
-    var customText = document.getElementById("customTXT");
-
-    customButton.addEventListener("click", function (e) {
-      f.click();
-    });
-
-    f.addEventListener("change", function (e) {
-      if (f.value) {
-        customTXT.innerHTML = f.value;
-      } else {
-        customTXT.innerHTML = "Nothing loaded yet";
-      }
-    });
-
-    f.addEventListener("change", function (event) {
-      fileList = event.target.files;
-      //console.log(fileList);
-      getMetadataForFileList(fileList);
-    });
-
-    const dropArea = document.getElementById("DropArea");
-
-    dropArea.addEventListener("dragover", function (event) {
-      event.stopPropagation();
-      event.preventDefault();
-      // Style the drag-and-drop as a "copy file" operation.
-      event.dataTransfer.dropEffect = "copy";
-    });
-
-    dropArea.addEventListener("drop", function (event) {
-      event.stopPropagation();
-      event.preventDefault();
-      fileList = event.dataTransfer.files;
-      //console.log(fileList);
-      getMetadataForFileList(fileList);
-    });
-
-    function getMetadataForFileList(data) {
-      for (const file of fileList) {
-        // Not supported in Safari for iOS.
-        const name = file.name ? file.name : "NOT SUPPORTED";
-        // Not supported in Firefox for Android or Opera for Android.
-        const type = file.type ? file.type : "NOT SUPPORTED";
-        // Unknown cross-browser support.
-        const size = file.size ? file.size : "NOT SUPPORTED";
-        //console.log({ file, name, type, size });
-
-        readFile(file);
-      }
-    }
-
-    function readFile(file) {
-      var reader = new FileReader();
-      reader.addEventListener("load", function (event) {
-        //console.log(event.target.result);
-        
-        let inputString = event.target.result;
-        console.log(inputString);
-        this.readDataFile(inputString);
-        customTXT.innerHTML = file.name;
+    },
+    /// ======================
+    handleFileDrop(e) {
+      //console.log("File Dropped")
+      let droppedFiles = e.dataTransfer.files;
+      if(!droppedFiles) return;
+      ([...droppedFiles]).forEach(f => {
+        this.files.push(f);
       });
+      this.readData();
+    },
+    handleFileInput(e) {
+      //console.log("File Added by List")
+      let files = e.target.files
+        if(!files) return;
+        ([...files]).forEach(f => {  
+          this.files.push(f);
+        });
+      this.readData();
+    },
+    readData() {
+      console.log("Reading Data");
+      console.log(this.files[0]);
 
-      reader.addEventListener("progress", function (event) {
-        if (event.loaded && event.total) {
-          const percent = (event.loaded / event.total) * 100;
-          //console.log(`Progress: ${Math.round(percent)}`);
-        }
-      });
-      reader.readAsText(file);
+      let fileReader = new FileReader();
+      fileReader.readAsText(this.files[0]);
+      
+      fileReader.onload = function() {
+        let fileString = fileReader.result;
+        console.log(fileString);
+      };
+
+      fileReader.onerror = function() {
+        console.log(fileReader.error);
+      };
+      
+    },
+    fillMatrix(fileString) {
+      //nodes
       
     }
   },

@@ -3,7 +3,11 @@
     <div>
         <h2 class="text-center" >Results</h2>
         
-        <div>Route Cost: {{routeCost.cost}}</div>
+        <div class = "ml-3">
+            <p class="h3"> 
+                Route Cost: {{routeCost.cost}}
+            </p>
+        </div>
 
         <table class="table">
             <thead align="center">
