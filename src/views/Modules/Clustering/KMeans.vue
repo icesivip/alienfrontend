@@ -3,22 +3,61 @@
     
     <div>
         <card>
-            <h2>Select your file</h2>
-            <div class="container">
-                <div class="large-12 medium-12 small-12 cell">
-                    <label>File
-                    <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
-                    </label>
-                    <button v-on:click="submitFile()">Submit</button>
+			<div class="contanerTop">
+				<div class="containerInfo">
+					<h1>K-Means</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at tortor vitae urna pretium faucibus in a sem. Sed pulvinar, lectus a imperdiet congue, enim nibh dignissim leo, at rutrum libero ipsum nec metus. In convallis ut neque sit amet finibus. Curabitur commodo est mi, a pellentesque massa pulvinar lacinia. Integer aliquet ac velit sit amet consectetur. Nullam venenatis libero in neque fringilla, id sagittis dui convallis. In facilisis arcu a ipsum lobortis placerat. In vulputate imperdiet turpis ut ultricies. Morbi commodo tincidunt semper. Proin egestas at nisl quis hendrerit. Maecenas id ligula gravida, consectetur velit et, feugiat leo. Phasellus maximus turpis sit amet porttitor aliquet. </p>
+					<p><b>a + b + c = d</b></p>
+				</div>
+				<div class="containerInfo">
+					<h1>K-Prototype</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at tortor vitae urna pretium faucibus in a sem. Sed pulvinar, lectus a imperdiet congue, enim nibh dignissim leo, at rutrum libero ipsum nec metus. In convallis ut neque sit amet finibus. Curabitur commodo est mi, a pellentesque massa pulvinar lacinia. Integer aliquet ac velit sit amet consectetur. Nullam venenatis libero in neque fringilla, id sagittis dui convallis. In facilisis arcu a ipsum lobortis placerat. In vulputate imperdiet turpis ut ultricies. Morbi commodo tincidunt semper. Proin egestas at nisl quis hendrerit. Maecenas id ligula gravida, consectetur velit et, feugiat leo. Phasellus maximus turpis sit amet porttitor aliquet.</p>
+					<p><b>a + b + c = d</b></p>
+				</div>
+			</div>
+			
+			<div class="containerMid">
+				<div class="containerInfo">
+					<h1>PCA</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at tortor vitae urna pretium faucibus in a sem. Sed pulvinar, lectus a imperdiet congue, enim nibh dignissim leo, at rutrum libero ipsum nec metus. In convallis ut neque sit amet finibus. Curabitur commodo est mi, a pellentesque massa pulvinar lacinia. Integer aliquet ac velit sit amet consectetur. Nullam venenatis libero in neque fringilla, id sagittis dui convallis. In facilisis arcu a ipsum lobortis placerat. In vulputate imperdiet turpis ut ultricies. Morbi commodo tincidunt semper. Proin egestas at nisl quis hendrerit. Maecenas id ligula gravida, consectetur velit et, feugiat leo. Phasellus maximus turpis sit amet porttitor aliquet. </p>
+				</div>
+			</div>
+			
+            <card class="containerBot">
+                <div>
+                    <!--Algorithm-->
+                    <BaseInput label="Algorithm">
+                        <select id="inputAlgorithm">
+                            <option selected>K-Means</option>
+                            <option selected>K-Prototype</option>
+                        </select>
+                    </BaseInput>
+
+                    <!--Select Dataset-->
+                    <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" hidden/>
+                    <BaseButton v-on:click="chooseFiles()">Upload File</BaseButton>
+
+                    <!--Submit-->
+                    <BaseButton v-on:click="submitFile()">Submit</BaseButton>
+
+                    <!--Clusters-->
+                    <BaseInput label="Clusters"/>
+
+                    <!--PCA-->
+                    <BaseCheckbox>PCA</BaseCheckbox>
+
+                    <!--Iteration-->
+                    <BaseInput label="Iteration"/>
+
+                    <!--Test-->
+                    <BaseButton v-on:click="get_test()">Test</BaseButton>
+
+                    <!--chart-->
+                    <div class="scat" style="width: 80%">
+                        <canvas id="myChart"></canvas>
+                    </div>
                 </div>
-            </div>
-
-            <button v-on:click="get_test()">TEST</button>
-
-            <div class="scat" style="width: 80%">
-                <canvas id="myChart"></canvas>
-            </div>
-
+            </card>
             
         </card>
     </div>
@@ -26,11 +65,20 @@
 
 <script>
 import axios from 'axios';
+import {BaseInput} from '../../../components';
+import {BaseButton} from '../../../components';
+import {BaseCheckbox} from '../../../components';
 
 
 export default {
 
     name: "Km",
+
+	components: {
+		BaseInput,
+		BaseButton,
+        BaseCheckbox
+	},
 
     data(){
 
@@ -39,7 +87,7 @@ export default {
 
             scatter: '',
 
-            series: '' 
+            series: ''
         }
 
     },
@@ -59,7 +107,7 @@ export default {
                     'Content-Type': 'multipart/form-data'
                     }
                 }
-            ).then((response) => {
+            ).then((response) => { 
                 console.log('SUCCESS!!');
 
                 console.log(response.data);
@@ -76,8 +124,13 @@ export default {
             });
         },
 
+        chooseFiles() {
+            document.getElementById("file").click();
+        },
+
         handleFileUpload(){
             this.file = this.$refs.file.files[0];
+            console.log(this.file);
         },
 
         get_test(){
@@ -179,5 +232,9 @@ export default {
 </script>
 
 <style>
-
+.contanerTop{
+	display: grid;
+	grid-template-columns:50% 50%;
+	grid-gap: 1rem;
+}
 </style>
