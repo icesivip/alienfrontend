@@ -29,8 +29,9 @@ import ClarkeAndWright from 'src/views/Modules/Routing/ClarkeAndWright';
 import Opt3Move from 'src/views/Modules/Routing/Opt3Move';
 import Sweep from 'src/views/Modules/Routing/Sweep';
 
-import KMeans from 'src/views/Modules/Clustering/KMeans';
-import KPrototypes from 'src/views/Modules/Clustering/KPrototypes';
+import PartitioningMethods from 'src/views/Modules/Clustering/PartitioningMethods';
+
+import PCA from 'src/views/Modules/PCA/PCA';
 
 Vue.use(Router);
 
@@ -155,14 +156,14 @@ export default new Router({
           components: { default: Sweep }
         },
         {
-          path: 'K-Means',
-          name: 'KM',
-          components: { default: KMeans }
+          path: 'partitioning-methods',
+          name: 'pm',
+          components: { default: PartitioningMethods }
         },
         {
-          path: 'K-Prototypes',
-          name: 'KP',
-          components: { default: KPrototypes }
+          path: 'pca',
+          name: 'pca',
+          components: { default: PCA }
         }
       ]
     }

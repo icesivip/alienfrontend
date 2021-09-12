@@ -41,16 +41,13 @@
                     <BaseButton v-on:click="submitFile()">Submit</BaseButton>
 
                     <!--Clusters-->
-                    <BaseInput label="Clusters"/>
+                    <BaseInput type="number" label="Clusters" id="k"/>
 
                     <!--PCA-->
                     <BaseCheckbox>PCA</BaseCheckbox>
 
                     <!--Iteration-->
                     <BaseInput label="Iteration"/>
-
-                    <!--Test-->
-                    <BaseButton v-on:click="get_test()">Test</BaseButton>
 
                     <!--chart-->
                     <div class="scat" style="width: 80%">
@@ -72,7 +69,7 @@ import {BaseCheckbox} from '../../../components';
 
 export default {
 
-    name: "Km",
+    name: "pm",
 
 	components: {
 		BaseInput,
@@ -99,6 +96,7 @@ export default {
             let formData = new FormData();
 
             formData.append('file', this.file);
+            formData.append('clusters', document.getElementById("k").textContent);
 
             axios.post( 'http://localhost:5000/upl',
                 formData,
@@ -109,13 +107,9 @@ export default {
                 }
             ).then((response) => { 
                 console.log('SUCCESS!!');
-
                 console.log(response.data);
-
                 this.scatter = response.data;
-
                 console.log(Object.keys(this.scatter).length);
-
                 this.graphRoute();
 
             })
@@ -131,17 +125,6 @@ export default {
         handleFileUpload(){
             this.file = this.$refs.file.files[0];
             console.log(this.file);
-        },
-
-        get_test(){
-            axios.get('http://localhost:5000/testt')
-            .then(response => {
-                console.log(response.data);
-                this.xd = 'testeado';})
-            
-            .catch(e => {
-                console.log(e);
-            })
         },
 
         graphRoute(){

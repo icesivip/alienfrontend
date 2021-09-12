@@ -179,14 +179,20 @@
           }"
           ><sidebar-item
             :link="{
-              name: $t('K-Means'),
-              path: '/k-means'
+              name: $t('Partitioning Methods'),
+              path: '/partitioning-methods'
             }"
           ></sidebar-item>
-          <sidebar-item
+        ></sidebar-item>
+        <sidebar-item
+          :link="{
+            name: $t('PCA'),
+            icon: 'tim-icons icon-scissors'
+          }"
+          ><sidebar-item
             :link="{
-              name: $t('K-Prototypes'),
-              path: '/k-prototypes'
+              name: $t('PCA'),
+              path: '/pca'
             }"
           ></sidebar-item>
         ></sidebar-item>
