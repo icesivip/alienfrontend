@@ -6,12 +6,12 @@
 			<div class="contanerTop">
 				<div class="containerInfo">
 					<h1>K-Means</h1>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at tortor vitae urna pretium faucibus in a sem. Sed pulvinar, lectus a imperdiet congue, enim nibh dignissim leo, at rutrum libero ipsum nec metus. In convallis ut neque sit amet finibus. Curabitur commodo est mi, a pellentesque massa pulvinar lacinia. Integer aliquet ac velit sit amet consectetur. Nullam venenatis libero in neque fringilla, id sagittis dui convallis. In facilisis arcu a ipsum lobortis placerat. In vulputate imperdiet turpis ut ultricies. Morbi commodo tincidunt semper. Proin egestas at nisl quis hendrerit. Maecenas id ligula gravida, consectetur velit et, feugiat leo. Phasellus maximus turpis sit amet porttitor aliquet. </p>
+					<p>El algoritmo K-Means propuesto en 1967 tiene como objetivo realizar k particiones en un conjunto de datos proporcionado. Cada partición está representada por un punto (llamado centroide) que es el promedio de los puntos en esa partición. Este método empieza con k centroides aleatorios, posteriormente se asignan los datapoints más cercanos a estos, se reasigna el vlaor del centroide respecto a los valores de cada cluster y se vuelve a hacer la asignación de puntos. Este proceso se itera hasta que el cambio en los clusters sea mínimo.</p>
 					<p><b>a + b + c = d</b></p>
 				</div>
 				<div class="containerInfo">
 					<h1>K-Prototype</h1>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at tortor vitae urna pretium faucibus in a sem. Sed pulvinar, lectus a imperdiet congue, enim nibh dignissim leo, at rutrum libero ipsum nec metus. In convallis ut neque sit amet finibus. Curabitur commodo est mi, a pellentesque massa pulvinar lacinia. Integer aliquet ac velit sit amet consectetur. Nullam venenatis libero in neque fringilla, id sagittis dui convallis. In facilisis arcu a ipsum lobortis placerat. In vulputate imperdiet turpis ut ultricies. Morbi commodo tincidunt semper. Proin egestas at nisl quis hendrerit. Maecenas id ligula gravida, consectetur velit et, feugiat leo. Phasellus maximus turpis sit amet porttitor aliquet.</p>
+					<p>El algoritmo K-Prototypes trabaja de una manera muy similar al K-Means; sin embargo, mientras el primero toma en cuenta valores tanto discretos como contínuos, el segundo únicamente admite valores contínuos. El proceso es el mismo, la única diferencia es su función de coste, que básicamente es la misma del K-means pero sumándole una función sigma para las variables discretas.</p>
 					<p><b>a + b + c = d</b></p>
 				</div>
 			</div>
@@ -19,7 +19,7 @@
 			<div class="containerMid">
 				<div class="containerInfo">
 					<h1>PCA</h1>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at tortor vitae urna pretium faucibus in a sem. Sed pulvinar, lectus a imperdiet congue, enim nibh dignissim leo, at rutrum libero ipsum nec metus. In convallis ut neque sit amet finibus. Curabitur commodo est mi, a pellentesque massa pulvinar lacinia. Integer aliquet ac velit sit amet consectetur. Nullam venenatis libero in neque fringilla, id sagittis dui convallis. In facilisis arcu a ipsum lobortis placerat. In vulputate imperdiet turpis ut ultricies. Morbi commodo tincidunt semper. Proin egestas at nisl quis hendrerit. Maecenas id ligula gravida, consectetur velit et, feugiat leo. Phasellus maximus turpis sit amet porttitor aliquet. </p>
+					<p>El análisis de componenetes principales o PCA por sus siglas en inglés, es una técnica que reduce la dimensionalidad de un conjunto de datos, ya sea para su procesamiento o como herramienta de visualización para el análisis exploratorio de datos.</p>
 				</div>
 			</div>
 			
@@ -41,13 +41,13 @@
                     <BaseButton v-on:click="submitFile()">Submit</BaseButton>
 
                     <!--Clusters-->
-                    <BaseInput type="number" label="Clusters" id="k"/>
+                    <input type="number" class="config" placeholder="# de clusters"/>
 
                     <!--PCA-->
                     <BaseCheckbox>PCA</BaseCheckbox>
 
                     <!--Iteration-->
-                    <BaseInput label="Iteration"/>
+                    <input placeholder="# de iteraciones" class="config"/>
 
                     <!--chart-->
                     <div class="scat" style="width: 80%">
@@ -219,5 +219,11 @@ export default {
 	display: grid;
 	grid-template-columns:50% 50%;
 	grid-gap: 1rem;
+}
+
+.config{
+    display: block;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
 }
 </style>
