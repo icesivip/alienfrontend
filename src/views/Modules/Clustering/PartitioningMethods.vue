@@ -7,12 +7,23 @@
 				<div class="containerInfo">
 					<h1>K-Means</h1>
 					<p>El algoritmo K-Means propuesto en 1967 tiene como objetivo realizar k particiones en un conjunto de datos proporcionado. Cada partición está representada por un punto (llamado centroide) que es el promedio de los puntos en esa partición. Este método empieza con k centroides aleatorios, posteriormente se asignan los datapoints más cercanos a estos, se reasigna el vlaor del centroide respecto a los valores de cada cluster y se vuelve a hacer la asignación de puntos. Este proceso se itera hasta que el cambio en los clusters sea mínimo.</p>
-					<p><b>a + b + c = d</b></p>
+                    <div v-katex:auto>
+                        \(d(x_{i},q_{l})=\sum_{s=p+1}^{m}\sqrt{(x_{i,s}^{N}-q_{l,s}^{N})^{2}}\)
+                    </div>
 				</div>
 				<div class="containerInfo">
-					<h1>K-Prototype</h1>
-					<p>El algoritmo K-Prototypes trabaja de una manera muy similar al K-Means; sin embargo, mientras el primero toma en cuenta valores tanto discretos como contínuos, el segundo únicamente admite valores contínuos. El proceso es el mismo, la única diferencia es su función de coste, que básicamente es la misma del K-means pero sumándole una función sigma para las variables discretas.</p>
-					<p><b>a + b + c = d</b></p>
+					<h1>K-Prototypes</h1>
+					<p>El algoritmo K-Prototypes trabaja de una manera muy similar al K-Means; sin embargo, mientras el primero toma en cuenta valores tanto discretos como contínuos, el segundo únicamente admite valores contínuos. El proceso es el mismo, la única diferencia es su función de coste, que básicamente es la misma del K-means pero sumándole una función delta para las variables discretas.</p>
+					<div v-katex:auto>
+                        \(d(x_{i},q_{l})=\gamma\sum_{s=1}^{p}\delta(x_{i,s}^{c}-q_{l,s}^{c})+\sum_{s=p+1}^{m}\sqrt{(x_{i,s}^{N}-q_{l,s}^{N})^{2}}\)
+                    </div>
+                    <div v-katex:auto>
+                        \(\delta(x_{i},q_{l})=\begin{Bmatrix}
+                        0,x_{i,s}=q_{l,s'}
+                        \\
+                        1,x_{i,s}\neq q_{l,s'}
+                        \end{Bmatrix}\)
+                    </div>
 				</div>
 			</div>
 			
@@ -65,7 +76,15 @@ import axios from 'axios';
 import {BaseInput} from '../../../components';
 import {BaseButton} from '../../../components';
 import {BaseCheckbox} from '../../../components';
+import Vue from 'vue';
+import VueKatex from 'vue-katex';
+import 'katex/dist/katex.min.css';
 
+Vue.use(VueKatex, {
+  globalOptions: {
+    //... Define globally applied KaTeX options here
+  }
+});
 
 export default {
 
@@ -90,7 +109,6 @@ export default {
     },
 
     methods: {
-        
         submitFile(){
 
             let formData = new FormData();
@@ -215,6 +233,8 @@ export default {
 </script>
 
 <style>
+@import "../../../../node_modules/katex/dist/katex.min.css";
+
 .contanerTop{
 	display: grid;
 	grid-template-columns:50% 50%;
