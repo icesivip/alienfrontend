@@ -1,28 +1,66 @@
 <template>
     
-    <div class="w-75 m-auto">
-        <table class="border-5 w-100" >
+    <div class="w-75 m-auto mb-3 ">
+        <table class=" border w-100 bg-white shadow p-4 text-dark m-auto" >
             <thead>
-                <tr class="text-center">
-                    <th class="text-center" :colspan="2">Trucks Capacity</th>
+                <tr class="text-center border">
+                    <th class="text-center p-3" :colspan="2"> <b>Trucks Capacity </b></th>
                 </tr>
 
             </thead>
             <tbody class="text-center">
-                <tr>
-                    <td class="w-50">
-                        Truck
+                <tr class="border">
+                    <td class="w-50 p-3">
+                       <b> Truck </b>
                     </td>
-                    <td class="w-50">
-                        Capacity
+                    <td class="w-50 p-3">
+                       <b> Capacity </b>
                     </td>
                 </tr>
-                <tr>
-                    <td class="w-50">0</td>
-                    <td class= "w-50"><input type="text" name="" id=""></td>
+                <tr class="border">
+                    <td class="w-50 p-3">0</td>
+                    <td class= "w-50 p-3 text-center"><input type="Number" name="" id=""></td>
                 </tr>
+
+                
             </tbody>
         </table>
+
+        <div class = "w-100  d-flex mt-3">
+          <base-button class="w-50 mr-5" native-type = "submit" type = "primary"> Add Truck</base-button>
+        <base-button class="w-50 ml-5 " native-type = "submit" type = "primary"> Remove Truck</base-button>
+        </div>
+
+
+
+        <div class="w-75 m-auto mt-5 shadow ">
+          <table class=" border w-100 p-4 ">
+            <thead>
+              <tr class="bg-primary text-white">
+                <th :colspan="4" class="text-center">
+                  nodes matrix
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  Node
+                </td>
+                <td>
+                  X
+                </td>
+                <td>
+                  Y
+                </td>
+                <td>
+                  Depot
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
     </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-    <div class = "w-75 m-auto text-center">
+    <div class = "w-75 m-auto text-center mb-1">
         <h1>hello world</h1>
     <input-table> </input-table>
     </div >
