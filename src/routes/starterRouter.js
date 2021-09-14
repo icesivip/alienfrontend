@@ -30,6 +30,8 @@ import Opt3Move from 'src/views/Modules/Routing/Opt3Move';
 import Sweep from 'src/views/Modules/Routing/Sweep';
 import TSP from 'src/views/Modules/Routing/TSPMainPage';
 
+import VRP from 'src/views/Modules/Routing/VRPMainPage';
+
 import KMeans from 'src/views/Modules/Clustering/KMeans';
 
 Vue.use(Router);
@@ -163,6 +165,11 @@ export default new Router({
           path: 'TSP',
           name: 'tsp',
           components: {default: TSP}
+        },
+        {
+          path: 'VRP',
+          name: 'vrp',
+          components: { default: VRP}
         }
       ]
     }

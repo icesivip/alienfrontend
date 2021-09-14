@@ -1,31 +1,17 @@
 <template>
-  <div id="nn">
-    
-    <h1>NEAREST NEIGHBOR ALGORITHM</h1>
-    <card>
-        <nodes-table :nodes="nodes" @solve="solve"> </nodes-table>
-    </card>
-    
-    <card v-show="solveStatus">
-      <routing-solution :route="route" :routeCost="routeCost"></routing-solution>
-    </card>
-    
-  <!-- <pre>
-      {{$data}}
-  </pre> -->
-
-  </div>
+    <div class = "w-75 m-auto text-center">
+        <h1>hello world</h1>
+    <input-table> </input-table>
+    </div >
 </template>
- 
 <script>
 
 import RRepository from './../../../repositories/Modules/Routing/Routing';
-import NodesTable from './NodesTable.vue';
+import InputTable from  './VRPInputTable.vue';
 import RoutingSolution from './RoutingSolution.vue';
 
 export default {
-  
-  name: "nn",
+     name: "nn",
   
   data() {
     return {
@@ -71,11 +57,8 @@ export default {
     }
   },
   components: {
-    'nodes-table': NodesTable,
+    'input-table': InputTable,
     'routing-solution': RoutingSolution
   }
 }
 </script>
-
-<style>
-</style>
