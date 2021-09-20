@@ -52,16 +52,16 @@
                     <BaseButton v-on:click="submitFile()">Submit</BaseButton>
 
                     <!--Clusters-->
-                    <input type="number" class="config" placeholder="# de clusters"/>
+                    <input id="k" type="number" class="config" placeholder="# de clusters"/>
 
                     <!--PCA-->
                     <BaseCheckbox>PCA</BaseCheckbox>
 
                     <!--Iteration-->
-                    <input placeholder="# de iteraciones" class="config"/>
+                    <input id="iteration" placeholder="# de iteraciones" class="config"/>
 
                     <!--chart-->
-                    <div class="scat" style="width: 80%">
+                    <div id="scat" style="width: 80%">
                         <canvas id="myChart"></canvas>
                     </div>
                 </div>
@@ -100,21 +100,28 @@ export default {
 
         return{
             file: '',
-
             scatter: '',
-
-            series: ''
+            series: '',
+            canvas: '',
+            ctx: ''
         }
 
     },
 
     methods: {
+
+        canvaConfig(){
+            this.canvas = document.getElementById('myChart');
+            this.ctx = this.canvas.getContext('2d');
+        },
+
         submitFile(){
 
             let formData = new FormData();
 
             formData.append('file', this.file);
-            formData.append('clusters', document.getElementById("k").textContent);
+            formData.append('clusters', parseInt(document.getElementById("k").value));
+            formData.append('iteration', parseInt(document.getElementById("iteration").value));
 
             axios.post( 'http://localhost:5000/upl',
                 formData,
@@ -125,9 +132,9 @@ export default {
                 }
             ).then((response) => { 
                 console.log('SUCCESS!!');
-                console.log(response.data);
+                
                 this.scatter = response.data;
-                console.log(Object.keys(this.scatter).length);
+
                 this.graphRoute();
 
             })
@@ -147,10 +154,11 @@ export default {
 
         graphRoute(){
 
+            this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
             this.formatData();
+            
 
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var scatterChart = new Chart(ctx, {
+            new Chart(this.ctx, {
                 type: 'scatter',
                 data: {
                     datasets: this.series
@@ -227,6 +235,9 @@ export default {
             return ~~(Math.random() * (to - frm)) + frm;
         }       
 
+    },
+    mounted(){
+        this.canvaConfig()
     }
   }
 
