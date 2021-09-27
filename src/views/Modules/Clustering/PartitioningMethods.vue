@@ -11,6 +11,7 @@
                         \(d(x_{i},q_{l})=\sum_{s=p+1}^{m}\sqrt{(x_{i,s}^{N}-q_{l,s}^{N})^{2}}\)
                     </div>
 				</div>
+                <br/>
 				<div class="containerInfo">
 					<h1>K-Prototypes</h1>
 					<p>El algoritmo K-Prototypes trabaja de una manera muy similar al K-Means; sin embargo, mientras el primero toma en cuenta valores tanto discretos como contínuos, el segundo únicamente admite valores contínuos. El proceso es el mismo, la única diferencia es su función de coste, que básicamente es la misma del K-means pero sumándole una función delta para las variables discretas.</p>
@@ -25,13 +26,14 @@
                         \end{Bmatrix}\)
                     </div>
 				</div>
-			</div>
-			
-			<div class="containerMid">
-				<div class="containerInfo">
+                <div class="containerInfo">
 					<h1>PCA</h1>
 					<p>El análisis de componenetes principales o PCA por sus siglas en inglés, es una técnica que reduce la dimensionalidad de un conjunto de datos, ya sea para su procesamiento o como herramienta de visualización para el análisis exploratorio de datos.</p>
 				</div>
+			</div>
+			
+			<div class="containerMid">
+				
 			</div>
 			
             <card class="containerBot">
@@ -57,12 +59,30 @@
                     <!--PCA-->
                     <BaseCheckbox>PCA</BaseCheckbox>
 
-                    <!--Iteration-->
-                    <input id="iteration" placeholder="# de iteraciones" class="config"/>
-
                     <!--chart-->
                     <div id="scat" style="width: 80%">
                         <canvas id="myChart"></canvas>
+                    </div>
+
+                    <!--Iteration-->
+                    <div>
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#link" aria-label="Previous">
+                                    <span aria-hidden="true"><i class="tim-icons icon-double-left" aria-hidden="true"></i></span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a>
+                                    <BaseInput id="iteration" placeholder="# de iteraciones" class="config"/>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#link" aria-label="Next">
+                                    <span aria-hidden="true"><i class="tim-icons icon-double-right" aria-hidden="true"></i></span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </card>
@@ -101,9 +121,11 @@ export default {
         return{
             file: '',
             scatter: '',
+
             series: '',
             canvas: '',
-            ctx: ''
+            ctx: '',
+            chart:''
         }
 
     },
@@ -153,27 +175,31 @@ export default {
         },
 
         graphRoute(){
-
             this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
             this.formatData();
             
-
-            new Chart(this.ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: this.series
-                    
-                },
-                options: {
-                    scales: {
-                        xAxes: [{
-                            type: 'linear',
-                            position: 'bottom',
-                            offset: true
-                        }]
+            if(this.chart == ''){//[Change]
+                this.chart = new Chart(this.ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: this.series
+                        
                     },
-                }
-            });
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                type: 'linear',
+                                position: 'bottom',
+                                offset: true
+                            }]
+                        },
+                    }
+                });
+            }
+            else{
+                this.chart.data.datasets = this.series;
+                this.chart.update();
+            }
         },
 
         formatData(){
@@ -209,7 +235,7 @@ export default {
 
             var COLORS = [];
             while (COLORS.length < Object.keys(this.scatter).length) {
-                COLORS.push(`rgb(${this.rand(0, 255)}, ${this.rand(0, 255)}, ${this.rand(0, 255)})`);
+                COLORS.push(`rgb(${this.rand(0, 255)}, ${this.rand(0, 255)}, ${this.rand(0, 255)})`);//[Change]
             }
             
 
@@ -247,9 +273,13 @@ export default {
 @import "../../../../node_modules/katex/dist/katex.min.css";
 
 .contanerTop{
-	display: grid;
+	/* display: grid;
 	grid-template-columns:50% 50%;
-	grid-gap: 1rem;
+	grid-gap: 1rem; */
+}
+
+h1 {
+  margin-bottom: 0.5em;
 }
 
 .config{
