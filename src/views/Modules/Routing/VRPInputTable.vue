@@ -17,9 +17,9 @@
                        <b> Capacity </b>
                     </td>
                 </tr>
-                <tr class="border">
-                    <td class="w-50 p-3">0</td>
-                    <td class= "w-50 p-3 text-center"><input type="Number" name="" id=""></td>
+                <tr class="border" :key="'truck' + i" v-for="(truck, i) in vehicles">
+                    <td class="w-50 p-3">{{i}}</td>
+                    <td class= "w-50 p-3 text-center"><input type="Number" name="" id="" v-model="vehicles[i].capacity"></td>
                 </tr>
 
                 
@@ -27,53 +27,80 @@
         </table>
 
         <div class = "w-100  d-flex mt-3 mb-5">
-          <base-button class="w-50 mr-5" native-type = "submit" type = "primary"> Add Truck</base-button>
-        <base-button class="w-50 ml-5 " native-type = "submit" type = "primary"> Remove Truck</base-button>
+          <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="addTruck"> Add Truck</base-button>
+        <base-button class="w-50 ml-5 " native-type = "submit" type = "primary" v-on:click = "removeTruck"> Remove Truck</base-button>
         </div>
 
 
 
-        <div class="w-100 m-auto mt-5 shadow ">
-          <table class="w-100 ">
+        <div class="w-100 m-auto mt-5 mb-5 ">
+          <table class="w-100 shadow ">
             <thead>
               <tr>
-                <th colspan="5" class="text-center bg-primary text-white">
-                  nodes table
+                <th colspan="5" class="text-center bg-primary text-white p-3">
+                  Nodes Table
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colspan="2" class="text-center text-white bg-primary ">
+              <tr >
+                <td colspan="2" class="text-center text-white bg-primary p-3">
                   <b>Node</b>
                 </td>
-                <td class="text-center text-dark bg-white" :colspan="1">
+                <td class="text-center text-dark bg-white p-3" :colspan="1">
                   <b>X</b>
                 </td>
-                <td class="text-center text-dark bg-white">
+                <td class="text-center text-dark bg-white p-3">
                   <b>Y</b>
                 </td>
-                <td class="text-center text-dark bg-white">
+                <td class="text-center text-dark bg-white p-3">
                   <b>Demand</b>
                 </td>
               </tr>
-              <tr>
-                <td colspan="2" class="text-center text-white bg-primary ">
-                  <b>Node</b>
+
+              <tr  class="border">
+                <td  :colspan="2" class="text-center text-white bg-primary p-3 ">
+                  <b>DEPOT</b>
                 </td>
-                <td class="text-center text-dark bg-white">
-                  <input type="number" name="" id="" style = "width : 20%; margin : 0%">
+                <td class="text-center text-dark bg-white p-3">
+                  <input type="number" name="" id="" v-model="depot.x">
                 </td>
-                <td class="text-center text-dark bg-white">
-                  <b>Y</b>
+                <td class="text-center text-dark bg-white p-3">
+                  <input type="number" name="" id="" v-model="depot.y" >
                 </td>
-                <td class="text-center text-dark bg-white">
-                  <b>Demand</b>
+                <td class="text-center text-dark bg-white p-3">
+                  
+                </td>
+              </tr>
+
+              <tr :key="'node' + i" v-for="(node, i) in nodes" class="border">
+                <td  :colspan="2" class="text-center text-white bg-primary p-3 ">
+                  <b>{{i}}</b>
+                </td>
+                <td class="text-center text-dark bg-white p-3">
+                  <input type="number" name="" id="" v-model="nodes[i].x">
+                </td>
+                <td class="text-center text-dark bg-white p-3">
+                  <input type="number" name="" id="" v-model="nodes[i].y" >
+                </td>
+                <td class="text-center text-dark bg-white p-3">
+                  <input type="number" name="" id="" v-model="nodes[i].demand">
                 </td>
               </tr>
             </tbody>
           </table>
 
+        </div>
+        <br>
+        
+        <div class = "w-100  d-flex mt-3 mb-5">
+          <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="addNode"> Add Node</base-button>
+        <base-button class="w-50 ml-5 " native-type = "submit" type = "primary" v-on:click = "removeNode"> Remove Node</base-button>
+        </div>
+
+        <div class = "w-100  d-flex mt-3 mb-5">
+          <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="addNode"> Load File</base-button>
+        <base-button class="w-50 ml-5 " native-type = "submit" type = "primary" v-on:click = "removeNode"> Solve</base-button>
         </div>
     </div>
 </template>
@@ -89,10 +116,14 @@ export default {
     vehicles: {
       required: true,
     },
+    depot: {
+      required: true,
+    },
   },
   data() {
     return {
       currentNode: 1,
+      currentTruck : 1,
       solveStatus: false,
       fileStatus: false,
       loaded: "",
@@ -107,14 +138,30 @@ export default {
         id: this.currentNode,
         x: 0,
         y: 0,
+        demand: 0
       };
 
       this.nodes.push(newNode);
+    },
+    addTruck(){
+      this.currentTruck += 1;
+      let newTruck = {
+        id: this.currentNode,
+        capacity: 0
+      }
+      this.vehicles.push(newTruck)
     },
     removeNode() {
       if (this.currentNode > 0) {
         this.currentNode--;
         this.nodes.pop();
+      }
+    },
+    removeTruck(){
+      if (this.currentTruck > 0)
+      {
+        this.currentNode--;
+        this.vehicles.pop();
       }
     },
     solve() {

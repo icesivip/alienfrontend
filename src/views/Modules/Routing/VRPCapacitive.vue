@@ -1,6 +1,7 @@
 <template>
+
     <div id="sp">
-       <h1>capacitive</h1>
+        <h1 class="text-center">VRP Capacitive</h1>
         <card>
             <input-table :nodes="nodes" :vehicles = "vehicles" :depot="depot" v-on:solve="solve"> </input-table>
         </card>
@@ -43,12 +44,10 @@ export default {
                 id: 1,
                 capacity: 20
             }
-        ],depot: [
-            {
-                x: 5,
-                y: 5,
-            },
-        ],
+        ],depot: {
+          x:5,
+          y:5
+        },
         route: '',
         routeCost: '',
         solveStatus: false,

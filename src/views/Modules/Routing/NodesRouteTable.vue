@@ -60,6 +60,7 @@ export default {
     return {
       
       currentNode: 1,
+      
       solveStatus: false,
       fileStatus: false,
     }
@@ -75,6 +76,7 @@ export default {
 
       this.nodes.push(newNode);
     },
+    
     removeNode(){
       if(this.currentNode > 0){
         this.currentNode--;
