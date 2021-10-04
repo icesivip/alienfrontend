@@ -78,7 +78,7 @@
                                 </a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link" href="#link" aria-label="Next">
+                                <a class="page-link" href="#link" aria-label="Next" v-on:click="step()">
                                     <span aria-hidden="true"><i class="tim-icons icon-double-right" aria-hidden="true"></i></span>
                                 </a>
                             </li>
@@ -99,6 +99,7 @@ import {BaseCheckbox} from '../../../components';
 import Vue from 'vue';
 import VueKatex from 'vue-katex';
 import 'katex/dist/katex.min.css';
+import { getType } from 'vis-util/esnext';
 
 Vue.use(VueKatex, {
   globalOptions: {
@@ -125,7 +126,11 @@ export default {
             series: '',
             canvas: '',
             ctx: '',
-            chart:''
+            chart:'',
+
+            model:'',
+            avilableIterations:'',
+            iterationIndex:''
         }
 
     },
@@ -144,6 +149,7 @@ export default {
             formData.append('file', this.file);
             formData.append('clusters', parseInt(document.getElementById("k").value));
             formData.append('iteration', parseInt(document.getElementById("iteration").value));
+            formData.append('model', JSON.stringify(this.model))
 
             axios.post( 'http://localhost:5000/upl',
                 formData,
@@ -155,10 +161,14 @@ export default {
             ).then((response) => { 
                 console.log('SUCCESS!!');
                 
+                console.log(response.data)
+                this.model = response.data;
                 this.scatter = response.data;
 
-                this.graphRoute();
+                this.avilableIterations = Object.keys(this.scatter)
+                this.iterationIndex = this.avilableIterations[0]
 
+                this.graphRoute();
             })
             .catch(function(response){
                 console.log(response.message);
@@ -207,17 +217,23 @@ export default {
 
             let data = [];
 
+            //console.log(" >>> Dic Lenght >>> ", Object.keys(this.scatter).length);
+            //console.log(" >>> key 0 lenght >>> ", Object.keys(this.scatter[50]).length);
+            //console.log(" >>> Access to array >>> ", this.scatter[50][0]);
+            //console.log(" >>> ACUÉHTATE >>> ", Object.keys(this.scatter)[0]);
+            
+            console.log(">>> MOOOODEL >>>", this.model[this.iterationIndex]);
 
-            for(let i=0; i < Object.keys(this.scatter).length; i++){
+            for(let i=0; i < Object.keys(this.model[this.iterationIndex]).length; i++){
 
                 let dic = []; 
 
-                for(let j=0; j < this.scatter[i].length; j++){
+                for(let j=0; j < this.model[this.iterationIndex][i].length; j++){
                     
                     let tempDic = {};
 
-                    tempDic['x'] = this.scatter[i][j][0];
-                    tempDic['y'] = this.scatter[i][j][1];
+                    tempDic['x'] = this.model[this.iterationIndex][i][j][0];
+                    tempDic['y'] = this.model[this.iterationIndex][i][j][1];
 
                     dic.push(tempDic);
                 }
@@ -259,7 +275,26 @@ export default {
 
         rand(frm, to) {
             return ~~(Math.random() * (to - frm)) + frm;
-        }       
+        },
+        
+        step(){
+            this.iterationIndex  = this.forward();
+            this.graphRoute();
+        },
+        forward(){
+            
+            let ind = this.avilableIterations.indexOf(this.iterationIndex);
+            var respon = 0;
+
+            console.log(">>> ind >>>", ind);
+
+            if(ind <=3){
+                respon = this.avilableIterations[parseInt(ind+1)];
+            }
+
+            console.log(respon);
+            return respon;
+        }
 
     },
     mounted(){
