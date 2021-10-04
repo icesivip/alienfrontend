@@ -1,5 +1,6 @@
 <template>
   <div>
+      <h1 class = "text-center m-auto">Traveling salesman problem</h1>
        <div class="row">
             <div class="col-md-8 ml-auto mr-auto">
                 <card class="card-subcategories card-plain">

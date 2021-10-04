@@ -26,35 +26,49 @@
             </tbody>
         </table>
 
-        <div class = "w-100  d-flex mt-3">
+        <div class = "w-100  d-flex mt-3 mb-5">
           <base-button class="w-50 mr-5" native-type = "submit" type = "primary"> Add Truck</base-button>
         <base-button class="w-50 ml-5 " native-type = "submit" type = "primary"> Remove Truck</base-button>
         </div>
 
 
 
-        <div class="w-75 m-auto mt-5 shadow ">
-          <table class=" border w-100 p-4 ">
+        <div class="w-100 m-auto mt-5 shadow ">
+          <table class="w-100 ">
             <thead>
-              <tr class="bg-primary text-white">
-                <th :colspan="4" class="text-center">
-                  nodes matrix
+              <tr>
+                <th colspan="5" class="text-center bg-primary text-white">
+                  nodes table
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>
-                  Node
+                <td colspan="2" class="text-center text-white bg-primary ">
+                  <b>Node</b>
                 </td>
-                <td>
-                  X
+                <td class="text-center text-dark bg-white" :colspan="1">
+                  <b>X</b>
                 </td>
-                <td>
-                  Y
+                <td class="text-center text-dark bg-white">
+                  <b>Y</b>
                 </td>
-                <td>
-                  Depot
+                <td class="text-center text-dark bg-white">
+                  <b>Demand</b>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" class="text-center text-white bg-primary ">
+                  <b>Node</b>
+                </td>
+                <td class="text-center text-dark bg-white">
+                  <input type="number" name="" id="" style = "width : 20%; margin : 0%">
+                </td>
+                <td class="text-center text-dark bg-white">
+                  <b>Y</b>
+                </td>
+                <td class="text-center text-dark bg-white">
+                  <b>Demand</b>
                 </td>
               </tr>
             </tbody>
@@ -70,6 +84,9 @@
 export default {
   props: {
     nodes: {
+      required: true,
+    },
+    vehicles: {
       required: true,
     },
   },

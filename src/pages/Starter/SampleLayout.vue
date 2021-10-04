@@ -153,6 +153,12 @@
               path: '/TSP'
             }"
           ></sidebar-item>
+          <sidebar-item
+            :link="{
+              name: $t('Vehicle Routing Problem'),
+              path: '/VRP'
+            }"
+          ></sidebar-item>
         </sidebar-item>
         <sidebar-item
           :link="{
