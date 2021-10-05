@@ -4,7 +4,7 @@
         <table class=" border w-100 bg-white shadow p-4 text-dark m-auto" >
             <thead>
                 <tr class="text-center border">
-                    <th class="text-center p-3" :colspan="2"> <b>Trucks Capacity </b></th>
+                    <th class="text-center p-3" :colspan="3"> <b>Trucks </b></th>
                 </tr>
 
             </thead>
@@ -16,10 +16,16 @@
                     <td class="w-50 p-3">
                        <b> Capacity </b>
                     </td>
+                    <td>
+                      <b> Quantity </b>
+                    </td>
                 </tr>
                 <tr class="border" :key="'truck' + i" v-for="(truck, i) in vehicles">
-                    <td class="w-50 p-3">{{i}}</td>
-                    <td class= "w-50 p-3 text-center"><input type="Number" name="" id="" v-model="vehicles[i].capacity"></td>
+                    <td class="p-3 w-auto">{{i}}</td>
+                    <td class= " w-auto p-3 text-center"><input type="Number" name="" id="" v-model="vehicles[i].capacity"></td>
+                    <td class=" w-auto p-3 text-center">
+                      <input type="number" name="" id="" v-model="vehicles[i].quantity">
+                    </td>
                 </tr>
 
                 
@@ -147,7 +153,8 @@ export default {
       this.currentTruck += 1;
       let newTruck = {
         id: this.currentNode,
-        capacity: 0
+        capacity: 0,
+        quantity: 1
       }
       this.vehicles.push(newTruck)
     },

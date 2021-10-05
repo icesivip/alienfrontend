@@ -1,6 +1,6 @@
 <template>
   <div align="center">
-    <table class="table-responsive text-white border-white rounded container">
+    <table class="table-responsive text-white border-white rounded container w-100">
       <thead>
         <tr class="bg-primary">
           <th
@@ -35,26 +35,14 @@
     </table>
 
     <div class="input-group-append mb-2 flex-nowrap justify-content-center">
-      <input
-        class="col-sm-2 btn btn-outline-primary expand"
-        type="button"
-        v-on:click="loadDataFile"
-        value="Load file"
-      />
+      <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="loadDataFile"> Load File</base-button>
+      
       <div class="col-sm-1"></div>
-      <input
-        class="col-sm-2 btn btn-outline-primary expand"
-        type="button"
-        v-on:click="addNode"
-        value="Add Node"
-      />
+      <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="addNode"> Add Node</base-button>
+      
       <div class="col-sm-1"></div>
-      <input
-        class="col-sm-2 btn btn-outline-danger expand"
-        type="button"
-        v-on:click="removeNode"
-        value="Remove Node"
-      />
+      <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="removeNode"> Remove Node</base-button>
+      
     </div>
     <div class="input-group-append mb-2 flex-nowrap justify-content-center">
       <!-- <input class="col-sm-11 btn btn-outline-success expand" type="submit" v-on:click="generateGraph" value="Generate Graph"> -->
@@ -91,12 +79,8 @@
     </card>
 
     <div class="input-group-append mb-2 flex-nowrap justify-content-center">
-      <input
-        class="col-sm-5 btn btn-outline-primary expand"
-        type="button"
-        v-on:click="solve"
-        value="Solve Nearest Neighbor"
-      />
+      <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="solve"> Solve</base-button>
+      
     </div>
 
     <!-- <pre>

@@ -39,10 +39,12 @@ export default {
             {
             id: 0,
             capacity: 60,
+            quantity:1
             },
             {
                 id: 1,
-                capacity: 20
+                capacity: 20,
+                quantity:1
             }
         ],depot: {
           x:5,
