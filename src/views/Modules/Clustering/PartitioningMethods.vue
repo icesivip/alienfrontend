@@ -37,56 +37,80 @@
 			</div>
 			
             <card class="containerBot">
-                <div>
-                    <!--Algorithm-->
-                    <BaseInput label="Algorithm">
-                        <select id="inputAlgorithm">
-                            <option selected>K-Means</option>
-                            <option selected>K-Prototype</option>
-                        </select>
-                    </BaseInput>
-
-                    <!--Select Dataset-->
-                    <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" hidden/>
-                    <BaseButton v-on:click="chooseFiles()">Upload File</BaseButton>
-
-                    <!--Submit-->
-                    <BaseButton v-on:click="submitFile()">Submit</BaseButton>
-
-                    <!--Clusters-->
-                    <input id="k" type="number" class="config" placeholder="# de clusters"/>
-
-                    <!--PCA-->
-                    <BaseCheckbox>PCA</BaseCheckbox>
-
-                    <!--chart-->
-                    <div id="scat" style="width: 80%">
-                        <canvas id="myChart"></canvas>
+                <form>
+                    <div class="form-row">
+                        <!--Algorithm-->
+                        <Select
+                        required
+                        id="inputAlgorithm"
+                        name = "algorithm"
+                        type="primary"
+                        v-model="input.algorithm"
+                        v-validate="inputValidations.algorithm"
+                        :error="getError('Algorithm')"
+                        placeholder="Algorithm"
+                        class="col-md-4"
+                        >
+                            <Option type="primary" value="K-Means" label="K-Means" key="K-Means">K-Means</Option>
+                            <Option type="primary" value="K-Prototype" label="K-Prototype" key="K-Prototype">K-Prototype</Option>
+                        </Select>
+                        <!--Clusters-->
+                        <BaseInput
+                        required
+                        id="k"
+                        name="clusters"
+                        type="number"
+                        v-model="input.clusters"
+                        v-validate="inputValidations.clusters"
+                        :error="getError('Clusters')"
+                        placeholder="Clusters"
+                        class="col-md-8 select-default"
+                        />
                     </div>
-
-                    <!--Iteration-->
                     <div>
-                        <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#link" aria-label="Previous">
-                                    <span aria-hidden="true"><i class="tim-icons icon-double-left" aria-hidden="true"></i></span>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a>
-                                    <BaseInput id="iteration" placeholder="# de iteraciones" class="config"/>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#link" aria-label="Next" v-on:click="step()">
-                                    <span aria-hidden="true"><i class="tim-icons icon-double-right" aria-hidden="true"></i></span>
-                                </a>
-                            </li>
-                        </ul>
+                        <!--PCA-->
+                        <BaseCheckbox
+                        name = "pca"
+                        v-model="input.pca"
+                        v-validate="inputValidations.pca"
+                        :error="getError('PCA')"
+                        class="mb-3"
+                        >
+                        PCA
+                        </BaseCheckbox>
                     </div>
-                </div>
+                    <div class="form-row">
+                        <!--Select Dataset-->
+                        <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" hidden/>
+                        <BaseButton type="primary" v-on:click="chooseFiles()" class="col-md-1">Upload File</BaseButton>
+                        <!--Submit-->
+                        <BaseButton type="primary" v-on:click="submitFile()" class="col-md-1">Submit</BaseButton>
+                    </div>
+                    <div>
+                        <!--chart-->
+                        <div id="scat" style="width: 80%">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!--Iteration-->
+                        <BaseInput
+                        required
+                        id="iteration"
+                        name="iteration"
+                        value = 1
+                        type="number"
+                        v-model="input.iteration"
+                        v-validate="inputValidations.iteration"
+                        :error="getError('Iteration')"
+                        placeholder="Iterations"
+                        class="col-md-2 select-default"
+                        />
+                        <BaseButton type="primary" v-on:click="step()" class="col-md-1">Next</BaseButton>
+                        <BaseButton type="primary" class="col-md-1">End</BaseButton>
+                    </div>
+                </form>
             </card>
-            
         </card>
     </div>
 </template>
@@ -96,10 +120,12 @@ import axios from 'axios';
 import {BaseInput} from '../../../components';
 import {BaseButton} from '../../../components';
 import {BaseCheckbox} from '../../../components';
+
+import {Select, Option} from 'element-ui';
 import Vue from 'vue';
 import VueKatex from 'vue-katex';
 import 'katex/dist/katex.min.css';
-import { getType } from 'vis-util/esnext';
+
 
 Vue.use(VueKatex, {
   globalOptions: {
@@ -114,7 +140,9 @@ export default {
 	components: {
 		BaseInput,
 		BaseButton,
-        BaseCheckbox
+        BaseCheckbox,
+        Select,
+        Option
 	},
 
     data(){
@@ -130,12 +158,72 @@ export default {
 
             model:'',
             avilableIterations:'',
-            iterationIndex:''
+            iterationIndex:'',
+
+            //Inputs
+            input: {
+                algorithm: '',
+                clusters: 2,
+                pca: false,
+                iteration: 1
+            },
+            inputValidations: {
+                algorithm:{
+                    required: true
+                },
+                clusters:{
+                    required: true,
+                    max_value: 8
+                },
+                pca:{
+                    required: true
+                },
+                iteration:{
+                    required: true
+                }
+            },
+            //...
         }
 
     },
 
     methods: {
+        //Inputs
+        getError(fieldName) {
+            return this.errors.first(fieldName);
+        },
+        validate() {
+            this.$validator.validateAll().then(isValid => {
+                this.$emit('on-submit', this.registerForm, isValid);
+            });
+        },
+        //...
+
+        //Rgb generator
+        colors(values){
+            return this.recursiveColors(values, 0, [0,0,0]);
+        },
+
+        recursiveColors(values, pos, combination){
+            var colors = [];
+            if(pos < combination.length){
+                for(let i = 0; i < values.length; i++){
+                    var c = [...combination];
+                    c[pos] = values[i];
+
+                    var e = this.recursiveColors(values, pos+1, c);
+
+                    colors = [...colors, ...e];
+                }
+            }
+            else{
+                colors.push(combination);
+            }
+            return colors;
+        },
+        //...
+
+
 
         canvaConfig(){
             this.canvas = document.getElementById('myChart');
@@ -170,9 +258,9 @@ export default {
 
                 this.graphRoute();
             })
-            .catch(function(response){
-                console.log(response.message);
-            });
+            // .catch(function(response){
+            //     console.log(response.message);
+            // });
         },
 
         chooseFiles() {
@@ -249,9 +337,28 @@ export default {
 
             let datasets = [];
 
+            // var cColors = [
+            //     [1,0,0],
+            //     [0,1,0],
+            //     [0,0,1],
+            //     [1,1,0],
+            //     [1,0,1],
+            //     [0,1,1],
+            //     [0,0,0],
+            //     [1,1,1]
+            // ];
+            var cColors = this.colors([0,  0.5,  1]);
+            var i = 0;
+
             var COLORS = [];
             while (COLORS.length < Object.keys(this.scatter).length) {
-                COLORS.push(`rgb(${this.rand(0, 255)}, ${this.rand(0, 255)}, ${this.rand(0, 255)})`);//[Change]
+                if(cColors.length > i){
+                    COLORS.push(`rgb(${cColors[i][0]*255}, ${cColors[i][1]*255}, ${cColors[i][2]*255})`);
+                }
+                else{
+                    COLORS.push(`rgb(${this.rand(0,255)}, ${this.rand(0,255)}, ${this.rand(0,255)})`);
+                }
+                i++;
             }
             
 
@@ -278,8 +385,10 @@ export default {
         },
         
         step(){
-            this.iterationIndex  = this.forward();
-            this.graphRoute();
+            //for(let i = 0; i < #; i++){
+                this.iterationIndex  = this.forward();
+                this.graphRoute();
+            //}
         },
         forward(){
             
@@ -306,12 +415,6 @@ export default {
 
 <style>
 @import "../../../../node_modules/katex/dist/katex.min.css";
-
-.contanerTop{
-	/* display: grid;
-	grid-template-columns:50% 50%;
-	grid-gap: 1rem; */
-}
 
 h1 {
   margin-bottom: 0.5em;
