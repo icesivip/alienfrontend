@@ -1,8 +1,6 @@
 <template>
-
-    
     <div>
-        <card>
+        <!-- <card>
 			<div class="contanerTop">
 				<div class="containerInfo">
 					<h1>K-Means</h1>
@@ -35,11 +33,184 @@
 			<div class="containerMid">
 				
 			</div>
-			
-            <card class="containerBot">
-                <form>
-                    <div class="form-row">
-                        <!--Algorithm-->
+        </card> -->
+
+        <div class="col-12" align="center">
+            <h1>Clustering</h1>
+            <base-button type="primary" @click.native="modals.clustering = true">About</base-button>
+        </div>
+
+        <!--About.................................................................................................................-->
+            <!--Clustering-->
+        <modal
+        :show.sync="modals.clustering"
+        footerClasses="justify-content-center"
+        type="notice"
+        scrollable
+        >
+            <div slot="header">
+                <h1 class="title title-up text-primary">Clustering</h1>
+            </div>
+            <div slot="close-button">
+                <base-button icon link type="primary" @click.native="modals.clustering = false">
+                    <i class="tim-icons icon-simple-remove text-primary"></i>
+                </base-button>
+            </div>
+            <div class="instruction">
+                <div class="row">
+                    <p class="description">
+                        Explication.
+                    </p>
+                </div>
+            </div>
+            <template slot="footer">
+                <div class="mr-auto p-2">
+                    <base-button type="primary" round @click.native="modals.clustering = false, modals.kmeans = true">K-Means</base-button>
+                </div>
+                <div class="mr-auto p-2">
+                    <base-button type="primary" round @click.native="modals.clustering = false, modals.kprototypes = true">K-Prototypes</base-button>
+                </div>
+                <div class="mr-auto p-2">
+                    <base-button type="primary" round @click.native="modals.clustering = false, modals.pca = true">PCA</base-button>
+                </div>
+                <div class="ml-auto p-2">
+                    <base-button type="secundary" round @click.native="modals.clustering = false">Ok</base-button>
+                </div>
+            </template>
+        </modal>
+            <!--K-Means-->
+        <modal
+        :show.sync="modals.kmeans"
+        footerClasses="justify-content-center"
+        type="notice"
+        >
+            <div slot="header">
+                <h1 class="title title-up text-primary">K-Means</h1>
+            </div>
+            <div slot="close-button">
+                <base-button icon link type="primary" @click.native="modals.clustering = false">
+                    <i class="tim-icons icon-simple-remove text-primary"></i>
+                </base-button>
+            </div>
+            <div class="instruction">
+                <div class="row">
+                    <p class="description">
+                        El algoritmo K-Means propuesto en 1967 tiene como objetivo realizar k 
+                        particiones en un conjunto de datos proporcionado. Cada partición 
+                        está representada por un punto (llamado centroide) que es el promedio 
+                        de los puntos en esa partición. Este método empieza con k centroides 
+                        aleatorios, posteriormente se asignan los datapoints más cercanos a 
+                        estos, se reasigna el vlaor del centroide respecto a los valores de 
+                        cada cluster y se vuelve a hacer la asignación de puntos. Este 
+                        proceso se itera hasta que el cambio en los clusters sea mínimo.
+                    </p>
+                    <div v-katex:auto class="text-primary">
+                            \(d(x_{i},q_{l})=\sum_{s=p+1}^{m}\sqrt{(x_{i,s}^{N}-q_{l,s}^{N})^{2}}\)
+                    </div>
+                </div>
+            </div>
+            <template slot="footer">
+                <div class="mr-auto p-2">
+                    <base-button type="primary" round @click.native="modals.kmeans = false, modals.clustering = true">Back</base-button>
+                </div>
+                <div class="ml-auto p-2">
+                    <base-button type="secundary" round @click.native="modals.kmeans = false">Ok</base-button>
+                </div>
+            </template>
+        </modal>
+            <!--K-Prototypes-->
+        <modal
+        :show.sync="modals.kprototypes"
+        footerClasses="justify-content-center"
+        type="notice"
+        >
+            <div slot="header">
+                <h1 class="title title-up text-primary">K-Prototypes</h1>
+            </div>
+            <div slot="close-button">
+                <base-button icon link type="primary" @click.native="modals.clustering = false">
+                    <i class="tim-icons icon-simple-remove text-primary"></i>
+                </base-button>
+            </div>
+            <div class="instruction">
+                <div class="row">
+                    <p class="description">
+                        El algoritmo K-Prototypes trabaja de una manera muy similar al K-Means; 
+                        sin embargo, mientras el primero toma en cuenta valores tanto discretos 
+                        como contínuos, el segundo únicamente admite valores contínuos. El 
+                        proceso es el mismo, la única diferencia es su función de coste, que 
+                        básicamente es la misma del K-means pero sumándole una función delta 
+                        para las variables discretas.
+                    </p>
+                    <div v-katex:auto class="text-primary">
+                        \(d(x_{i},q_{l})=\gamma\sum_{s=1}^{p}\delta(x_{i,s}^{c}-q_{l,s}^{c})+\sum_{s=p+1}^{m}\sqrt{(x_{i,s}^{N}-q_{l,s}^{N})^{2}}\)
+                    </div>
+                    <div v-katex:auto class="text-primary">
+                        \(\delta(x_{i},q_{l})=\begin{Bmatrix}
+                        0,x_{i,s}=q_{l,s'}
+                        \\
+                        1,x_{i,s}\neq q_{l,s'}
+                        \end{Bmatrix}\)
+                    </div>
+                </div>
+            </div>
+            <template slot="footer">
+                <div class="mr-auto p-2">
+                    <base-button type="primary" round @click.native="modals.kprototypes = false, modals.clustering = true">Back</base-button>
+                </div>
+                <div class="ml-auto p-2">
+                    <base-button type="secundary" round @click.native="modals.kprototypes = false">Ok</base-button>
+                </div>
+            </template>
+        </modal>
+            <!--PCA-->
+        <modal
+        :show.sync="modals.pca"
+        footerClasses="justify-content-center"
+        type="notice"
+        >
+            <div slot="header">
+                <h1 class="title title-up text-primary">PCA</h1>
+            </div>
+            <div slot="close-button">
+                <base-button icon link type="primary" @click.native="modals.clustering = false">
+                    <i class="tim-icons icon-simple-remove text-primary"></i>
+                </base-button>
+            </div>
+            <div class="instruction">
+                <div class="row">
+                    <p class="description">
+                        El análisis de componenetes principales o PCA por sus siglas en 
+                        inglés, es una técnica que reduce la dimensionalidad de un 
+                        conjunto de datos, ya sea para su procesamiento o como 
+                        herramienta de visualización para el análisis exploratorio de 
+                        datos.
+                    </p>
+                </div>
+            </div>
+            <template slot="footer">
+                <div class="mr-auto p-2">
+                    <base-button type="primary" round @click.native="modals.pca = false, modals.clustering = true">Back</base-button>
+                </div>
+                <div class="ml-auto p-2">
+                    <base-button type="secundary" round @click.native="modals.pca = false">Ok</base-button>
+                </div>
+            </template>
+        </modal>
+        <!--......................................................................................................................-->
+
+        <br/>
+
+        <card class="containerBot">
+            <form>
+                <div class="form-row">
+                    <!--Algorithm-->
+                    <el-tooltip
+                    effect="light"
+                    :open-delay="200"
+                    placement="top"
+                    >
+                        <div slot="content"><b class="text-primary">Algorithm:</b><br/>The algorithm to generate the clusters.</div>
                         <Select
                         required
                         id="inputAlgorithm"
@@ -49,13 +220,20 @@
                         v-validate="inputValidations.algorithm"
                         :error="getError('Algorithm')"
                         placeholder="Algorithm"
-                        class="col-md-4"
+                        class="select-default col-md-4"
                         >
-                            <Option type="primary" value="K-Means" label="K-Means" key="K-Means">K-Means</Option>
-                            <Option type="primary" value="K-Prototype" label="K-Prototype" key="K-Prototype">K-Prototype</Option>
+                            <Option type="primary" value="K-Means" label="K-Means" key="K-Means"></Option>
+                            <Option type="primary" value="K-Prototype" label="K-Prototype" key="K-Prototype"></Option>
                         </Select>
-                        <!--Clusters-->
-                        <BaseInput
+                    </el-tooltip>
+                    <!--Clusters-->
+                    <el-tooltip
+                    effect="light"
+                    :open-delay="200"
+                    placement="right"
+                    >
+                        <div slot="content"><b class="text-primary">Clusters:</b><br/>The number of clusters.</div>
+                        <base-input
                         required
                         id="k"
                         name="clusters"
@@ -64,37 +242,67 @@
                         v-validate="inputValidations.clusters"
                         :error="getError('Clusters')"
                         placeholder="Clusters"
-                        class="col-md-8 select-default"
+                        class="col-md-4 select-default"
                         />
-                    </div>
-                    <div>
-                        <!--PCA-->
-                        <BaseCheckbox
+                    </el-tooltip>
+                </div>
+                <div class = "form-row">
+                    <!--PCA-->
+                    <el-tooltip
+                    effect="light"
+                    :open-delay="200"
+                    placement="right"
+                    >
+                        <div slot="content"><b class="text-primary">PCA:</b><br/>If the algorithm is using pca.</div>
+                        <base-checkbox
                         name = "pca"
                         v-model="input.pca"
                         v-validate="inputValidations.pca"
                         :error="getError('PCA')"
-                        class="mb-3"
+                        class="mb-3 col-md-1"
                         >
-                        PCA
-                        </BaseCheckbox>
-                    </div>
-                    <div class="form-row">
-                        <!--Select Dataset-->
-                        <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" hidden/>
-                        <BaseButton type="primary" v-on:click="chooseFiles()" class="col-md-1">Upload File</BaseButton>
-                        <!--Submit-->
-                        <BaseButton type="primary" v-on:click="submitFile()" class="col-md-1">Submit</BaseButton>
-                    </div>
-                    <div>
-                        <!--chart-->
-                        <div id="scat" style="width: 80%">
-                            <canvas id="myChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <!--Iteration-->
-                        <BaseInput
+                            PCA
+                        </base-checkbox>
+                    </el-tooltip>
+                </div>
+                <div class="form-row">
+                    <!--Select Dataset-->
+                    <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" hidden/>
+                    <el-tooltip
+                    effect="light"
+                    :open-delay="200"
+                    placement="bottom"
+                    >
+                        <div slot="content"><b class="text-primary">Select Dataset:</b><br/>Select a csv file to upload the dataset.</div>
+                        <base-button type="primary" v-on:click="chooseFiles()" class="col-md-2">Upload File</base-button>
+                    </el-tooltip>
+                    <!--Submit-->
+                    <el-tooltip
+                    effect="light"
+                    :open-delay="200"
+                    placement="right"
+                    >
+                        <div slot="content"><b class="text-primary">Submit:</b><br/>Submit the the data to generate the graph or table.</div>
+                        <base-button type="primary" v-on:click="submitFile()" class="col-md-2">Submit</base-button>
+                    </el-tooltip>
+                </div>
+            </form>
+            <div>
+                <!--chart-->
+                <div id="scat" style="width: 80%">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <form>
+                <div class="form-row">
+                    <!--Iteration-->
+                    <el-tooltip
+                    effect="light"
+                    :open-delay="200"
+                    placement="bottom"
+                    >
+                        <div slot="content"><b class="text-primary">Iteration:</b><br/>The number of steps is going to make.</div>
+                        <base-input
                         required
                         id="iteration"
                         name="iteration"
@@ -104,27 +312,41 @@
                         v-validate="inputValidations.iteration"
                         :error="getError('Iteration')"
                         placeholder="Iterations"
-                        class="col-md-2 select-default"
+                        class="col-md-4 select-default"
                         />
-                        <BaseButton type="primary" v-on:click="step()" class="col-md-1">Next</BaseButton>
-                        <BaseButton type="primary" class="col-md-1">End</BaseButton>
-                    </div>
-                </form>
-            </card>
+                    </el-tooltip>
+                    <!--Next-->
+                    <el-tooltip
+                    effect="light"
+                    :open-delay="200"
+                    placement="bottom"
+                    >
+                        <div slot="content"><b class="text-primary">Next:</b><br/>Move the number of specified iterations.</div>
+                        <base-button type="primary" v-on:click="step()" class="col-md-2">Next</base-button>
+                    </el-tooltip>
+                    <!--End-->
+                    <el-tooltip
+                    effect="light"
+                    :open-delay="200"
+                    placement="right"
+                    >
+                        <div slot="content"><b class="text-primary">End:</b><br/>Show the final result of the algorithm.</div>
+                        <base-button type="primary" class="col-md-2">End</base-button>
+                    </el-tooltip>
+                </div>
+            </form>
         </card>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
-import {BaseInput} from '../../../components';
-import {BaseButton} from '../../../components';
-import {BaseCheckbox} from '../../../components';
-
+import {Modal, BaseAlert } from "../../../components";
 import {Select, Option} from 'element-ui';
 import Vue from 'vue';
 import VueKatex from 'vue-katex';
 import 'katex/dist/katex.min.css';
+import BaseButton from '../../../components/BaseButton.vue';
 
 
 Vue.use(VueKatex, {
@@ -138,11 +360,11 @@ export default {
     name: "pm",
 
 	components: {
-		BaseInput,
-		BaseButton,
-        BaseCheckbox,
         Select,
-        Option
+        Option,
+        Modal,
+        BaseAlert,
+BaseButton
 	},
 
     data(){
@@ -159,6 +381,15 @@ export default {
             model:'',
             avilableIterations:'',
             iterationIndex:'',
+            
+            //Modals
+            modals: {
+                clustering: false,
+                kmeans: false,
+                kprototypes: false,
+                pca: false,
+            },
+            //...
 
             //Inputs
             input: {
@@ -223,8 +454,7 @@ export default {
         },
         //...
 
-
-
+        
         canvaConfig(){
             this.canvas = document.getElementById('myChart');
             this.ctx = this.canvas.getContext('2d');
