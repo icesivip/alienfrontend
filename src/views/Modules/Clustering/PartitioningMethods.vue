@@ -396,7 +396,7 @@ BaseButton
                 algorithm: '',
                 clusters: 2,
                 pca: false,
-                iteration: 1
+                iteration: 200
             },
             inputValidations: {
                 algorithm:{
@@ -454,19 +454,16 @@ BaseButton
         },
         //...
 
-        
-        canvaConfig(){
-            this.canvas = document.getElementById('myChart');
-            this.ctx = this.canvas.getContext('2d');
-        },
-
+        //Submit
         submitFile(){
 
             let formData = new FormData();
 
             formData.append('file', this.file);
-            formData.append('clusters', parseInt(document.getElementById("k").value));
-            formData.append('iteration', parseInt(document.getElementById("iteration").value));
+
+            formData.append('clusters', parseInt(this.input.clusters));
+            formData.append('iteration', parseInt(this.input.iteration));
+
             formData.append('model', JSON.stringify(this.model))
 
             axios.post( 'http://localhost:5000/upl',
@@ -479,9 +476,9 @@ BaseButton
             ).then((response) => { 
                 console.log('SUCCESS!!');
                 
-                console.log(response.data)
+                //console.log(response.data)
                 this.model = response.data;
-                this.scatter = response.data;
+                this.scatter = response.data['steps'];
 
                 this.avilableIterations = Object.keys(this.scatter)
                 this.iterationIndex = this.avilableIterations[0]
@@ -492,14 +489,23 @@ BaseButton
             //     console.log(response.message);
             // });
         },
+        //...
 
+        //File
         chooseFiles() {
             document.getElementById("file").click();
         },
 
         handleFileUpload(){
             this.file = this.$refs.file.files[0];
-            console.log(this.file);
+            //console.log(this.file);
+        },
+        //...
+
+        //Graph
+        canvaConfig(){
+            this.canvas = document.getElementById('myChart');
+            this.ctx = this.canvas.getContext('2d');
         },
 
         graphRoute(){
@@ -514,6 +520,13 @@ BaseButton
                         
                     },
                     options: {
+                        legend: {
+                            labels: {
+                                filter: function(item, chart) {
+                                    return (item.text !== 'hidden');
+                                }
+                            }
+                        },
                         scales: {
                             xAxes: [{
                                 type: 'linear',
@@ -531,52 +544,43 @@ BaseButton
         },
 
         formatData(){
-            
+            console.log("----->")
+            console.log(this.model['steps'])
+            console.log(this.model['centroids'])
+            console.log("<-----")
 
-            let data = [];
+            console.log(this.iterationIndex)
+
+            this.scatter = [];
 
             //console.log(" >>> Dic Lenght >>> ", Object.keys(this.scatter).length);
             //console.log(" >>> key 0 lenght >>> ", Object.keys(this.scatter[50]).length);
             //console.log(" >>> Access to array >>> ", this.scatter[50][0]);
             //console.log(" >>> ACUÉHTATE >>> ", Object.keys(this.scatter)[0]);
             
-            console.log(">>> MOOOODEL >>>", this.model[this.iterationIndex]);
-
-            for(let i=0; i < Object.keys(this.model[this.iterationIndex]).length; i++){
+            var steps = this.model['steps'][this.iterationIndex]
+            for(let i=0; i < Object.keys(steps).length; i++){
 
                 let dic = []; 
 
-                for(let j=0; j < this.model[this.iterationIndex][i].length; j++){
+                for(let j=0; j < steps[i].length; j++){
                     
                     let tempDic = {};
 
-                    tempDic['x'] = this.model[this.iterationIndex][i][j][0];
-                    tempDic['y'] = this.model[this.iterationIndex][i][j][1];
+                    tempDic['x'] = steps[i][j][0];
+                    tempDic['y'] = steps[i][j][1];
 
                     dic.push(tempDic);
                 }
 
-                data.push(dic);
+                this.scatter.push(dic);
             }
-
-           
-
-            this.scatter = data;
 
 
 
             let datasets = [];
 
-            // var cColors = [
-            //     [1,0,0],
-            //     [0,1,0],
-            //     [0,0,1],
-            //     [1,1,0],
-            //     [1,0,1],
-            //     [0,1,1],
-            //     [0,0,0],
-            //     [1,1,1]
-            // ];
+            //Colors
             var cColors = this.colors([0,  0.5,  1]);
             var i = 0;
 
@@ -590,13 +594,20 @@ BaseButton
                 }
                 i++;
             }
+            //...
             
+            var centroids = this.model['centroids'][this.iterationIndex]
+            for(let i = 0; i < this.scatter.length; i++){
+                let centroid = {}
 
-            for(let i = 0; i < data.length; i++){
-                
+                centroid['label'] = 'hidden';//`K${i+1}(Centroid)`;
+                centroid['showline'] = false;
+                centroid['fill'] = false;
+                centroid['borderColor'] = COLORS[i];
+                centroid['data'] = [Object.values(centroids)[i]];
+                centroid['pointRadius'] = 10;
+
                 let dic = {};
-
-                
 
                 dic['label'] = `K${i+1}`;
                 dic['showline'] = false;
@@ -604,36 +615,36 @@ BaseButton
                 dic['borderColor'] = COLORS[i];
                 dic['data'] = this.scatter[i];
 
-                datasets[i] = dic;
+                datasets.push(dic);
+                datasets.push(centroid);
             }
 
             this.series = datasets;
         },
+        //...
 
         rand(frm, to) {
             return ~~(Math.random() * (to - frm)) + frm;
         },
         
+        //Step
         step(){
-            //for(let i = 0; i < #; i++){
-                this.iterationIndex  = this.forward();
-                this.graphRoute();
-            //}
+            this.iterationIndex  = this.forward();
+            this.graphRoute();
         },
+
         forward(){
             
             let ind = this.avilableIterations.indexOf(this.iterationIndex);
             var respon = 0;
 
-            console.log(">>> ind >>>", ind);
-
             if(ind <=3){
                 respon = this.avilableIterations[parseInt(ind+1)];
             }
 
-            console.log(respon);
             return respon;
         }
+        //...
 
     },
     mounted(){
