@@ -44,6 +44,8 @@
         <Sweep v-show="SStatus"></Sweep>
         <NearestNeighbour v-show="NNStatus"></NearestNeighbour>
         <Opt3Move v-show="O3MStatus"></Opt3Move>
+
+        
         
     </div>    
 </template>
