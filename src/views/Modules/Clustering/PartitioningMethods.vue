@@ -59,7 +59,7 @@
             <div class="instruction">
                 <div class="row">
                     <p class="description">
-                        Explication.
+                        El clustering es una tarea que tiene como finalidad principal lograr el agrupamiento de conjuntos de objetos no etiquetados, para lograr construir subconjuntos de datos conocidos como Clusters.
                     </p>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                 <h1 class="title title-up text-primary">K-Means</h1>
             </div>
             <div slot="close-button">
-                <base-button icon link type="primary" @click.native="modals.clustering = false">
+                <base-button icon link type="primary" @click.native="modals.kmeans = false">
                     <i class="tim-icons icon-simple-remove text-primary"></i>
                 </base-button>
             </div>
@@ -128,7 +128,7 @@
                 <h1 class="title title-up text-primary">K-Prototypes</h1>
             </div>
             <div slot="close-button">
-                <base-button icon link type="primary" @click.native="modals.clustering = false">
+                <base-button icon link type="primary" @click.native="modals.kprototypes = false">
                     <i class="tim-icons icon-simple-remove text-primary"></i>
                 </base-button>
             </div>
@@ -173,7 +173,7 @@
                 <h1 class="title title-up text-primary">PCA</h1>
             </div>
             <div slot="close-button">
-                <base-button icon link type="primary" @click.native="modals.clustering = false">
+                <base-button icon link type="primary" @click.native="modals.pca = false">
                     <i class="tim-icons icon-simple-remove text-primary"></i>
                 </base-button>
             </div>
