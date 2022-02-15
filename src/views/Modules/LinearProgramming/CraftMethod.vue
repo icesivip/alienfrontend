@@ -291,6 +291,8 @@ import { Slider } from "src/components";
 import axios from "axios";
 import { Select, Option } from "element-ui";
 import swal from "sweetalert2";
+import CraftMethodRepository from './../../../repositories/Modules/MasterPlanSchedule/CraftMethodRepository';
+
 export default {
   data() {
     return {
@@ -337,8 +339,7 @@ export default {
       });
     },
     log() {
-      axios
-        .post("http://proyectovip.icesi.edu.co/craftMethodModule/craft", this.requestBody)
+        CraftMethodRepository.solveModel(this.requestBody)
         .then(response => {
           // console.log(response);
           this.succesMessage();
@@ -359,17 +360,7 @@ export default {
           // console.log(e.response);
         });
 
-      /*       axios
-        .post(`http://localhost:8080/craft`, {
-          data: this.requestBody
-        })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(e => {
-          console.log(e);
-                this.errors.push(e)
-        }); */
+     
     },
     getError(fieldName) {
       return this.errors.first(fieldName);

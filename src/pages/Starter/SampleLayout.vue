@@ -132,18 +132,6 @@
         </sidebar-item>
         <sidebar-item
           :link="{
-            name: $t('Forecasts'),
-            icon: 'tim-icons icon-sound-wave'
-          }"
-          ><sidebar-item
-            :link="{
-              name: $t('Forecasts'),
-              path: '/forecasts'
-            }"
-          ></sidebar-item>
-        </sidebar-item>
-        <sidebar-item
-          :link="{
             name: $t('Routing'),
             icon: 'tim-icons icon-delivery-fast'
           }"
