@@ -399,8 +399,6 @@ export default {
       this.network.nodes.add({ id: 23, label: "AMPL", color: "blue" });
       this.network.nodes.add({ id: 24, label: "Graphical Method", color: "blue" });
       this.network.nodes.add({ id: 26, label: "Inventory Control Systems", color: '#134D70 '});
-      this.network.nodes.add({ id: 27, label: "FORECAST", color: '#0A938F '});
-      this.network.nodes.add({ id: 28, label: "ForeCast", color: '#0A938F  '});
 
       this.network.edges.add({ from: 1, to: 0 });
       this.network.edges.add({ from: 2, to: 0 });
@@ -424,8 +422,6 @@ export default {
       this.network.edges.add({ from: 22, to: 1, length : 200 });
       this.network.edges.add({ from: 26, to: 2 , lenght : 200});
       this.network.edges.add({ from: 24, to: 1, length : 200 });
-      this.network.edges.add({ from: 27, to: 0 });
-      this.network.edges.add({ from: 27, to: 28, lenght : 200 });
 
       var container = document.getElementById("mynetwork");
       var net = new Network(container,this.network, this.options);
