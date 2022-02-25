@@ -1,7 +1,7 @@
 <template>
     <div id="sp">
         <h1>SWEEP ALGORITHM</h1>
-        <card>
+        <card class="w-100">
             <nodes-table :nodes="nodes" v-on:solve="solve"> </nodes-table>
         </card>
         

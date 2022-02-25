@@ -1,13 +1,25 @@
 <template>
-  <div align="center">
-    <table class="table-responsive text-white border-white rounded container w-100">
+  <div>
+  <div align="center flex-row" class="d-flex w-100">
+    <div class="input-group-append mb-2 flex-column  justify-content-center w-25">
+      <base-button class="  w-100" native-type = "submit" type = "primary" v-on:click="loadDataFile"> Load File</base-button>
+      
+      <div class="col-sm-1"></div>
+      <base-button class="w-100 " native-typde = "submit" type = "primary" v-on:click="addNode"> Add Node</base-button>
+      
+      <div class="col-sm-1"></div>
+      <base-button class="w-100 " native-type = "submit" type = "primary" v-on:click="removeNode"> Remove Node</base-button>
+      
+    </div>
+   
+    <table class="table-responsive m-0 text-white w-50 border-white rounded container">
       <thead>
-        <tr class="bg-primary">
+        <tr class="border-1">
           <th
             :colspan="3"
             scope="col"
             id="NodesList"
-            class="text-center text-white"
+            class="text-center text-dark "
           >
             Nodes Matrix
           </th>
@@ -15,35 +27,25 @@
       </thead>
       <tbody>
         <tr>
-          <td class="bg-primary text-center" scope="col">
+          <td class=" text-center text-dark " scope="col">
             <center>Node</center>
           </td>
           <td class="bg-white text-center text-dark" scope="col">X</td>
           <td class="bg-white text-center text-dark" scope="col">Y</td>
         </tr>
         <tr :key="'node' + i" v-for="(node, i) in nodes">
-          <td class="bg-primary text-center">{{ node.id }}</td>
-          <td style="width: 9%; height: 50%">
-            <input type="number" v-model="nodes[i].x" />
+          <td class="text-center text-dark">{{ node.id }}</td>
+          <td style="width: 9%; height: 50%" class="border-1 rounded p-1">
+            <input type="number" v-model="nodes[i].x" class="border-1 rounded  p-1 " />
           </td>
           <td style="width: 9%; height: 50%">
-            <input type="number" v-model="nodes[i].y" />
+            <input type="number" v-model="nodes[i].y" class = "border-1 rounded p-1"  />
           </td>
           <!-- <td style='width: 9%; height: 50%;' :key="'node' + j" v-for="(nodeTwo, j) in node" ><input type='number' v-model="graph[nodeOne.id][nodeTwo.id]"></td> -->
         </tr>
       </tbody>
     </table>
-
-    <div class="input-group-append mb-2 flex-nowrap justify-content-center">
-      <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="loadDataFile"> Load File</base-button>
-      
-      <div class="col-sm-1"></div>
-      <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="addNode"> Add Node</base-button>
-      
-      <div class="col-sm-1"></div>
-      <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="removeNode"> Remove Node</base-button>
-      
-    </div>
+   </div>
     <div class="input-group-append mb-2 flex-nowrap justify-content-center">
       <!-- <input class="col-sm-11 btn btn-outline-success expand" type="submit" v-on:click="generateGraph" value="Generate Graph"> -->
     </div>
@@ -87,6 +89,7 @@
           {{$data}}
         </pre> -->
   </div>
+  
 </template>
 
 <script>
