@@ -1,7 +1,7 @@
 <template>
   <div>
   <div align="center flex-row" class="d-flex w-100">
-    <div class="w-25 p-3">
+    <div class="w-25 p-3 mt-4" >
       <div class="input-group-append mb-2 flex-column  justify-content-center w-100">
       <base-button class="  w-100" native-type = "submit" type = "primary" v-on:click="loadDataFile"> Load File</base-button>
       
@@ -84,8 +84,8 @@
       </div>
     </card>
 
-    <div class="input-group-append mb-2 flex-nowrap justify-content-center">
-      <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="solve"> Solve</base-button>
+    <div class="input-group-append justify-content-end">
+      <base-button class="w-25" native-type = "submit" type = "primary" v-on:click="solve"> Solve</base-button>
       
     </div>
 
