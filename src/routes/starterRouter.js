@@ -28,6 +28,10 @@ import ClarkeAndWright from 'src/views/Modules/Routing/ClarkeAndWright';
 import Opt3Move from 'src/views/Modules/Routing/Opt3Move';
 import Sweep from 'src/views/Modules/Routing/Sweep';
 
+import PartitioningMethods from 'src/views/Modules/Clustering/PartitioningMethods';
+
+import PCA from 'src/views/Modules/PCA/PCA';
+
 Vue.use(Router);
 
 export default new Router({
@@ -146,6 +150,16 @@ export default new Router({
           name: 'sp',
           components: { default: Sweep }
         },
+        {
+          path: 'partitioning-methods',
+          name: 'pm',
+          components: { default: PartitioningMethods }
+        },
+        {
+          path: 'pca',
+          name: 'pca',
+          components: { default: PCA }
+        }
       ]
     }
   ],
