@@ -4,9 +4,10 @@
         <h2 class="text-center" >Results</h2>
         
         <div class = "ml-3">
-            <p class="h3"> 
+            <h1 class="h1 ">
+
                 Route Cost: {{routeCost.cost}}
-            </p>
+            </h1>
         </div>
 
         <table class="table">
@@ -17,7 +18,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td style="text-align:center" :key="i" v-for="(node, i) in route">{{node.id}}</td>
+                    <td style="text-align:center" :key="i" v-for="(node, i) in route"> <b class="h3">{{node.id}} </b></td>
                 </tr>
             </tbody>
         </table>
@@ -27,7 +28,7 @@
             <canvas id="myChart"></canvas>
         </div> -->
         
-        <div class="ml-auto mr-auto" style="width: 80%">
+        <div class="ml-auto mr-auto shadow p-5 rounded" style="width: 80%">
             <canvas id="myChart"></canvas>
         </div>
 

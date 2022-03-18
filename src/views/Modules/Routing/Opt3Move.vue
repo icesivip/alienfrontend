@@ -13,7 +13,7 @@
 
 <script>
 import RRepository from './../../../repositories/Modules/Routing/Routing';
-import NodesRouteTable from './NodesRouteTable.vue';
+import NodesRouteTable from './NodesTable.vue';
 import RoutingSolution from './RoutingSolution.vue';
 
 export default {
