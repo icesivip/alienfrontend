@@ -3,17 +3,26 @@
   <div align="center flex-row" class="d-flex w-100">
     <div class="w-25 p-3 mt-4" >
       <div class="input-group-append mb-2 flex-column  justify-content-center w-100">
-      <base-button class="  w-100" native-type = "submit" type = "primary" v-on:click="loadDataFile"> Load File</base-button>
-      
+      <base-button class="w-100" native-type = "submit" type = "primary" v-on:click="loadDataFile">
+        <i class="tim-icons icon-cloud-upload-94 md-ico"></i>
+        <span class="md-text">Load File</span>
+      </base-button>
+
       <div class="col-sm-1"></div>
-      <base-button class="w-100 " native-typde = "submit" type = "primary" v-on:click="addNode"> Add Node</base-button>
-      
+      <base-button class="w-100 " native-typde = "submit" type = "primary" v-on:click="addNode">
+        <i class="tim-icons icon-simple-add md-ico"></i>
+        <span class="md-text">Add Node</span>
+      </base-button>
+
       <div class="col-sm-1"></div>
-      <base-button class="w-100 " native-type = "submit" type = "primary" v-on:click="removeNode"> Remove Node</base-button>
-      
+      <base-button class="w-100 " native-type = "submit" type = "primary" v-on:click="removeNode">
+        <i class="tim-icons icon-simple-delete md-ico"></i>
+        <span class="md-text">Remove Node</span>
+      </base-button>
+
     </div>
     </div>
-   
+
     <div class="w-75">
       <table class="table m-0 text-white w-100 border-white rounded container">
       <thead>
@@ -86,14 +95,14 @@
 
     <div class="input-group-append justify-content-end">
       <base-button class="w-25" native-type = "submit" type = "primary" v-on:click="solve"> Solve</base-button>
-      
+
     </div>
 
     <!-- <pre>
           {{$data}}
         </pre> -->
   </div>
-  
+
 </template>
 
 <script>
@@ -155,7 +164,7 @@ export default {
       //console.log("File Added by List")
       let files = e.target.files
         if(!files) return;
-        ([...files]).forEach(f => {  
+        ([...files]).forEach(f => {
           this.files.push(f);
         });
       this.readData();
@@ -166,7 +175,7 @@ export default {
 
       let fileReader = new FileReader();
       fileReader.readAsText(this.files[0]);
-      
+
       fileReader.onload = function() {
         let fileString = fileReader.result;
         console.log(fileString);
@@ -175,11 +184,11 @@ export default {
       fileReader.onerror = function() {
         console.log(fileReader.error);
       };
-      
+
     },
     fillMatrix(fileString) {
       //nodes
-      
+
     }
   },
 };
@@ -188,5 +197,17 @@ export default {
 <style>
 .mt-1 {
   margin-top: 0.25rem !important;
+}
+.md-ico{
+  display: none;
+}
+
+@media(max-width: 950px){
+  .md-ico{
+    display: block;
+  }
+  .md-text{
+    display: none !important;
+  }
 }
 </style>
