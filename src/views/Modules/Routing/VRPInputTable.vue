@@ -1,57 +1,81 @@
 <template>
     
     <div class="w-75 m-auto mb-3 ">
-        <table class=" border w-100 bg-white shadow p-4 text-dark m-auto" >
+
+
+      <div align="center flex-row" class="d-flex w-100">
+
+        <div class="w-25  mt-5">
+          
+          <div class="input-group-append mb-2 flex-column  justify-content-center w-100 mt-5">
+          <base-button class="w-100 " native-type = "submit" type = "primary" v-on:click="addTruck"> Add Truck</base-button>
+        <base-button class="w-100 " native-type = "submit" type = "primary" v-on:click = "removeTruck"> Remove Truck</base-button>
+        </div>
+        </div>
+        <div class="w-75 p-3 mt-4" >
+          <table class="  w-100 bg-white  p-4 text-dark m-auto" >
             <thead>
-                <tr class="text-center border">
+                <tr class="text-center text-dark border-0">
                     <th class="text-center p-3" :colspan="3"> <b>Trucks </b></th>
                 </tr>
 
             </thead>
             <tbody class="text-center">
-                <tr class="border">
-                    <td class="w-50 p-3">
+                <tr class="">
+                    <td class="bg-white text-center text-dark">
                        <b> Truck </b>
                     </td>
-                    <td class="w-50 p-3">
+                    <td class="bg-white text-center text-dark">
                        <b> Capacity </b>
                     </td>
-                    <td>
+                    <td class="bg-white text-center text-dark">
                       <b> Quantity </b>
                     </td>
                 </tr>
-                <tr class="border" :key="'truck' + i" v-for="(truck, i) in vehicles">
-                    <td class="p-3 w-auto">{{i}}</td>
-                    <td class= " w-auto p-3 text-center"><input type="Number" name="" id="" v-model="vehicles[i].capacity"></td>
-                    <td class=" w-auto p-3 text-center">
-                      <input type="number" name="" id="" v-model="vehicles[i].quantity">
+                <tr class="" :key="'truck' + i" v-for="(truck, i) in vehicles">
+                    <td class="text-center text-dark border-0"><b>{{i}}</b> </td>
+                    <td class= "p-1 border-bottom border-end border-primary m-2"><input type="Number" name="" id="" v-model="vehicles[i].capacity" class=" border-0 text-center w-100"></td>
+                    <td class=" p-1 border-bottom border-end border-primary m-2">
+                      <input type="number" name="" id="" v-model="vehicles[i].quantity" class=" border-0 text-center w-100">
                     </td>
                 </tr>
 
                 
             </tbody>
         </table>
+        </div>
+      </div>
 
-        <div class = "w-100  d-flex mt-3 mb-5">
-          <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="addTruck"> Add Truck</base-button>
-        <base-button class="w-50 ml-5 " native-type = "submit" type = "primary" v-on:click = "removeTruck"> Remove Truck</base-button>
+        
+
+
+        <div align="center flex-row" class="d-flex w-100" >
+          <div class="w-25 p-3 mt-4">
+          <div class = "input-group-append mb-2 flex-column  justify-content-center w-100">
+            <base-button class="w-100" native-type = "submit" type = "primary" v-on:click="addNode"> Add Node</base-button>
+            <base-button class="w-100 " native-type = "submit" type = "primary" v-on:click = "removeNode"> Remove Node</base-button>
+        
+        
+          <base-button class="w-100" native-type = "submit" type = "primary" v-on:click="addNode"> Load File</base-button>
+        <base-button class="w-100 " native-type = "submit" type = "primary" v-on:click = "removeNode"> Solve</base-button>
         </div>
 
-
-
-        <div class="w-100 m-auto mt-5 mb-5 ">
-          <table class="w-100 shadow ">
+        </div>
+        <br>
+        <div class="w-75">
+          <div class="w-100 m-auto mt-5 mb-5 ">
+          <table class="w-100  ">
             <thead>
               <tr>
-                <th colspan="5" class="text-center bg-primary text-white p-3">
+                <th colspan="5" class="text-center text-dark border-0">
                   Nodes Table
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr >
-                <td colspan="2" class="text-center text-white bg-primary p-3">
-                  <b>Node</b>
+                <td colspan="2" class="p-1 border-bottom border-end border-white m-2 ">
+                 <b> Node </b>
                 </td>
                 <td class="text-center text-dark bg-white p-3" :colspan="1">
                   <b>X</b>
@@ -64,50 +88,46 @@
                 </td>
               </tr>
 
-              <tr  class="border">
-                <td  :colspan="2" class="text-center text-white bg-primary p-3 ">
+              <tr  >
+                <td  :colspan="2" class="p-1 border-bottom border-end border-white m-2 ">
                   <b>DEPOT</b>
                 </td>
-                <td class="text-center text-dark bg-white p-3">
-                  <input type="number" name="" id="" v-model="depot.x">
+                <td class="p-1 border-bottom border-end border-primary m-2">
+                  <input type="number" name="" id="" v-model="depot.x" class="border-0 text-center w-100">
                 </td>
-                <td class="text-center text-dark bg-white p-3">
-                  <input type="number" name="" id="" v-model="depot.y" >
+                <td class="p-1 border-bottom border-end border-primary m-2">
+                  <input type="number" name="" id="" v-model="depot.y" class="border-0 text-center w-100" >
                 </td>
-                <td class="text-center text-dark bg-white p-3">
+                <td class="p-1 border-bottom border-end border-white m-2">
                   
                 </td>
               </tr>
 
-              <tr :key="'node' + i" v-for="(node, i) in nodes" class="border">
-                <td  :colspan="2" class="text-center text-white bg-primary p-3 ">
+              <tr :key="'node' + i" v-for="(node, i) in nodes" >
+                <td  :colspan="2" class="p-1 border-bottom border-end border-white m-2 ">
                   <b>{{i}}</b>
                 </td>
-                <td class="text-center text-dark bg-white p-3">
-                  <input type="number" name="" id="" v-model="nodes[i].x">
+                <td class="p-1 border-bottom border-end border-primary m-2">
+                  <input type="number" name="" id="" v-model="nodes[i].x" class="border-0 text-center w-100">
                 </td>
-                <td class="text-center text-dark bg-white p-3">
-                  <input type="number" name="" id="" v-model="nodes[i].y" >
+                <td class="p-1 border-bottom border-end border-primary m-2">
+                  <input type="number" name="" id="" v-model="nodes[i].y" class="border-0 text-center w-100">
                 </td>
-                <td class="text-center text-dark bg-white p-3">
-                  <input type="number" name="" id="" v-model="nodes[i].demand">
+                <td class="p-1 border-bottom border-end border-primary m-2">
+                  <input type="number" name="" id="" v-model="nodes[i].demand" class="border-0 text-center w-100">
                 </td>
               </tr>
             </tbody>
           </table>
 
         </div>
-        <br>
+        </div>
+        </div>
         
-        <div class = "w-100  d-flex mt-3 mb-5">
-          <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="addNode"> Add Node</base-button>
-        <base-button class="w-50 ml-5 " native-type = "submit" type = "primary" v-on:click = "removeNode"> Remove Node</base-button>
-        </div>
+        
+        
 
-        <div class = "w-100  d-flex mt-3 mb-5">
-          <base-button class="w-50 mr-5" native-type = "submit" type = "primary" v-on:click="addNode"> Load File</base-button>
-        <base-button class="w-50 ml-5 " native-type = "submit" type = "primary" v-on:click = "removeNode"> Solve</base-button>
-        </div>
+        
     </div>
 </template>
 
