@@ -20,12 +20,12 @@
       <a class="navbar-brand" href="#pablo">{{ routeName }}</a>
     </div>
 
-    <ul class="navbar-nav" :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'">
+    <!--<ul class="navbar-nav" :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'">
       <div class="search-bar input-group" @click="searchModalVisible = true">
-        <!--
+       
           <input type="text" class="form-control" placeholder="Search...">
           <div class="input-group-addon"><i class="tim-icons icon-zoom-split"></i></div>
-        -->
+       
         <button
           class="btn btn-link"
           id="search-button"
@@ -34,7 +34,7 @@
         >
           <i class="tim-icons icon-zoom-split"></i>
         </button>
-        <!-- You can choose types of search input -->
+         You can choose types of search input 
       </div>
       <modal
         :show.sync="searchModalVisible"
@@ -78,7 +78,7 @@
           <a href="#" class="nav-item dropdown-item">Log out</a>
         </li>
       </base-dropdown>
-    </ul>
+    </ul>-->
   </base-nav>
 </template>
 <script>
