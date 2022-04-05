@@ -347,7 +347,7 @@ import Vue from 'vue';
 import VueKatex from 'vue-katex';
 import 'katex/dist/katex.min.css';
 import BaseButton from '../../../components/BaseButton.vue';
-
+import PartitioningRepository from '../../../repositories/Modules/Clustering/PartitioningRepository';
 
 Vue.use(VueKatex, {
   globalOptions: {
@@ -466,15 +466,9 @@ BaseButton
 
             formData.append('model', JSON.stringify(this.model))
 
-            axios.post( 'http://localhost:5000/upl',
-                formData,
-                {
-                    headers: {
-                    'Content-Type': 'multipart/form-data'
-                    }
-                }
-            ).then((response) => { 
-                console.log('SUCCESS!!');
+
+            PartitioningRepository.solve(formData).then((response)=>{
+                 console.log('SUCCESS!!');
                 
                 //console.log(response.data)
                 this.model = response.data;
@@ -484,10 +478,7 @@ BaseButton
                 this.iterationIndex = this.avilableIterations[0]
 
                 this.graphRoute();
-            })
-            // .catch(function(response){
-            //     console.log(response.message);
-            // });
+            });
         },
         //...
 

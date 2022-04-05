@@ -172,7 +172,7 @@
             }"
           ></sidebar-item>
         ></sidebar-item>
-        <sidebar-item
+        <!--<sidebar-item
           :link="{
             name: $t('PCA'),
             icon: 'tim-icons icon-scissors'
@@ -183,7 +183,8 @@
               path: '/pca'
             }"
           ></sidebar-item>
-        ></sidebar-item>
+        >
+        </sidebar-item>-->
       </template>
     </side-bar>
     <div class="main-panel" :data="sidebarBackground">
