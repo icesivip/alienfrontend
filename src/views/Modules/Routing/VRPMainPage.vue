@@ -1,7 +1,8 @@
 <template>
   <div>
+       <h1 class = "text-center m-auto">Vehicle Routing Problem</h1>
        <div class="row">
-            <div class="col-md-8 ml-auto mr-auto">
+            <div class="col-md-8 ml-auto mr-auto mb-0">
                 <card class="card-subcategories card-plain">
                     
                     

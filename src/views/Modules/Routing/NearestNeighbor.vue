@@ -55,11 +55,7 @@ export default {
           "/img/Routing/tsp/Step3.gif"
 
         ],
-        tutorialIndex:0
-         
-        
-          
-        
+        tutorialIndex:0 
       },
       nodes: [  
         {
