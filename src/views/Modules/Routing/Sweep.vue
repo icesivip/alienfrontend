@@ -5,20 +5,20 @@
         <div>
       <button class="btn btn-primary float-start" v-on:click = "changeTuto"> {{tutorial.msg}}</button>
     </div>
-    <div v-if="tutorial.value" class="card w-75 m-auto p-3 text-center">
-     
-     <b> <h3> How it works?</h3> </b>
-      <img  v-bind:src="tutorial.imgs[tutorial.tutorialIndex]" alt="Somethig wrong" class="w-50 m-auto">
-      <div align="center flex-row" class="d-flex w-100">
-        <base-button v-on:click="nextTuto(-1)" class="w-50">prev</base-button>
-        <base-button v-on:click="nextTuto(1)" class="w-50">next</base-button>
-      </div>
-      
+      <div v-if="tutorial.value" class="card my-3 mx-auto p-5 text-center">
+
+        <b> <h3> How it works?</h3> </b>
+        <carousel :navigationEnabled="true" :perPage="1">
+          <slide :key="'tutorialGif'+ i" v-for="(tutorialGif,i) in tutorial.imgs">
+            <img  v-bind:src="tutorialGif" alt="Something wrong" class="w-75 m-auto">
+          </slide>
+        </carousel>
+
     </div>
         <card class="w-100">
             <nodes-table :nodes="nodes" v-on:solve="solve"> </nodes-table>
         </card>
-        
+
         <card v-show="solveStatus">
         <routing-solution :route="route" :routeCost="routeCost"></routing-solution>
         </card>
@@ -29,6 +29,7 @@
 import RRepository from './../../../repositories/Modules/Routing/Routing';
 import NodesTable from './NodesTable.vue';
 import RoutingSolution from './RoutingSolution.vue';
+import {Carousel, Slide} from 'vue-carousel';
 
 export default {
     name: "sp",
@@ -42,14 +43,9 @@ export default {
           "/img/Routing/sweep/Step2.gif",
           "/img/Routing/sweep/Step3.gif"
 
-        ],
-        tutorialIndex:0
-         
-        
-          
-        
+        ]
       },
-        nodes: [  
+        nodes: [
             {
             id: 0,
             x: 1,
@@ -71,7 +67,7 @@ export default {
         this.solveStatus = true;
 
         var no = {nodes: nodes};
-        
+
         RRepository.solveSweep(no).then((response) => {
             if(response.status < 400){
                 let r = response.data
@@ -86,22 +82,13 @@ export default {
       this.tutorial.value = !this.tutorial.value;
       if (this.tutorial.value) this.tutorial.msg = "Hide";
       else this.tutorial.msg = "What is Nearest Neighbour?";
-    },
-    nextTuto(n){
-      if (n === 1){
-        if (this.tutorial.tutorialIndex === 2 ) this.tutorial.tutorialIndex = 0;
-        else this.tutorial.tutorialIndex++;
-      }else{
-        if (this.tutorial.tutorialIndex === 0 ) this.tutorial.tutorialIndex = 2;
-        else this.tutorial.tutorialIndex--;
-      }
     }
-        
-        
     },
     components: {
-        'nodes-table': NodesTable,
-        'routing-solution': RoutingSolution
+      'nodes-table': NodesTable,
+      'routing-solution': RoutingSolution,
+      'carousel':Carousel,
+      'slide':Slide,
     }
 }
 </script>
